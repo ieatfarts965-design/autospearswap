@@ -5,6 +5,10 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.hit.EntityHitResult;
+import dev.odithekitty.autospearswap.mixin.MinecraftClientAccessor;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
@@ -13,6 +17,7 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
     public static KeyBinding toggleAttributeSwapKey;
     public static KeyBinding swapToSpearKey;
     private static int previousSlot = -1;
+    private static int triggerBotTicks = 0;
 
     @Override
     public void onInitializeClient() {
@@ -24,9 +29,27 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
             "key.autospearswap.toggle_attribute", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_B, category));
         swapToSpearKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
             "key.autospearswap.swap_spear", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_V, category));
+        KeyBinding triggerBotKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+            "key.autospearswap.trigger_bot", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_G, category));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             PvpHud.tick(client);
+            while (triggerBotKey.wasPressed()) {
+                AutoSpearSwapConfig.triggerBotEnabled = !AutoSpearSwapConfig.triggerBotEnabled;
+                triggerBotTicks = 0;
+                AutoSpearSwapConfig.save();
+            }
+            if (AutoSpearSwapConfig.triggerBotEnabled && client.player != null && client.world != null
+                && client.currentScreen == null && client.crosshairTarget instanceof EntityHitResult hit) {
+                Entity target = hit.getEntity();
+                if (target instanceof PlayerEntity targetPlayer && targetPlayer != client.player
+                    && targetPlayer.isAlive() && !targetPlayer.isSpectator()) {
+                    if (triggerBotTicks <= 0) {
+                        ((MinecraftClientAccessor) client).autospearswap$invokeDoAttack();
+                        triggerBotTicks = Math.max(1, AutoSpearSwapConfig.triggerBotDelayTicks);
+                    } else triggerBotTicks--;
+                } else triggerBotTicks = 0;
+            } else triggerBotTicks = 0;
             if (client.player != null && AutoSpearSwapConfig.autoSprint && client.options.forwardKey.isPressed()
                 && !client.player.isSneaking() && !client.player.hasVehicle()) {
                 client.player.setSprinting(true);
