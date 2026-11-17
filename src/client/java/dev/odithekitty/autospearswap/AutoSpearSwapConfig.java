@@ -27,14 +27,6 @@ public final class AutoSpearSwapConfig {
     public static boolean triggerBotEnabled = false;
     public static int triggerBotDelayTicks = 2;
     public static boolean jumpResetEnabled = false;
-        boolean hudSpeed = true;
-        boolean hudDirection = true;
-        boolean hudBiome = false;
-        boolean hudPing = true;
-        boolean hudHealth = true;
-        boolean hudFood = false;
-        boolean hudHeldItem = false;
-        boolean hudEffects = false;
     public static boolean hudSpeed = true;
     public static boolean hudDirection = true;
     public static boolean hudBiome = false;
@@ -142,5 +134,13 @@ public final class AutoSpearSwapConfig {
         boolean triggerBotEnabled = false;
         int triggerBotDelayTicks = 2;
         boolean jumpResetEnabled = false;
+        boolean hudSpeed = true;
+        boolean hudDirection = true;
+        boolean hudBiome = false;
+        boolean hudPing = true;
+        boolean hudHealth = true;
+        boolean hudFood = false;
+        boolean hudHeldItem = false;
+        boolean hudEffects = false;
     }
 }
