@@ -6,6 +6,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 
@@ -128,6 +130,32 @@ public final class PvpHud {
             String effects = player.getStatusEffects().stream().map(e -> e.getEffectType().value().getName().getString()).limit(3).collect(java.util.stream.Collectors.joining(", "));
             draw(context, client, Text.literal("EFFECTS  " + effects), x, y, color);
             y += 11;
+        }
+        if (AutoSpearSwapConfig.hudFps) {
+            draw(context, client, Text.literal("FPS  " + client.getCurrentFps()), x, y, color);
+            y += 11;
+        }
+        if (AutoSpearSwapConfig.hudClock) {
+            draw(context, client, Text.literal("TIME  " + java.time.LocalTime.now().withNano(0)), x, y, color);
+            y += 11;
+        }
+        if (AutoSpearSwapConfig.hudTarget && client.crosshairTarget instanceof EntityHitResult hit
+            && hit.getEntity() instanceof LivingEntity target && target != player) {
+            String targetName = target.getName().getString();
+            String targetHealth = String.format("%.1f HP", target.getHealth());
+            draw(context, client, Text.literal("TARGET  " + targetName + "  •  " + targetHealth), x, y, 0xFF65D6FF);
+            y += 11;
+        }
+        if (AutoSpearSwapConfig.hudDurability) {
+            ItemStack heldStack = player.getMainHandStack();
+            if (heldStack.isDamageable()) {
+                int remaining = heldStack.getMaxDamage() - heldStack.getDamage();
+                int percent = Math.round(remaining * 100.0f / heldStack.getMaxDamage());
+                if (percent <= 20) {
+                    draw(context, client, Text.literal("DURABILITY WARNING  " + percent + "%"), x, y, 0xFFFF7777);
+                    y += 11;
+                }
+            }
         }
         if (AutoSpearSwapConfig.lowHealthWarning && player.getHealth() <= 6.0f) {
             String warning = "LOW HEALTH";
