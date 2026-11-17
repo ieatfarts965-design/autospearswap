@@ -15,6 +15,8 @@ public final class AutoSpearSwapConfig {
     public static int spearSlot = 8;
     public static int maceSlot = 1;
     public static int lungeReturnDelayTicks = 1;
+    public static int uiTheme = 0;
+    public static int uiOpacity = 65;
 
     private AutoSpearSwapConfig() {}
 
@@ -28,6 +30,8 @@ public final class AutoSpearSwapConfig {
                     spearSlot = clamp(data.spearSlot);
                     maceSlot = clamp(data.maceSlot);
                     lungeReturnDelayTicks = Math.max(0, Math.min(10, data.lungeReturnDelayTicks));
+                    uiTheme = Math.max(0, Math.min(4, data.uiTheme));
+                    uiOpacity = Math.max(25, Math.min(90, data.uiOpacity));
                 }
             } else save();
         } catch (Exception e) {
@@ -44,6 +48,8 @@ public final class AutoSpearSwapConfig {
             d.spearSlot = spearSlot;
             d.maceSlot = maceSlot;
             d.lungeReturnDelayTicks = lungeReturnDelayTicks;
+            d.uiTheme = uiTheme;
+            d.uiOpacity = uiOpacity;
             Files.writeString(FILE, GSON.toJson(d));
         } catch (Exception e) {
             System.err.println("[AutoSpearSwap] Could not save config: " + e.getMessage());
@@ -51,11 +57,14 @@ public final class AutoSpearSwapConfig {
     }
 
     private static int clamp(int slot) { return Math.max(0, Math.min(8, slot)); }
+
     private static final class Data {
         boolean attributeSwapEnabled;
         boolean lungeSwapEnabled;
         int spearSlot = 8;
         int maceSlot = 1;
         int lungeReturnDelayTicks = 1;
+        int uiTheme = 0;
+        int uiOpacity = 65;
     }
 }
