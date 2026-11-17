@@ -13,7 +13,7 @@ import net.minecraft.particle.ParticlesMode;
 import net.minecraft.text.Text;
 
 public final class AutoSpearSwapScreen extends Screen {
-    private static final String[] TABS = {"Combat", "Movement", "HUD", "Visuals", "Performance", "Packs", "Keys"};
+    private static final String[] TABS = {"Combat", "Movement", "HUD", "Visuals", "Performance", "Packs", "Keys", "Macros"};
     private static final String[] THEMES = {"Nexus", "Violet", "Mint", "Crimson", "Gold"};
     private static final int[] ACCENT = {0xFF27C7FF, 0xFFB18CFF, 0xFF63E6B0, 0xFFFF647C, 0xFFFFC857};
     private static final int[] PANEL = {0xF0091728, 0xF0151028, 0xF00B211D, 0xF0201018, 0xF0221A0B};
@@ -65,6 +65,7 @@ public final class AutoSpearSwapScreen extends Screen {
                     if (AutoSpearSwapConfig.uiOpacity > 85) AutoSpearSwapConfig.uiOpacity = 40;
                     save();
                 });
+                add(cx, y1 + 39, cw, h, "Cycle visual preset", b -> { visualPreset(); save(); });
             }
             case 4 -> {
                 add(cx, y1, cw, h, "Apply FPS preset", b -> { performance(); save(); });
@@ -75,6 +76,16 @@ public final class AutoSpearSwapScreen extends Screen {
                 add(cx, y1, cw, h, keyText("Menu key", AutoSpearSwapClient.openMenuKey), b -> capture(AutoSpearSwapClient.openMenuKey));
                 add(cx, y1 + 38, cw, h, keyText("Spear key", AutoSpearSwapClient.swapToSpearKey), b -> capture(AutoSpearSwapClient.swapToSpearKey));
                 add(cx, y1 + 76, cw, h, keyText("Triggerbot key", AutoSpearSwapClient.triggerBotKey), b -> capture(AutoSpearSwapClient.triggerBotKey));
+                add(cx, y1 + 114, cw, h, keyText("Macro key", AutoSpearSwapClient.macroKey), b -> capture(AutoSpearSwapClient.macroKey));
+            }
+            case 7 -> {
+                add(cx, y1, bw, h, "Add Jump", b -> { MacroEngine.add("JUMP", 2); clearAndInit(); });
+                add(cx + bw + gap, y1, bw, h, "Add Attack", b -> { MacroEngine.add("ATTACK", 2); clearAndInit(); });
+                add(cx, y1 + 38, bw, h, "Add Use", b -> { MacroEngine.add("USE", 2); clearAndInit(); });
+                add(cx + bw + gap, y1 + 38, bw, h, "Add Forward", b -> { MacroEngine.add("FORWARD", 4); clearAndInit(); });
+                add(cx, y1 + 76, bw, h, MacroEngine.isRunning() ? "Stop macro" : "Play macro", b -> { MacroEngine.toggle(); clearAndInit(); });
+                add(cx + bw + gap, y1 + 76, bw, h, "Undo step", b -> { if (!MacroEngine.STEPS.isEmpty()) MacroEngine.STEPS.remove(MacroEngine.STEPS.size() - 1); clearAndInit(); });
+                add(cx, y1 + 114, cw, h, "Clear macro sequence", b -> { MacroEngine.clear(); clearAndInit(); });
             }
         }
         add(x + pw - 82, y + ph - 38, 70, 26, "Close", b -> close());
@@ -116,6 +127,39 @@ public final class AutoSpearSwapScreen extends Screen {
         c.options.write();
     }
 
+    private static int visualPresetIndex = 0;
+    private static final String[] VISUAL_PRESETS = {"Clean", "Competitive", "Vibrant", "Classic", "Low Effects"};
+
+    private static void visualPreset() {
+        MinecraftClient c = MinecraftClient.getInstance();
+        visualPresetIndex = (visualPresetIndex + 1) % VISUAL_PRESETS.length;
+        switch (visualPresetIndex) {
+            case 1 -> {
+                c.options.getParticles().setValue(ParticlesMode.MINIMAL);
+                c.options.getCloudRenderMode().setValue(CloudRenderMode.OFF);
+                c.options.getEntityDistanceScaling().setValue(0.5);
+                c.options.getEntityShadows().setValue(false);
+            }
+            case 2 -> {
+                c.options.getParticles().setValue(ParticlesMode.ALL);
+                c.options.getCloudRenderMode().setValue(CloudRenderMode.FANCY);
+                c.options.getEntityDistanceScaling().setValue(1.0);
+                c.options.getEntityShadows().setValue(true);
+            }
+            case 3 -> {
+                c.options.getParticles().setValue(ParticlesMode.DECREASED);
+            }
+            case 4 -> {
+                c.options.getParticles().setValue(ParticlesMode.MINIMAL);
+                c.options.getCloudRenderMode().setValue(CloudRenderMode.OFF);
+                c.options.getEntityDistanceScaling().setValue(0.75);
+                c.options.getEntityShadows().setValue(false);
+            }
+            default -> defaults();
+        }
+        c.options.write();
+    }
+
     private static void defaults() {
         MinecraftClient c = MinecraftClient.getInstance();
         c.options.getParticles().setValue(ParticlesMode.ALL);
@@ -154,6 +198,13 @@ public final class AutoSpearSwapScreen extends Screen {
         ctx.drawTextWithShadow(textRenderer, Text.literal("CLIENT  /  MODULE CENTER"), x + 16, y + 27, ACCENT[t]);
         ctx.drawTextWithShadow(textRenderer, Text.literal(TABS[tab].toUpperCase()), x + 150, y + 24, 0xFFFFFFFF);
         ctx.drawTextWithShadow(textRenderer, Text.literal(capturing == null ? "CONFIGURE YOUR CLIENT" : "PRESS A KEY TO REBIND"), x + 150, y + 38, 0xFF9CB4C8);
+        if (tab == 7) {
+            String sequence = MacroEngine.STEPS.isEmpty() ? "No steps yet" : "Sequence: " +
+                MacroEngine.STEPS.stream().map(s -> s.action + "(" + s.ticks + "t)").limit(5)
+                    .collect(java.util.stream.Collectors.joining("  >  "));
+            ctx.drawTextWithShadow(textRenderer, Text.literal(sequence), x + 150, y + 220, ACCENT[t]);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("F8  •  " + (MacroEngine.isRunning() ? "RUNNING" : "READY")), x + 150, y + 236, 0xFF9CB4C8);
+        }
         super.render(ctx, mx, my, delta);
     }
 
