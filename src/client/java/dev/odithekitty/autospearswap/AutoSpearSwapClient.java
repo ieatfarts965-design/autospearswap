@@ -70,7 +70,7 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
             }
             wasZooming = zooming;
             if (AutoSpearSwapConfig.autoRespawn && client.player != null
-                && client.player.isDead() && client.currentScreen == null) {
+                && client.player.isDead()) {
                 client.player.requestRespawn();
             }
             if (client.player == null || client.world == null) {
