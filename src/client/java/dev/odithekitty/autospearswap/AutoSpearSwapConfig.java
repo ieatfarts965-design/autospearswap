@@ -23,7 +23,7 @@ public final class AutoSpearSwapConfig {
     public static boolean hudKeystrokes = true;
     public static boolean hudCombatTimer = true;
     public static boolean lowHealthWarning = true;
-    public static boolean autoSprint = false;
+    public static boolean autoSprint = false;\n    public static boolean triggerBotEnabled = false;\n    public static int triggerBotDelayTicks = 2;
 
     private AutoSpearSwapConfig() {}
 
@@ -45,7 +45,7 @@ public final class AutoSpearSwapConfig {
                     hudKeystrokes = data.hudKeystrokes;
                     hudCombatTimer = data.hudCombatTimer;
                     lowHealthWarning = data.lowHealthWarning;
-                    autoSprint = data.autoSprint;
+                    autoSprint = data.autoSprint;\n                    triggerBotEnabled = data.triggerBotEnabled;\n                    triggerBotDelayTicks = Math.max(1, Math.min(10, data.triggerBotDelayTicks));
                 }
             } else {
                 save();
@@ -72,7 +72,7 @@ public final class AutoSpearSwapConfig {
             d.hudKeystrokes = hudKeystrokes;
             d.hudCombatTimer = hudCombatTimer;
             d.lowHealthWarning = lowHealthWarning;
-            d.autoSprint = autoSprint;
+            d.autoSprint = autoSprint;\n            d.triggerBotEnabled = triggerBotEnabled;\n            d.triggerBotDelayTicks = triggerBotDelayTicks;
             Files.writeString(FILE, GSON.toJson(d));
         } catch (Exception e) {
             System.err.println("[AutoSpearSwap] Could not save config: " + e.getMessage());
@@ -97,6 +97,6 @@ public final class AutoSpearSwapConfig {
         boolean hudKeystrokes = true;
         boolean hudCombatTimer = true;
         boolean lowHealthWarning = true;
-        boolean autoSprint = false;
+        boolean autoSprint = false;\n        boolean triggerBotEnabled = false;\n        int triggerBotDelayTicks = 2;
     }
 }
