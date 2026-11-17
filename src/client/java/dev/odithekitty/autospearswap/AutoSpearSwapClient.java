@@ -17,6 +17,7 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
     public static KeyBinding toggleAttributeSwapKey;
     public static KeyBinding swapToSpearKey;
     public static KeyBinding triggerBotKey;
+    public static KeyBinding macroKey;
     private static int previousSlot = -1;
     private static int triggerBotTicks = 0;
 
@@ -32,9 +33,13 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
             "key.autospearswap.swap_spear", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_V, category));
         triggerBotKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
             "key.autospearswap.trigger_bot", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_G, category));
+        macroKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+            "key.autospearswap.macro", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_F8, category));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             PvpHud.tick(client);
+            MacroEngine.tick(client);
+            while (macroKey.wasPressed()) MacroEngine.toggle();
             while (triggerBotKey.wasPressed()) {
                 AutoSpearSwapConfig.triggerBotEnabled = !AutoSpearSwapConfig.triggerBotEnabled;
                 triggerBotTicks = 0;
