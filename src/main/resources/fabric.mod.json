@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "autospearswap",
   "version": "${version}",
-  "name": "Auto Spear Swap Client",
-  "description": "Client-side spear hotbar helper, configurable controls, and performance settings.",
+  "name": "Nexus PvP Client",
+  "description": "Configurable PvP HUD, spear swapping, auto sprint, and performance settings.",
   "environment": "client",
   "icon": "assets/icon.png",
   "entrypoints": {
