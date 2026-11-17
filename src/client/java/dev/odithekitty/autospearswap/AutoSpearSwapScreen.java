@@ -13,7 +13,7 @@ import net.minecraft.particle.ParticlesMode;
 import net.minecraft.text.Text;
 
 public final class AutoSpearSwapScreen extends Screen {
-    private static final String[] TABS = {"Combat", "Movement", "HUD", "Visuals", "Performance", "Packs", "Keys", "Macros"};
+    private static final String[] TABS = {"Combat", "Movement", "HUD", "Visuals", "Performance", "Packs", "Skies", "Keys", "Macros"};
     private static final String[] THEMES = {"Nexus", "Violet", "Mint", "Crimson", "Gold"};
     private static final int[] ACCENT = {0xFF27C7FF, 0xFFB18CFF, 0xFF63E6B0, 0xFFFF647C, 0xFFFFC857};
     private static final int[] PANEL = {0xF0091728, 0xF0151028, 0xF00B211D, 0xF0201018, 0xF0221A0B};
@@ -70,17 +70,26 @@ public final class AutoSpearSwapScreen extends Screen {
                 add(cx, y1 + 39, cw, h, "Cycle visual preset", b -> { visualPreset(); save(); });
             }
             case 4 -> {
-                add(cx, y1, cw, h, "Apply FPS preset", b -> { performance(); save(); });
-                add(cx, y1 + 38, cw, h, "Restore visual defaults", b -> { defaults(); save(); });
+                add(cx, y1, cw, h, "MAX FPS  •  aggressive", b -> { performance(); save(); });
+                add(cx, y1 + 38, cw, h, "Balanced performance", b -> { balancedPerformance(); save(); });
+                add(cx, y1 + 76, cw, h, "Visual quality", b -> { visualQuality(); save(); });
+                add(cx, y1 + 114, cw, h, "Restore defaults", b -> { defaults(); save(); });
             }
-            case 5 -> add(cx, y1, cw, h, "Open resource pack manager", b -> packs());
+            case 5 -> {
+                add(cx, y1, cw, h, "Open resource pack manager", b -> packs());
+                add(cx, y1 + 38, cw, h, "Open resource packs folder", b -> openPackFolder());
+            }
             case 6 -> {
+                add(cx, y1, cw, h, "Open resource packs folder", b -> openPackFolder());
+                add(cx, y1 + 38, cw, h, "Open resource pack manager", b -> packs());
+            }
+            case 7 -> {
                 add(cx, y1, cw, h, keyText("Menu key", AutoSpearSwapClient.openMenuKey), b -> capture(AutoSpearSwapClient.openMenuKey));
                 add(cx, y1 + 38, cw, h, keyText("Spear key", AutoSpearSwapClient.swapToSpearKey), b -> capture(AutoSpearSwapClient.swapToSpearKey));
                 add(cx, y1 + 76, cw, h, keyText("Triggerbot key", AutoSpearSwapClient.triggerBotKey), b -> capture(AutoSpearSwapClient.triggerBotKey));
                 add(cx, y1 + 114, cw, h, keyText("Macro key", AutoSpearSwapClient.macroKey), b -> capture(AutoSpearSwapClient.macroKey));
             }
-            case 7 -> {
+            case 8 -> {
                 add(cx, y1, bw, h, "Add Jump", b -> { MacroEngine.add("JUMP", MacroEngine.defaultTicks); clearAndInit(); });
                 add(cx + bw + gap, y1, bw, h, "Add Attack", b -> { MacroEngine.add("ATTACK", MacroEngine.defaultTicks); clearAndInit(); });
                 add(cx, y1 + 38, bw, h, "Add Use", b -> { MacroEngine.add("USE", MacroEngine.defaultTicks); clearAndInit(); });
@@ -124,6 +133,16 @@ public final class AutoSpearSwapScreen extends Screen {
         return (capturing == key ? "PRESS A KEY  •  " : name + "  •  ") + key.getBoundKeyLocalizedText().getString();
     }
 
+    private void openPackFolder() {
+        if (client == null) return;
+        try {
+            java.nio.file.Files.createDirectories(client.getResourcePackDir());
+            net.minecraft.util.Util.getOperatingSystem().open(client.getResourcePackDir().toFile());
+        } catch (Exception e) {
+            System.err.println("[Nexus] Could not open resource pack folder: " + e.getMessage());
+        }
+    }
+
     private void packs() {
         if (openingPacks || client == null) return;
         openingPacks = true;
@@ -140,9 +159,29 @@ public final class AutoSpearSwapScreen extends Screen {
         MinecraftClient c = MinecraftClient.getInstance();
         c.options.getParticles().setValue(ParticlesMode.MINIMAL);
         c.options.getCloudRenderMode().setValue(CloudRenderMode.OFF);
-        c.options.getEntityDistanceScaling().setValue(0.5);
+        c.options.getEntityDistanceScaling().setValue(0.25);
         c.options.getBiomeBlendRadius().setValue(0);
         c.options.getEntityShadows().setValue(false);
+        c.options.write();
+    }
+
+    private static void balancedPerformance() {
+        MinecraftClient c = MinecraftClient.getInstance();
+        c.options.getParticles().setValue(ParticlesMode.DECREASED);
+        c.options.getCloudRenderMode().setValue(CloudRenderMode.FAST);
+        c.options.getEntityDistanceScaling().setValue(0.75);
+        c.options.getBiomeBlendRadius().setValue(1);
+        c.options.getEntityShadows().setValue(false);
+        c.options.write();
+    }
+
+    private static void visualQuality() {
+        MinecraftClient c = MinecraftClient.getInstance();
+        c.options.getParticles().setValue(ParticlesMode.ALL);
+        c.options.getCloudRenderMode().setValue(CloudRenderMode.FANCY);
+        c.options.getEntityDistanceScaling().setValue(1.0);
+        c.options.getBiomeBlendRadius().setValue(5);
+        c.options.getEntityShadows().setValue(true);
         c.options.write();
     }
 
@@ -209,15 +248,20 @@ public final class AutoSpearSwapScreen extends Screen {
         int pw = Math.min(540, width - 20), ph = Math.min(440, height - 20);
         int x = (width - pw) / 2, y = (height - ph) / 2;
         int a = Math.round(255 * (AutoSpearSwapConfig.uiOpacity / 100.0f));
+        ctx.fill(x - 3, y - 3, x + pw + 3, y + ph + 3, 0x66000000);
         ctx.fill(x, y, x + pw, y + ph, (PANEL[t] & 0x00FFFFFF) | (a << 24));
         ctx.fill(x, y, x + pw, y + 3, ACCENT[t]);
+        ctx.fill(x, y + 3, x + 3, y + ph, ACCENT[t] & 0x66FFFFFF);
         ctx.fill(x + 8, y + 54, x + 132, y + ph - 48, (SIDE[t] & 0x00FFFFFF) | (a << 24));
-        ctx.fill(x + 10, y + 48, x + pw - 10, y + 49, 0x553D7898);
+        ctx.fill(x + 10, y + 48, x + pw - 10, y + 49, 0x883D7898);
+        ctx.fill(x + 144, y + 55, x + pw - 14, y + 56, 0x443D7898);
+        ctx.fill(x + 144, y + ph - 50, x + pw - 14, y + ph - 49, 0x443D7898);
         ctx.drawTextWithShadow(textRenderer, Text.literal("NEXUS"), x + 16, y + 13, 0xFFFFFFFF);
         ctx.drawTextWithShadow(textRenderer, Text.literal("CLIENT  /  MODULE CENTER"), x + 16, y + 27, ACCENT[t]);
+        ctx.drawTextWithShadow(textRenderer, Text.literal("NEXUS  •  1.6"), x + pw - 90, y + 17, 0xFF9CB4C8);
         ctx.drawTextWithShadow(textRenderer, Text.literal(TABS[tab].toUpperCase()), x + 150, y + 24, 0xFFFFFFFF);
         ctx.drawTextWithShadow(textRenderer, Text.literal(capturing == null ? "CONFIGURE YOUR CLIENT" : "PRESS A KEY TO REBIND"), x + 150, y + 38, 0xFF9CB4C8);
-        if (tab == 7) {
+        if (tab == 8) {
             String sequence = MacroEngine.STEPS.isEmpty() ? "No steps yet" : "Sequence: " +
                 MacroEngine.STEPS.stream().map(s -> s.action + "(" + s.ticks + "t)").limit(5)
                     .collect(java.util.stream.Collectors.joining("  >  "));
