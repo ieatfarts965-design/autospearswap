@@ -4,7 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.InputUtil;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
@@ -58,7 +58,13 @@ public final class PvpHud {
         }
         if (AutoSpearSwapConfig.hudArmor) {
             StringBuilder line = new StringBuilder("ARMOR ");
-            for (ItemStack stack : player.getArmorItems()) {
+            ItemStack[] armor = {
+                player.getEquippedStack(EquipmentSlot.HEAD),
+                player.getEquippedStack(EquipmentSlot.CHEST),
+                player.getEquippedStack(EquipmentSlot.LEGS),
+                player.getEquippedStack(EquipmentSlot.FEET)
+            };
+            for (ItemStack stack : armor) {
                 if (stack.isEmpty()) line.append("-- ");
                 else if (stack.isDamageable()) {
                     int remaining = Math.max(0, stack.getMaxDamage() - stack.getDamage());
