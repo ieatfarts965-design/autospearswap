@@ -13,7 +13,7 @@ import net.minecraft.particle.ParticlesMode;
 import net.minecraft.text.Text;
 
 public final class AutoSpearSwapScreen extends Screen {
-    private static final String[] TABS = {"Combat", "Movement", "HUD", "Visuals", "Performance", "Packs", "Skies", "Keys", "Macros"};
+    private static final String[] TABS = {"Combat", "Movement", "HUD", "Visuals", "Performance", "Packs", "Skies", "Keys", "Macros", "Info"};
     private static final String[] THEMES = {"Nexus", "Violet", "Mint", "Crimson", "Gold"};
     private static final int[] ACCENT = {0xFF27C7FF, 0xFFB18CFF, 0xFF63E6B0, 0xFFFF647C, 0xFFFFC857};
     private static final int[] PANEL = {0xF0091728, 0xF0151028, 0xF00B211D, 0xF0201018, 0xF0221A0B};
@@ -114,6 +114,16 @@ public final class AutoSpearSwapScreen extends Screen {
                     else clearAndInit();
                 });
                 add(cx + bw + gap, y1 + 190, bw, h, "Clear sequence", b -> { MacroEngine.clear(); clearAndInit(); });
+            }
+            case 9 -> {
+                toggle(cx, y1, bw, h, "Movement speed", AutoSpearSwapConfig.hudSpeed, () -> AutoSpearSwapConfig.hudSpeed = !AutoSpearSwapConfig.hudSpeed);
+                toggle(cx + bw + gap, y1, bw, h, "Direction", AutoSpearSwapConfig.hudDirection, () -> AutoSpearSwapConfig.hudDirection = !AutoSpearSwapConfig.hudDirection);
+                toggle(cx, y1 + 38, bw, h, "Biome", AutoSpearSwapConfig.hudBiome, () -> AutoSpearSwapConfig.hudBiome = !AutoSpearSwapConfig.hudBiome);
+                toggle(cx + bw + gap, y1 + 38, bw, h, "Server ping", AutoSpearSwapConfig.hudPing, () -> AutoSpearSwapConfig.hudPing = !AutoSpearSwapConfig.hudPing);
+                toggle(cx, y1 + 76, bw, h, "Health", AutoSpearSwapConfig.hudHealth, () -> AutoSpearSwapConfig.hudHealth = !AutoSpearSwapConfig.hudHealth);
+                toggle(cx + bw + gap, y1 + 76, bw, h, "Food", AutoSpearSwapConfig.hudFood, () -> AutoSpearSwapConfig.hudFood = !AutoSpearSwapConfig.hudFood);
+                toggle(cx, y1 + 114, bw, h, "Held item", AutoSpearSwapConfig.hudHeldItem, () -> AutoSpearSwapConfig.hudHeldItem = !AutoSpearSwapConfig.hudHeldItem);
+                toggle(cx + bw + gap, y1 + 114, bw, h, "Potion effects", AutoSpearSwapConfig.hudEffects, () -> AutoSpearSwapConfig.hudEffects = !AutoSpearSwapConfig.hudEffects);
             }
         }
         add(x + pw - 82, y + ph - 38, 70, 26, "Close", b -> close());
