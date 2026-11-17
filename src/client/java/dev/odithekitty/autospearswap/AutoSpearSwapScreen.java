@@ -86,6 +86,7 @@ public final class AutoSpearSwapScreen extends Screen {
                 toggle(cx, y1 + 156, bw, h, "Fullbright", AutoSpearSwapConfig.fullbright, () -> AutoSpearSwapConfig.fullbright = !AutoSpearSwapConfig.fullbright);
                 toggle(cx + bw + gap, y1 + 156, bw, h, "Zoom", AutoSpearSwapConfig.zoomEnabled, () -> AutoSpearSwapConfig.zoomEnabled = !AutoSpearSwapConfig.zoomEnabled);
                 toggle(cx, y1 + 195, cw, h, "Auto respawn", AutoSpearSwapConfig.autoRespawn, () -> AutoSpearSwapConfig.autoRespawn = !AutoSpearSwapConfig.autoRespawn);
+                toggle(cx, y1 + 234, cw, h, "Auto eat", AutoSpearSwapConfig.autoEat, () -> AutoSpearSwapConfig.autoEat = !AutoSpearSwapConfig.autoEat);
             }
             case 4 -> {
                 add(cx, y1, cw, h, "MAX FPS  •  aggressive", b -> { performance(); save(); });
@@ -169,6 +170,7 @@ public final class AutoSpearSwapScreen extends Screen {
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Fullbright", () -> AutoSpearSwapConfig.fullbright, () -> AutoSpearSwapConfig.fullbright = !AutoSpearSwapConfig.fullbright, n);
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Zoom", () -> AutoSpearSwapConfig.zoomEnabled, () -> AutoSpearSwapConfig.zoomEnabled = !AutoSpearSwapConfig.zoomEnabled, n);
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto respawn", () -> AutoSpearSwapConfig.autoRespawn, () -> AutoSpearSwapConfig.autoRespawn = !AutoSpearSwapConfig.autoRespawn, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto eat", () -> AutoSpearSwapConfig.autoEat, () -> AutoSpearSwapConfig.autoEat = !AutoSpearSwapConfig.autoEat, n);
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Triggerbot", () -> AutoSpearSwapConfig.triggerBotEnabled, () -> AutoSpearSwapConfig.triggerBotEnabled = !AutoSpearSwapConfig.triggerBotEnabled, n);
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto spear", () -> AutoSpearSwapConfig.attributeSwapEnabled, () -> AutoSpearSwapConfig.attributeSwapEnabled = !AutoSpearSwapConfig.attributeSwapEnabled, n);
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Jump reset", () -> AutoSpearSwapConfig.jumpResetEnabled, () -> AutoSpearSwapConfig.jumpResetEnabled = !AutoSpearSwapConfig.jumpResetEnabled, n);
