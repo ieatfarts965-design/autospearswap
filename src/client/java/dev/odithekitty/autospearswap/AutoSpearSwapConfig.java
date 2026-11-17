@@ -25,6 +25,9 @@ public final class AutoSpearSwapConfig {
     public static boolean hudCombatTimer = true;
     public static boolean lowHealthWarning = true;
     public static boolean autoSprint = false;
+    public static boolean autoTool = false;
+    public static boolean autoJump = false;
+    public static boolean toggleSneak = false;
     public static boolean triggerBotEnabled = false;
     public static int triggerBotDelayTicks = 2;
     public static boolean jumpResetEnabled = false;
@@ -49,6 +52,9 @@ public final class AutoSpearSwapConfig {
         attributeSwapEnabled = false;
         lungeSwapEnabled = false;
         autoSprint = false;
+        autoTool = false;
+        autoJump = false;
+        toggleSneak = false;
         hudCoordinates = true;
         hudCps = true;
         hudArmor = true;
@@ -113,6 +119,9 @@ public final class AutoSpearSwapConfig {
                     hudCombatTimer = data.hudCombatTimer;
                     lowHealthWarning = data.lowHealthWarning;
                     autoSprint = data.autoSprint;
+                    autoTool = data.autoTool;
+                    autoJump = data.autoJump;
+                    toggleSneak = data.toggleSneak;
                     triggerBotEnabled = data.triggerBotEnabled;
                     triggerBotDelayTicks = Math.max(1, Math.min(10, data.triggerBotDelayTicks));
                     jumpResetEnabled = data.jumpResetEnabled;
@@ -154,6 +163,9 @@ public final class AutoSpearSwapConfig {
             d.hudCombatTimer = hudCombatTimer;
             d.lowHealthWarning = lowHealthWarning;
             d.autoSprint = autoSprint;
+            d.autoTool = autoTool;
+            d.autoJump = autoJump;
+            d.toggleSneak = toggleSneak;
             d.triggerBotEnabled = triggerBotEnabled;
             d.triggerBotDelayTicks = triggerBotDelayTicks;
             d.jumpResetEnabled = jumpResetEnabled;
@@ -193,6 +205,9 @@ public final class AutoSpearSwapConfig {
         boolean hudCombatTimer = true;
         boolean lowHealthWarning = true;
         boolean autoSprint = false;
+        boolean autoTool = false;
+        boolean autoJump = false;
+        boolean toggleSneak = false;
         boolean triggerBotEnabled = false;
         int triggerBotDelayTicks = 2;
         boolean jumpResetEnabled = false;
