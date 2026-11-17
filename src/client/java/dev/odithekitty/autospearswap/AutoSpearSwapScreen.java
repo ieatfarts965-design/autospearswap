@@ -28,8 +28,19 @@ public final class AutoSpearSwapScreen extends Screen {
         int buttonWidth = Math.min(142, (width - 30 - gap) / 2);
         int left = width / 2 - buttonWidth - gap / 2;
         int right = width / 2 + gap / 2;
-        int row = Math.max(36, height / 2 - 148);
-        int rowGap = 25;
+        int row = Math.max(28, height / 2 - 180);
+        int rowGap = 22;
+
+        addButton(left, row, buttonWidth, toggleText("Triggerbot", AutoSpearSwapConfig.triggerBotEnabled), b -> {
+            AutoSpearSwapConfig.triggerBotEnabled = !AutoSpearSwapConfig.triggerBotEnabled;
+            saveAndRefresh();
+        });
+        addButton(right, row, buttonWidth, Text.literal("Trigger delay: " + AutoSpearSwapConfig.triggerBotDelayTicks + "t"), b -> {
+            AutoSpearSwapConfig.triggerBotDelayTicks++;
+            if (AutoSpearSwapConfig.triggerBotDelayTicks > 10) AutoSpearSwapConfig.triggerBotDelayTicks = 1;
+            saveAndRefresh();
+        });
+        row += rowGap;
 
         addButton(left, row, buttonWidth, toggleText("Auto spear", AutoSpearSwapConfig.attributeSwapEnabled), b -> {
             AutoSpearSwapConfig.attributeSwapEnabled = !AutoSpearSwapConfig.attributeSwapEnabled;
@@ -181,7 +192,7 @@ public final class AutoSpearSwapScreen extends Screen {
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         renderBackground(context, mouseX, mouseY, delta);
         int panelWidth = Math.min(340, width - 16);
-        int panelHeight = Math.min(390, height - 12);
+        int panelHeight = Math.min(430, height - 12);
         int x = (width - panelWidth) / 2;
         int y = (height - panelHeight) / 2;
         int alpha = Math.round(255 * (AutoSpearSwapConfig.uiOpacity / 100.0f));
@@ -189,7 +200,7 @@ public final class AutoSpearSwapScreen extends Screen {
         context.fill(x, y, x + panelWidth, y + 3, accent());
         context.drawCenteredTextWithShadow(textRenderer, title, width / 2, y + 8, accent());
         context.drawCenteredTextWithShadow(textRenderer,
-            Text.literal(capturing == null ? "PVP HUD  •  COMBAT  •  PERFORMANCE" : "Press the key you want to bind"),
+            Text.literal(capturing == null ? "PVP HUD  •  TRIGGERBOT  •  COMBAT" : "Press the key you want to bind"),
             width / 2, y + 20, 0xFFD7E6F2);
         super.render(context, mouseX, mouseY, delta);
     }
