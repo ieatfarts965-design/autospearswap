@@ -130,6 +130,40 @@ public final class AutoSpearSwapScreen extends Screen {
                 toggle(cx + bw + gap, y1 + 76, bw, h, "Food", AutoSpearSwapConfig.hudFood, () -> AutoSpearSwapConfig.hudFood = !AutoSpearSwapConfig.hudFood);
                 toggle(cx, y1 + 114, bw, h, "Held item", AutoSpearSwapConfig.hudHeldItem, () -> AutoSpearSwapConfig.hudHeldItem = !AutoSpearSwapConfig.hudHeldItem);
                 toggle(cx + bw + gap, y1 + 114, bw, h, "Potion effects", AutoSpearSwapConfig.hudEffects, () -> AutoSpearSwapConfig.hudEffects = !AutoSpearSwapConfig.hudEffects);
+                add(cx, y1 + 152, bw, h, "Save Legit", b -> AutoSpearSwapConfig.saveProfile("Legit"));
+                add(cx + bw + gap, y1 + 152, bw, h, "Load Legit", b -> { AutoSpearSwapConfig.loadProfile("Legit"); clearAndInit(); });
+                add(cx, y1 + 190, bw, h, "Save PvP", b -> AutoSpearSwapConfig.saveProfile("PvP"));
+                add(cx + bw + gap, y1 + 190, bw, h, "Load PvP", b -> { AutoSpearSwapConfig.loadProfile("PvP"); clearAndInit(); });
+                add(cx, y1 + 228, bw, h, "Save Visual", b -> AutoSpearSwapConfig.saveProfile("Visual"));
+                add(cx + bw + gap, y1 + 228, bw, h, "Load Visual", b -> { AutoSpearSwapConfig.loadProfile("Visual"); clearAndInit(); });
+                add(cx, y1 + 266, bw, h, "Save Performance", b -> AutoSpearSwapConfig.saveProfile("Performance"));
+                add(cx + bw + gap, y1 + 266, bw, h, "Load Performance", b -> { AutoSpearSwapConfig.loadProfile("Performance"); clearAndInit(); });
+            }
+            case 10 -> {
+                searchField = new TextFieldWidget(textRenderer, cx, y1, cw, h, Text.literal("Search modules"));
+                searchField.setMaxLength(32);
+                searchField.setText(moduleQuery);
+                searchField.setChangedListener(value -> moduleQuery = value);
+                addDrawableChild(searchField);
+                add(cx, y1 + 38, cw, h, "Apply search", b -> clearAndInit());
+                String q = moduleQuery.toLowerCase(java.util.Locale.ROOT);
+                int n = 0;
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Triggerbot", () -> AutoSpearSwapConfig.triggerBotEnabled, () -> AutoSpearSwapConfig.triggerBotEnabled = !AutoSpearSwapConfig.triggerBotEnabled, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto spear", () -> AutoSpearSwapConfig.attributeSwapEnabled, () -> AutoSpearSwapConfig.attributeSwapEnabled = !AutoSpearSwapConfig.attributeSwapEnabled, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Jump reset", () -> AutoSpearSwapConfig.jumpResetEnabled, () -> AutoSpearSwapConfig.jumpResetEnabled = !AutoSpearSwapConfig.jumpResetEnabled, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto sprint", () -> AutoSpearSwapConfig.autoSprint, () -> AutoSpearSwapConfig.autoSprint = !AutoSpearSwapConfig.autoSprint, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Coordinates", () -> AutoSpearSwapConfig.hudCoordinates, () -> AutoSpearSwapConfig.hudCoordinates = !AutoSpearSwapConfig.hudCoordinates, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "CPS counter", () -> AutoSpearSwapConfig.hudCps, () -> AutoSpearSwapConfig.hudCps = !AutoSpearSwapConfig.hudCps, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Armor status", () -> AutoSpearSwapConfig.hudArmor, () -> AutoSpearSwapConfig.hudArmor = !AutoSpearSwapConfig.hudArmor, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Keystrokes", () -> AutoSpearSwapConfig.hudKeystrokes, () -> AutoSpearSwapConfig.hudKeystrokes = !AutoSpearSwapConfig.hudKeystrokes, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Combat timer", () -> AutoSpearSwapConfig.hudCombatTimer, () -> AutoSpearSwapConfig.hudCombatTimer = !AutoSpearSwapConfig.hudCombatTimer, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Low health", () -> AutoSpearSwapConfig.lowHealthWarning, () -> AutoSpearSwapConfig.lowHealthWarning = !AutoSpearSwapConfig.lowHealthWarning, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Movement speed", () -> AutoSpearSwapConfig.hudSpeed, () -> AutoSpearSwapConfig.hudSpeed = !AutoSpearSwapConfig.hudSpeed, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Direction", () -> AutoSpearSwapConfig.hudDirection, () -> AutoSpearSwapConfig.hudDirection = !AutoSpearSwapConfig.hudDirection, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Biome", () -> AutoSpearSwapConfig.hudBiome, () -> AutoSpearSwapConfig.hudBiome = !AutoSpearSwapConfig.hudBiome, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Server ping", () -> AutoSpearSwapConfig.hudPing, () -> AutoSpearSwapConfig.hudPing = !AutoSpearSwapConfig.hudPing, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Health", () -> AutoSpearSwapConfig.hudHealth, () -> AutoSpearSwapConfig.hudHealth = !AutoSpearSwapConfig.hudHealth, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Food", () -> AutoSpearSwapConfig.hudFood, () -> AutoSpearSwapConfig.hudFood = !AutoSpearSwapConfig.hudFood, n);
             }
         }
         add(x + pw - 82, y + ph - 38, 70, 26, "Close", b -> close());
