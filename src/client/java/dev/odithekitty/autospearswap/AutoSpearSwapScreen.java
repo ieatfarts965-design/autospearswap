@@ -16,6 +16,7 @@ public final class AutoSpearSwapScreen extends Screen {
     private static final int[] ACCENTS = {0xFF36CFFF, 0xFFB58CFF, 0xFF62E6A5, 0xFFFF7777, 0xFFFFC857};
     private static final String[] THEME_NAMES = {"Cyan", "Violet", "Mint", "Red", "Gold"};
     private KeyBinding capturing;
+    private boolean openingResourcePacks;
 
     public AutoSpearSwapScreen() {
         super(Text.literal("NEXUS CLIENT"));
@@ -86,13 +87,22 @@ public final class AutoSpearSwapScreen extends Screen {
     }
 
     private void openResourcePacks() {
-        MinecraftClient mc = MinecraftClient.getInstance();
+        if (openingResourcePacks || client == null) return;
+        openingResourcePacks = true;
+        MinecraftClient mc = client;
+        Screen parent = this;
         mc.setScreen(new PackScreen(
             mc.getResourcePackManager(),
             manager -> mc.reloadResources(),
             mc.getResourcePackDir(),
             Text.literal("Resource Packs")
-        ));
+        ) {
+            @Override
+            public void close() {
+                openingResourcePacks = false;
+                mc.setScreen(parent);
+            }
+        });
     }
 
     private static void applyPerformancePreset() {
