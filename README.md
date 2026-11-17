@@ -1,27 +1,37 @@
 # Auto Spear Swap Client
 
-Client-side Fabric mod for Minecraft 1.21.11 (Java 21).
+Fabric client mod for Minecraft 1.21.11 (Java 21).
 
-## Included features
-- Right Shift opens the in-game client menu.
-- V switches to the configured spear hotbar slot; press V again to return to the slot you were using.
-- B toggles the attribute-swap helper setting.
-- Rebind the menu and spear swap keys in the menu.
+## Client menu
+- Right Shift opens the Nexus Client menu.
+- B toggles automatic spear selection while holding use; V manually swaps to the configured spear slot and back.
+- Rebind the menu and manual swap keys in the menu.
 - Choose the spear hotbar slot (1–9).
-- Apply an FPS-friendly vanilla settings preset: minimal particles, clouds off, 50% entity render distance, zero biome blend, and entity shadows off.
-- Restore the visual settings preset from the menu.
-- Settings are stored in `config/autospearswap.json`; keybinds are stored by Minecraft in its normal options file.
+- Apply an FPS-friendly vanilla settings preset or restore visual defaults.
+- Customize the menu accent theme (Cyan, Violet, Mint, Red, Gold) and panel opacity. These preferences persist in `config/autospearswap.json`.
 
-## Custom sky resource packs
-Minecraft/Fabric does not natively load OptiFine custom sky properties. Install **Skyboxify 3.3.1 for Minecraft 1.21.11 (Fabric)** alongside this mod to render compatible OptiFine-format sky resource packs. Put the resource pack in the normal `resourcepacks` folder and enable it in Minecraft's Resource Packs menu. Skyboxify is a separate mod and is not bundled in this jar.
+## Import and enable resource packs
+The menu's **Open / import resource packs** button opens Minecraft's native Resource Packs screen. You can:
+1. Drag a resource-pack ZIP from Windows File Explorer directly onto that screen to import it, or place the ZIP in the instance's `resourcepacks` folder.
+2. Move the pack from Available to Selected and click Done.
+3. The pack reloads through Minecraft's normal resource reload.
+
+The three user-provided packs are compatible with Minecraft 1.21.11 (pack format 75):
+- `Tightfault-SkyWars-32x-1.21.11.zip`
+- `Kitty-Pack-Cheese-Edition-128x-1.21.11.zip`
+- `Winter kitty ❄️HD 1.21.11.zip`
+
+They are intentionally not bundled into the mod JAR (together they are about 190 MB). Import them from your downloaded ZIPs using the menu above.
+
+For OptiFine-format custom sky properties, install Skyboxify for Minecraft 1.21.11 Fabric separately. Sky rendering is handled by Skyboxify; the resource pack menu here imports/enables packs through Minecraft.
 
 ## Install
 1. Install Fabric Loader for Minecraft 1.21.11 and Fabric API.
-2. Put the normal `autospearswap-1.0.0.jar` in `.minecraft/mods`.
-3. For OptiFine-format custom skies, also install the matching Skyboxify build and its listed dependencies.
+2. Put the normal `autospearswap-1.1.0.jar` in `.minecraft/mods`.
+3. Install Skyboxify as well if you need OptiFine-format custom skies.
 
-## Important
-The spear hotbar helper is a deliberate manual swap/restore action. This build does not claim to perform automatic server-side lunge timing or force attribute changes on servers that block held-item swapping. FPS gains depend on your hardware, world, and settings; the preset trades some visual quality for lower rendering load.
+## Notes
+FPS improvements depend on the world and hardware; the preset reduces rendering quality to lower some rendering work. The spear helper cannot guarantee server-side combat timing or bypass server restrictions.
 
 ## Build
-Requires Java 21. Run `gradle build`. The main jar is in `build/libs/`; do not install the `-sources.jar`.
+Requires Java 21. Run `gradle build`. Install the main JAR in `build/libs/`, not the `-sources.jar`.
