@@ -79,13 +79,30 @@ public final class AutoSpearSwapScreen extends Screen {
                 add(cx, y1 + 114, cw, h, keyText("Macro key", AutoSpearSwapClient.macroKey), b -> capture(AutoSpearSwapClient.macroKey));
             }
             case 7 -> {
-                add(cx, y1, bw, h, "Add Jump", b -> { MacroEngine.add("JUMP", 2); clearAndInit(); });
-                add(cx + bw + gap, y1, bw, h, "Add Attack", b -> { MacroEngine.add("ATTACK", 2); clearAndInit(); });
-                add(cx, y1 + 38, bw, h, "Add Use", b -> { MacroEngine.add("USE", 2); clearAndInit(); });
-                add(cx + bw + gap, y1 + 38, bw, h, "Add Forward", b -> { MacroEngine.add("FORWARD", 4); clearAndInit(); });
-                add(cx, y1 + 76, bw, h, MacroEngine.isRunning() ? "Stop macro" : "Play macro", b -> { MacroEngine.toggle(); clearAndInit(); });
-                add(cx + bw + gap, y1 + 76, bw, h, "Undo step", b -> { if (!MacroEngine.STEPS.isEmpty()) MacroEngine.STEPS.remove(MacroEngine.STEPS.size() - 1); clearAndInit(); });
-                add(cx, y1 + 114, cw, h, "Clear macro sequence", b -> { MacroEngine.clear(); clearAndInit(); });
+                add(cx, y1, bw, h, "Add Jump", b -> { MacroEngine.add("JUMP", MacroEngine.defaultTicks); clearAndInit(); });
+                add(cx + bw + gap, y1, bw, h, "Add Attack", b -> { MacroEngine.add("ATTACK", MacroEngine.defaultTicks); clearAndInit(); });
+                add(cx, y1 + 38, bw, h, "Add Use", b -> { MacroEngine.add("USE", MacroEngine.defaultTicks); clearAndInit(); });
+                add(cx + bw + gap, y1 + 38, bw, h, "Add Forward", b -> { MacroEngine.add("FORWARD", MacroEngine.defaultTicks); clearAndInit(); });
+                add(cx, y1 + 76, bw, h, "Add Back", b -> { MacroEngine.add("BACK", MacroEngine.defaultTicks); clearAndInit(); });
+                add(cx + bw + gap, y1 + 76, bw, h, "Add Left", b -> { MacroEngine.add("LEFT", MacroEngine.defaultTicks); clearAndInit(); });
+                add(cx, y1 + 114, bw, h, "Add Right", b -> { MacroEngine.add("RIGHT", MacroEngine.defaultTicks); clearAndInit(); });
+                add(cx + bw + gap, y1 + 114, bw, h, "Add Sprint", b -> { MacroEngine.add("SPRINT", MacroEngine.defaultTicks); clearAndInit(); });
+                add(cx, y1 + 152, bw, h, "Delay  •  " + MacroEngine.defaultTicks + " ticks", b -> {
+                    int[] delays = {1, 2, 3, 5, 8, 12, 20};
+                    int next = 0;
+                    for (int i = 0; i < delays.length; i++) if (delays[i] == MacroEngine.defaultTicks) next = (i + 1) % delays.length;
+                    MacroEngine.defaultTicks = delays[next]; clearAndInit();
+                });
+                add(cx + bw + gap, y1 + 152, bw, h, "Undo step", b -> {
+                    if (!MacroEngine.STEPS.isEmpty()) { MacroEngine.STEPS.remove(MacroEngine.STEPS.size() - 1); }
+                    clearAndInit();
+                });
+                add(cx, y1 + 190, bw, h, MacroEngine.isRunning() ? "Stop macro" : "Play macro", b -> {
+                    MacroEngine.toggle();
+                    if (MacroEngine.isRunning() && client != null) client.setScreen(null);
+                    else clearAndInit();
+                });
+                add(cx + bw + gap, y1 + 190, bw, h, "Clear sequence", b -> { MacroEngine.clear(); clearAndInit(); });
             }
         }
         add(x + pw - 82, y + ph - 38, 70, 26, "Close", b -> close());
@@ -202,8 +219,8 @@ public final class AutoSpearSwapScreen extends Screen {
             String sequence = MacroEngine.STEPS.isEmpty() ? "No steps yet" : "Sequence: " +
                 MacroEngine.STEPS.stream().map(s -> s.action + "(" + s.ticks + "t)").limit(5)
                     .collect(java.util.stream.Collectors.joining("  >  "));
-            ctx.drawTextWithShadow(textRenderer, Text.literal(sequence), x + 150, y + 220, ACCENT[t]);
-            ctx.drawTextWithShadow(textRenderer, Text.literal("F8  •  " + (MacroEngine.isRunning() ? "RUNNING" : "READY")), x + 150, y + 236, 0xFF9CB4C8);
+            ctx.drawTextWithShadow(textRenderer, Text.literal(sequence), x + 150, y + 340, ACCENT[t]);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("F8  •  " + (MacroEngine.isRunning() ? "RUNNING" : "READY")), x + 150, y + 356, 0xFF9CB4C8);
         }
         super.render(ctx, mx, my, delta);
     }
