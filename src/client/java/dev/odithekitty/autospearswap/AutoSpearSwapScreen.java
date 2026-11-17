@@ -62,6 +62,8 @@ public final class AutoSpearSwapScreen extends Screen {
                 toggle(cx + bw + gap, y1 + 39, bw, h, "Toggle sneak", AutoSpearSwapConfig.toggleSneak,
                     () -> AutoSpearSwapConfig.toggleSneak = !AutoSpearSwapConfig.toggleSneak);
                 add(cx, y1 + 78, cw, h, "Toggle sneak key  •  " + keyText("Sneak", AutoSpearSwapClient.toggleSneakKey), b -> capture(AutoSpearSwapClient.toggleSneakKey));
+                toggle(cx, y1 + 117, cw, h, "Auto Walk", AutoSpearSwapConfig.autoWalk, () -> AutoSpearSwapConfig.autoWalk = !AutoSpearSwapConfig.autoWalk);
+                add(cx, y1 + 156, cw, h, keyText("Auto Walk key", AutoSpearSwapClient.autoWalkKey), b -> capture(AutoSpearSwapClient.autoWalkKey));
             }
             case 2 -> {
                 toggle(cx, y1, bw, h, "Coordinates", AutoSpearSwapConfig.hudCoordinates, () -> AutoSpearSwapConfig.hudCoordinates = !AutoSpearSwapConfig.hudCoordinates);
@@ -70,6 +72,10 @@ public final class AutoSpearSwapScreen extends Screen {
                 toggle(cx + bw + gap, y1 + 38, bw, h, "Keystrokes", AutoSpearSwapConfig.hudKeystrokes, () -> AutoSpearSwapConfig.hudKeystrokes = !AutoSpearSwapConfig.hudKeystrokes);
                 toggle(cx, y1 + 76, bw, h, "Combat timer", AutoSpearSwapConfig.hudCombatTimer, () -> AutoSpearSwapConfig.hudCombatTimer = !AutoSpearSwapConfig.hudCombatTimer);
                 toggle(cx + bw + gap, y1 + 76, bw, h, "Low health", AutoSpearSwapConfig.lowHealthWarning, () -> AutoSpearSwapConfig.lowHealthWarning = !AutoSpearSwapConfig.lowHealthWarning);
+                toggle(cx, y1 + 114, bw, h, "Target HUD", AutoSpearSwapConfig.hudTarget, () -> AutoSpearSwapConfig.hudTarget = !AutoSpearSwapConfig.hudTarget);
+                toggle(cx + bw + gap, y1 + 114, bw, h, "Durability alert", AutoSpearSwapConfig.hudDurability, () -> AutoSpearSwapConfig.hudDurability = !AutoSpearSwapConfig.hudDurability);
+                toggle(cx, y1 + 152, bw, h, "FPS counter", AutoSpearSwapConfig.hudFps, () -> AutoSpearSwapConfig.hudFps = !AutoSpearSwapConfig.hudFps);
+                toggle(cx + bw + gap, y1 + 152, bw, h, "Clock", AutoSpearSwapConfig.hudClock, () -> AutoSpearSwapConfig.hudClock = !AutoSpearSwapConfig.hudClock);
             }
             case 3 -> {
                 add(cx, y1, bw, h, "Theme  •  " + THEMES[AutoSpearSwapConfig.uiTheme], b -> {
@@ -109,6 +115,7 @@ public final class AutoSpearSwapScreen extends Screen {
                 add(cx, y1 + 114, cw, h, keyText("Macro key", AutoSpearSwapClient.macroKey), b -> capture(AutoSpearSwapClient.macroKey));
                 add(cx, y1 + 152, cw, h, "Triggerbot mode  •  " + (AutoSpearSwapConfig.triggerBotHoldMode ? "HOLD" : "TOGGLE"), b -> { AutoSpearSwapConfig.triggerBotHoldMode = !AutoSpearSwapConfig.triggerBotHoldMode; AutoSpearSwapConfig.triggerBotEnabled = false; save(); });
                 add(cx, y1 + 190, cw, h, keyText("Zoom key", AutoSpearSwapClient.zoomKey), b -> capture(AutoSpearSwapClient.zoomKey));
+                add(cx, y1 + 228, cw, h, keyText("Auto Walk key", AutoSpearSwapClient.autoWalkKey), b -> capture(AutoSpearSwapClient.autoWalkKey));
             }
             case 8 -> {
                 add(cx, y1, bw, h, "Add Jump", b -> { MacroEngine.add("JUMP", MacroEngine.defaultTicks); clearAndInit(); });
@@ -171,6 +178,11 @@ public final class AutoSpearSwapScreen extends Screen {
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Zoom", () -> AutoSpearSwapConfig.zoomEnabled, () -> AutoSpearSwapConfig.zoomEnabled = !AutoSpearSwapConfig.zoomEnabled, n);
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto respawn", () -> AutoSpearSwapConfig.autoRespawn, () -> AutoSpearSwapConfig.autoRespawn = !AutoSpearSwapConfig.autoRespawn, n);
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto eat", () -> AutoSpearSwapConfig.autoEat, () -> AutoSpearSwapConfig.autoEat = !AutoSpearSwapConfig.autoEat, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto walk", () -> AutoSpearSwapConfig.autoWalk, () -> AutoSpearSwapConfig.autoWalk = !AutoSpearSwapConfig.autoWalk, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Target HUD", () -> AutoSpearSwapConfig.hudTarget, () -> AutoSpearSwapConfig.hudTarget = !AutoSpearSwapConfig.hudTarget, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Durability alert", () -> AutoSpearSwapConfig.hudDurability, () -> AutoSpearSwapConfig.hudDurability = !AutoSpearSwapConfig.hudDurability, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "FPS counter", () -> AutoSpearSwapConfig.hudFps, () -> AutoSpearSwapConfig.hudFps = !AutoSpearSwapConfig.hudFps, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Clock", () -> AutoSpearSwapConfig.hudClock, () -> AutoSpearSwapConfig.hudClock = !AutoSpearSwapConfig.hudClock, n);
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Triggerbot", () -> AutoSpearSwapConfig.triggerBotEnabled, () -> AutoSpearSwapConfig.triggerBotEnabled = !AutoSpearSwapConfig.triggerBotEnabled, n);
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto spear", () -> AutoSpearSwapConfig.attributeSwapEnabled, () -> AutoSpearSwapConfig.attributeSwapEnabled = !AutoSpearSwapConfig.attributeSwapEnabled, n);
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Jump reset", () -> AutoSpearSwapConfig.jumpResetEnabled, () -> AutoSpearSwapConfig.jumpResetEnabled = !AutoSpearSwapConfig.jumpResetEnabled, n);
