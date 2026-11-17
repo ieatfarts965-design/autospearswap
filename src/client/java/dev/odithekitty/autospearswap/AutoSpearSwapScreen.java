@@ -31,15 +31,12 @@ public final class AutoSpearSwapScreen extends Screen {
         int row = Math.max(28, height / 2 - 180);
         int rowGap = 22;
 
-        addButton(left, row, buttonWidth, toggleText("Triggerbot", AutoSpearSwapConfig.triggerBotEnabled), b -> {
-            AutoSpearSwapConfig.triggerBotEnabled = !AutoSpearSwapConfig.triggerBotEnabled;
-            saveAndRefresh();
-        });
-        addButton(right, row, buttonWidth, Text.literal("Trigger delay: " + AutoSpearSwapConfig.triggerBotDelayTicks + "t"), b -> {
-            AutoSpearSwapConfig.triggerBotDelayTicks++;
-            if (AutoSpearSwapConfig.triggerBotDelayTicks > 10) AutoSpearSwapConfig.triggerBotDelayTicks = 1;
-            saveAndRefresh();
-        });
+        addButton(left, row, buttonWidth * 2 + gap,
+            Text.literal("Triggerbot  •  " + (AutoSpearSwapConfig.triggerBotEnabled ? "ON" : "OFF") + "  •  VANILLA COOLDOWN"),
+            b -> {
+                AutoSpearSwapConfig.triggerBotEnabled = !AutoSpearSwapConfig.triggerBotEnabled;
+                saveAndRefresh();
+            });
         row += rowGap;
 
         addButton(left, row, buttonWidth, toggleText("Auto spear", AutoSpearSwapConfig.attributeSwapEnabled), b -> {
@@ -131,6 +128,9 @@ public final class AutoSpearSwapScreen extends Screen {
         openingResourcePacks = true;
         MinecraftClient mc = client;
         Screen parent = this;
+        // Rescan the actual resourcepacks directory before opening the picker so
+        // packs copied in while Minecraft was running appear immediately.
+        mc.getResourcePackManager().scanPacks();
         mc.setScreen(new PackScreen(
             mc.getResourcePackManager(),
             manager -> mc.reloadResources(),
