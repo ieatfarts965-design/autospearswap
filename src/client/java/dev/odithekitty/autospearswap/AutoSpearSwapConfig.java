@@ -104,7 +104,7 @@ public final class AutoSpearSwapConfig {
                     spearSlot = clamp(data.spearSlot);
                     maceSlot = clamp(data.maceSlot);
                     lungeReturnDelayTicks = Math.max(0, Math.min(10, data.lungeReturnDelayTicks));
-                    uiTheme = Math.max(0, Math.min(5, data.uiTheme));
+                    uiTheme = Math.max(0, Math.min(8, data.uiTheme));
                     uiOpacity = Math.max(25, Math.min(90, data.uiOpacity));
                     hudCoordinates = data.hudCoordinates;
                     hudCps = data.hudCps;
