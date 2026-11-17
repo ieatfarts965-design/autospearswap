@@ -261,6 +261,17 @@ public final class AutoSpearSwapScreen extends Screen {
         ctx.drawTextWithShadow(textRenderer, Text.literal("NEXUS  •  1.6"), x + pw - 90, y + 17, 0xFF9CB4C8);
         ctx.drawTextWithShadow(textRenderer, Text.literal(TABS[tab].toUpperCase()), x + 150, y + 24, 0xFFFFFFFF);
         ctx.drawTextWithShadow(textRenderer, Text.literal(capturing == null ? "CONFIGURE YOUR CLIENT" : "PRESS A KEY TO REBIND"), x + 150, y + 38, 0xFF9CB4C8);
+        if (tab == 6) {
+            ctx.drawTextWithShadow(textRenderer, Text.literal("VANILLA SKY TEXTURES"), x + 150, y + 154, ACCENT[t]);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("Resource packs can replace the sun, moon and clouds."), x + 150, y + 174, 0xFFEAF6FF);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("Custom skyboxes need a compatible sky-rendering mod."), x + 150, y + 190, 0xFF9CB4C8);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("Use the folder button, add your pack, then reopen Packs."), x + 150, y + 214, 0xFF9CB4C8);
+        }
+        if (tab == 5) {
+            ctx.drawTextWithShadow(textRenderer, Text.literal("RESOURCE PACKS"), x + 150, y + 154, ACCENT[t]);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("Drop .zip packs into the opened folder."), x + 150, y + 174, 0xFFEAF6FF);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("Reopen the manager to rescan, enable, then press Done."), x + 150, y + 190, 0xFF9CB4C8);
+        }
         if (tab == 8) {
             String sequence = MacroEngine.STEPS.isEmpty() ? "No steps yet" : "Sequence: " +
                 MacroEngine.STEPS.stream().map(s -> s.action + "(" + s.ticks + "t)").limit(5)
