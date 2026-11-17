@@ -19,5 +19,8 @@
   },
   "suggests": {
     "skyboxify": "*"
-  }
+  },
+  "mixins": [
+    "autospearswap.mixins.json"
+  ]
 }
