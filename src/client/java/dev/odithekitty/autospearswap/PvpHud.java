@@ -143,17 +143,28 @@ public final class PvpHud {
             && hit.getEntity() instanceof LivingEntity target && target != player) {
             String targetName = target.getName().getString();
             String targetHealth = String.format("%.1f HP", target.getHealth());
-            draw(context, client, Text.literal("TARGET  " + targetName + "  •  " + targetHealth), x, y, 0xFF65D6FF);
+            String targetDistance = String.format("%.1f m", target.distanceTo(player));
+            draw(context, client, Text.literal("TARGET  " + targetName + "  •  " + targetHealth + "  •  " + targetDistance), x, y, 0xFF65D6FF);
             y += 11;
         }
         if (AutoSpearSwapConfig.hudDurability) {
-            ItemStack heldStack = player.getMainHandStack();
-            if (heldStack.isDamageable()) {
-                int remaining = heldStack.getMaxDamage() - heldStack.getDamage();
-                int percent = Math.round(remaining * 100.0f / heldStack.getMaxDamage());
-                if (percent <= 20) {
-                    draw(context, client, Text.literal("DURABILITY WARNING  " + percent + "%"), x, y, 0xFFFF7777);
-                    y += 11;
+            ItemStack[] watched = {
+                player.getMainHandStack(),
+                player.getEquippedStack(EquipmentSlot.HEAD),
+                player.getEquippedStack(EquipmentSlot.CHEST),
+                player.getEquippedStack(EquipmentSlot.LEGS),
+                player.getEquippedStack(EquipmentSlot.FEET)
+            };
+            String[] slots = {"Held item", "Helmet", "Chestplate", "Leggings", "Boots"};
+            for (int i = 0; i < watched.length; i++) {
+                ItemStack stack = watched[i];
+                if (stack.isDamageable()) {
+                    int remaining = stack.getMaxDamage() - stack.getDamage();
+                    int percent = Math.round(remaining * 100.0f / stack.getMaxDamage());
+                    if (percent <= 20) {
+                        draw(context, client, Text.literal("LOW DURABILITY  " + slots[i] + "  " + percent + "%"), x, y, 0xFFFF7777);
+                        y += 11;
+                    }
                 }
             }
         }
