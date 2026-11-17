@@ -9,6 +9,7 @@ import java.nio.file.Path;
 public final class AutoSpearSwapConfig {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Path FILE = FabricLoader.getInstance().getConfigDir().resolve("autospearswap.json");
+    private static final Path PROFILES = FabricLoader.getInstance().getConfigDir().resolve("nexus-profiles");
 
     public static boolean attributeSwapEnabled = false;
     public static boolean lungeSwapEnabled = false;
@@ -62,6 +63,31 @@ public final class AutoSpearSwapConfig {
         uiTheme = 5;
         uiOpacity = 82;
         save();
+    }
+
+    public static void saveProfile(String name) {
+        try {
+            Files.createDirectories(PROFILES);
+            Files.copy(FILE, PROFILES.resolve(safeProfile(name) + ".json"), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        } catch (Exception e) {
+            System.err.println("[Nexus] Could not save profile: " + e.getMessage());
+        }
+    }
+
+    public static void loadProfile(String name) {
+        try {
+            Path profile = PROFILES.resolve(safeProfile(name) + ".json");
+            if (Files.exists(profile)) {
+                Files.copy(profile, FILE, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                load();
+            }
+        } catch (Exception e) {
+            System.err.println("[Nexus] Could not load profile: " + e.getMessage());
+        }
+    }
+
+    private static String safeProfile(String name) {
+        return name.replaceAll("[^a-zA-Z0-9_-]", "_");
     }
 
     public static void load() {
