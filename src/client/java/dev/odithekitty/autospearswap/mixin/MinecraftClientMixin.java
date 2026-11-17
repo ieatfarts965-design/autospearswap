@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MinecraftClientMixin {
     @Shadow public net.minecraft.client.world.ClientWorld world;
     @Shadow public net.minecraft.client.network.ClientPlayerEntity player;
-    @Shadow private net.minecraft.client.network.ClientPlayNetworkHandler getNetworkHandler() { return null; }
+    @Shadow public abstract net.minecraft.client.network.ClientPlayNetworkHandler getNetworkHandler();
 
     @Unique private int autospearswap$previousSlot = -1;
 
