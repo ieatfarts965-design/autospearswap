@@ -36,6 +36,9 @@ public final class AutoSpearSwapConfig {
     public static boolean hudFood = false;
     public static boolean hudHeldItem = false;
     public static boolean hudEffects = false;
+    public static int hudX = 7;
+    public static int hudY = 7;
+    public static boolean triggerBotHoldMode = false;
 
     private AutoSpearSwapConfig() {}
 
@@ -67,6 +70,7 @@ public final class AutoSpearSwapConfig {
 
     public static void saveProfile(String name) {
         try {
+            save();
             Files.createDirectories(PROFILES);
             Files.copy(FILE, PROFILES.resolve(safeProfile(name) + ".json"), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
         } catch (Exception e) {
@@ -120,6 +124,9 @@ public final class AutoSpearSwapConfig {
                     hudFood = data.hudFood;
                     hudHeldItem = data.hudHeldItem;
                     hudEffects = data.hudEffects;
+                    hudX = Math.max(0, Math.min(10000, data.hudX));
+                    hudY = Math.max(0, Math.min(10000, data.hudY));
+                    triggerBotHoldMode = data.triggerBotHoldMode;
                 }
             } else {
                 save();
@@ -158,6 +165,9 @@ public final class AutoSpearSwapConfig {
             d.hudFood = hudFood;
             d.hudHeldItem = hudHeldItem;
             d.hudEffects = hudEffects;
+            d.hudX = hudX;
+            d.hudY = hudY;
+            d.triggerBotHoldMode = triggerBotHoldMode;
             Files.writeString(FILE, GSON.toJson(d));
         } catch (Exception e) {
             System.err.println("[AutoSpearSwap] Could not save config: " + e.getMessage());
@@ -194,5 +204,8 @@ public final class AutoSpearSwapConfig {
         boolean hudFood = false;
         boolean hudHeldItem = false;
         boolean hudEffects = false;
+        int hudX = 7;
+        int hudY = 7;
+        boolean triggerBotHoldMode = false;
     }
 }
