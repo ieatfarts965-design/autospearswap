@@ -46,3 +46,9 @@ This is a client-side utility mod. HUD values are local estimates: CPS counts in
 - Added a configurable macro sequencer with saved action sequences, adjustable tick delays, jump/attack/use and movement actions, and an F8 playback toggle.
 - Added visual presets alongside the five Nexus interface themes and vanilla resource-pack manager.
 - Macro playback uses normal Minecraft key bindings; server rules and server-side checks still apply. Use macros only where permitted.
+
+
+## Nexus Client 1.5.0
+
+- Added optional jump reset: detects a fresh incoming hit while grounded and triggers a jump with a short cooldown. This is timing-sensitive and must be tested on the target server.
+- Proxy note: a client mod cannot falsify the public source IP of an established connection. Routing through a legitimate SOCKS/HTTP proxy is different; the remote server sees the proxy's exit IP, not a spoofed client IP.
