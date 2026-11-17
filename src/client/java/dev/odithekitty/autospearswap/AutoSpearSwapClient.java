@@ -44,10 +44,12 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
                 Entity target = hit.getEntity();
                 if (target instanceof PlayerEntity targetPlayer && targetPlayer != client.player
                     && targetPlayer.isAlive() && !targetPlayer.isSpectator()) {
-                    if (triggerBotTicks <= 0) {
+                    // Wait for vanilla's attack cooldown to be fully charged. The server
+                    // remains authoritative and can still reject an attack if its own
+                    // cooldown or combat rules do not permit it.
+                    if (client.player.getAttackCooldownProgress(0.5F) >= 1.0F) {
                         ((MinecraftClientAccessor) client).autospearswap$invokeDoAttack();
-                        triggerBotTicks = Math.max(1, AutoSpearSwapConfig.triggerBotDelayTicks);
-                    } else triggerBotTicks--;
+                    }
                 } else triggerBotTicks = 0;
             } else triggerBotTicks = 0;
             if (client.player != null && AutoSpearSwapConfig.autoSprint && client.options.forwardKey.isPressed()
