@@ -56,6 +56,10 @@ public final class MacroEngine {
         save();
     }
 
+    public static void undo() {
+        if (!STEPS.isEmpty()) { STEPS.remove(STEPS.size() - 1); save(); }
+    }
+
     public static void clear() {
         stop();
         STEPS.clear();
