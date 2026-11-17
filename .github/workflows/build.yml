@@ -16,7 +16,7 @@ jobs:
         with:
           gradle-version: 9.4.0
       - name: Install Nexus icon
-        run: base64 -d src/main/resources/assets/icon.png.b64 > src/main/resources/assets/icon.png
+        run: base64 -d src/main/resources/assets/icon.png.b64 > src/main/resources/assets/icon.png && rm src/main/resources/assets/icon.png.b64
       - name: Build
         run: gradle build
       - uses: actions/upload-artifact@v4
