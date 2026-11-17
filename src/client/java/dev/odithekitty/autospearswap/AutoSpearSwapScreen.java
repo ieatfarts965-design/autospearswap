@@ -94,7 +94,7 @@ public final class AutoSpearSwapScreen extends Screen {
                     MacroEngine.defaultTicks = delays[next]; clearAndInit();
                 });
                 add(cx + bw + gap, y1 + 152, bw, h, "Undo step", b -> {
-                    if (!MacroEngine.STEPS.isEmpty()) { MacroEngine.STEPS.remove(MacroEngine.STEPS.size() - 1); }
+                    MacroEngine.undo();
                     clearAndInit();
                 });
                 add(cx, y1 + 190, bw, h, MacroEngine.isRunning() ? "Stop macro" : "Play macro", b -> {
