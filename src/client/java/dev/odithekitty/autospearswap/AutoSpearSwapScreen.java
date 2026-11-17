@@ -163,7 +163,7 @@ public final class AutoSpearSwapScreen extends Screen {
                 add(cx + bw + gap, y1 + 266, bw, h, "Load Performance", b -> { AutoSpearSwapConfig.loadProfile("Performance"); clearAndInit(); });
             }
             case 10 -> {
-                searchField = new TextFieldWidget(textRenderer, cx, y1, cw, h, Text.literal("Search modules"));
+                searchField = new TextFieldWidget(textRenderer, cx, y1, cw - 72, h, Text.literal("Search modules"));
                 searchField.setMaxLength(32);
                 searchField.setText(moduleQuery);
                 searchField.setChangedListener(value -> moduleQuery = value);
