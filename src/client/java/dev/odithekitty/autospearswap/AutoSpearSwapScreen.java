@@ -45,6 +45,8 @@ public final class AutoSpearSwapScreen extends Screen {
                 add(cx, y1 + 39, cw, h, "Spear slot  •  " + (AutoSpearSwapConfig.spearSlot + 1), b -> {
                     AutoSpearSwapConfig.spearSlot = (AutoSpearSwapConfig.spearSlot + 1) % 9; save();
                 });
+                toggle(cx, y1 + 78, cw, h, "Jump reset", AutoSpearSwapConfig.jumpResetEnabled,
+                    () -> AutoSpearSwapConfig.jumpResetEnabled = !AutoSpearSwapConfig.jumpResetEnabled);
             }
             case 1 -> toggle(cx, y1, bw, h, "Auto sprint", AutoSpearSwapConfig.autoSprint,
                 () -> AutoSpearSwapConfig.autoSprint = !AutoSpearSwapConfig.autoSprint);
