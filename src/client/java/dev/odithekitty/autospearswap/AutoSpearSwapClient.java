@@ -21,6 +21,10 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
     public static KeyBinding triggerBotKey;
     public static KeyBinding macroKey;
     public static KeyBinding toggleSneakKey;
+    public static KeyBinding zoomKey;
+    private static int originalFov = -1;
+    private static boolean wasZooming;
+    private static double originalGamma = -1.0;
     private static boolean sneakLatched;
     private static int autoJumpCooldown;
     private static int previousSlot = -1;
@@ -45,9 +49,26 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
             "key.autospearswap.macro", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_F8, category));
         toggleSneakKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
             "key.autospearswap.toggle_sneak", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_C, category));
+        zoomKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+            "key.autospearswap.zoom", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_Z, category));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             PvpHud.tick(client);
+            if (originalGamma < 0.0) originalGamma = client.options.getGamma().getValue();
+            client.options.getGamma().setValue(AutoSpearSwapConfig.fullbright ? 1.0 : originalGamma);
+            boolean zooming = AutoSpearSwapConfig.zoomEnabled && zoomKey.isPressed()
+                && client.currentScreen == null;
+            if (zooming && !wasZooming) originalFov = client.options.getFov().getValue();
+            if (zooming) client.options.getFov().setValue(30);
+            else if (wasZooming && originalFov >= 0) {
+                client.options.getFov().setValue(originalFov);
+                originalFov = -1;
+            }
+            wasZooming = zooming;
+            if (AutoSpearSwapConfig.autoRespawn && client.player != null
+                && client.player.isDead() && client.currentScreen == null) {
+                client.player.requestRespawn();
+            }
             if (client.player == null || client.world == null) {
                 lastHurtTime = 0;
                 jumpResetCooldown = 0;
