@@ -16,10 +16,10 @@ import net.minecraft.text.Text;
 
 public final class AutoSpearSwapScreen extends Screen {
     private static final String[] TABS = {"Combat", "Movement", "HUD", "Visuals", "Performance", "Packs", "Skies", "Keys", "Macros", "Info", "Search", "Editor"};
-    private static final String[] THEMES = {"Nexus", "Violet", "Mint", "Crimson", "Gold", "Clarity"};
-    private static final int[] ACCENT = {0xFF27C7FF, 0xFFB18CFF, 0xFF63E6B0, 0xFFFF647C, 0xFFFFC857, 0xFFB7C7D8};
-    private static final int[] PANEL = {0xF0091728, 0xF0151028, 0xF00B211D, 0xF0201018, 0xF0221A0B, 0xF010141B};
-    private static final int[] SIDE = {0xF00B2034, 0xF01D1635, 0xF0103028, 0xF02A1420, 0xF02C220F, 0xF018202B};
+    private static final String[] THEMES = {"Nexus", "Violet", "Mint", "Crimson", "Gold", "Clarity", "Obsidian", "Arctic", "Rose"};
+    private static final int[] ACCENT = {0xFF27C7FF, 0xFFB18CFF, 0xFF63E6B0, 0xFFFF647C, 0xFFFFC857, 0xFFB7C7D8, 0xFF9BA7B8, 0xFF71D8FF, 0xFFFF8FAF};
+    private static final int[] PANEL = {0xF0091728, 0xF0151028, 0xF00B211D, 0xF0201018, 0xF0221A0B, 0xF010141B, 0xF00C1017, 0xF0081B29, 0xF01D1019};
+    private static final int[] SIDE = {0xF00B2034, 0xF01D1635, 0xF0103028, 0xF02A1420, 0xF02C220F, 0xF018202B, 0xF017202D, 0xF00C2C40, 0xF02C1924};
     private int tab;
     private KeyBinding capturing;
     private boolean openingPacks;
@@ -321,7 +321,7 @@ public final class AutoSpearSwapScreen extends Screen {
     @Override
     public void render(DrawContext ctx, int mx, int my, float delta) {
         renderBackground(ctx, mx, my, delta);
-        int t = Math.max(0, Math.min(5, AutoSpearSwapConfig.uiTheme));
+        int t = Math.max(0, Math.min(8, AutoSpearSwapConfig.uiTheme));
         int pw = Math.min(540, width - 20), ph = Math.min(440, height - 20);
         int x = (width - pw) / 2, y = (height - ph) / 2;
         int a = Math.round(255 * (AutoSpearSwapConfig.uiOpacity / 100.0f));
