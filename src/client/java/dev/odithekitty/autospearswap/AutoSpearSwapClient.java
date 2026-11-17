@@ -33,6 +33,7 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
     private static boolean autoWalkLatched;
     private static boolean sneakLatched;
     private static int autoJumpCooldown;
+    private static int autoSwimCooldown;
     private static int previousSlot = -1;
     private static int triggerBotTicks = 0;
     private static int lastHurtTime = 0;
@@ -95,6 +96,7 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
             } else {
                 if (jumpResetCooldown > 0) jumpResetCooldown--;
                 if (autoJumpCooldown > 0) autoJumpCooldown--;
+                if (autoSwimCooldown > 0) autoSwimCooldown--;
                 if (autoEatCooldown > 0) autoEatCooldown--;
                 if (!AutoSpearSwapConfig.autoEat) {
                     if (autoEatPreviousSlot >= 0) {
@@ -131,6 +133,12 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
                     && !client.player.hasVehicle() && client.currentScreen == null && autoJumpCooldown == 0) {
                     client.player.jump();
                     autoJumpCooldown = 2;
+                }
+                if (AutoSpearSwapConfig.autoSwim && client.options.forwardKey.isPressed()
+                    && client.player.isTouchingWater() && !client.player.hasVehicle()
+                    && client.currentScreen == null && autoSwimCooldown == 0) {
+                    client.player.jump();
+                    autoSwimCooldown = 3;
                 }
                 if (AutoSpearSwapConfig.autoTool && client.options.attackKey.isPressed()
                     && client.currentScreen == null && client.crosshairTarget instanceof BlockHitResult blockHit) {
