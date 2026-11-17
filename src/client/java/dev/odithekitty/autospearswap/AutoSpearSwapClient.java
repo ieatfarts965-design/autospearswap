@@ -25,7 +25,7 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
         swapToSpearKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
             "key.autospearswap.swap_spear", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_V, category));
 
-        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {\n            PvpHud.tick(client);\n            if (client.player != null && AutoSpearSwapConfig.autoSprint && client.options.forwardKey.isPressed()\n                && !client.player.isSneaking() && !client.player.hasVehicle()) {\n                client.player.setSprinting(true);\n            }
             while (openMenuKey.wasPressed()) {
                 if (client.currentScreen == null) client.setScreen(new AutoSpearSwapScreen());
             }
