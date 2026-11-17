@@ -45,8 +45,8 @@ public final class PvpHud {
     public static void render(DrawContext context, MinecraftClient client) {
         PlayerEntity player = client.player;
         if (player == null || client.textRenderer == null) return;
-        int x = 7;
-        int y = 7;
+        int x = AutoSpearSwapConfig.hudX;
+        int y = AutoSpearSwapConfig.hudY;
         int color = 0xFFEAF6FF;
         if (AutoSpearSwapConfig.hudCoordinates) {
             draw(context, client, Text.literal(String.format("XYZ  %.1f  %.1f  %.1f", player.getX(), player.getY(), player.getZ())), x, y, color);
