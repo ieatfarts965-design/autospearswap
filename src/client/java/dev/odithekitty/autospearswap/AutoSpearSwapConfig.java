@@ -26,6 +26,7 @@ public final class AutoSpearSwapConfig {
     public static boolean autoSprint = false;
     public static boolean triggerBotEnabled = false;
     public static int triggerBotDelayTicks = 2;
+    public static boolean jumpResetEnabled = false;
 
     private AutoSpearSwapConfig() {}
 
@@ -50,6 +51,7 @@ public final class AutoSpearSwapConfig {
                     autoSprint = data.autoSprint;
                     triggerBotEnabled = data.triggerBotEnabled;
                     triggerBotDelayTicks = Math.max(1, Math.min(10, data.triggerBotDelayTicks));
+                    jumpResetEnabled = data.jumpResetEnabled;
                 }
             } else {
                 save();
@@ -79,6 +81,7 @@ public final class AutoSpearSwapConfig {
             d.autoSprint = autoSprint;
             d.triggerBotEnabled = triggerBotEnabled;
             d.triggerBotDelayTicks = triggerBotDelayTicks;
+            d.jumpResetEnabled = jumpResetEnabled;
             Files.writeString(FILE, GSON.toJson(d));
         } catch (Exception e) {
             System.err.println("[AutoSpearSwap] Could not save config: " + e.getMessage());
@@ -106,5 +109,6 @@ public final class AutoSpearSwapConfig {
         boolean autoSprint = false;
         boolean triggerBotEnabled = false;
         int triggerBotDelayTicks = 2;
+        boolean jumpResetEnabled = false;
     }
 }
