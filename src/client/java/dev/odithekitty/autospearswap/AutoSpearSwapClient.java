@@ -24,11 +24,13 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
     public static KeyBinding macroKey;
     public static KeyBinding toggleSneakKey;
     public static KeyBinding zoomKey;
+    public static KeyBinding autoWalkKey;
     private static int originalFov = -1;
     private static boolean wasZooming;
     private static double originalGamma = -1.0;
     private static int autoEatPreviousSlot = -1;
     private static int autoEatCooldown;
+    private static boolean autoWalkLatched;
     private static boolean sneakLatched;
     private static int autoJumpCooldown;
     private static int previousSlot = -1;
@@ -55,9 +57,21 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
             "key.autospearswap.toggle_sneak", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_C, category));
         zoomKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
             "key.autospearswap.zoom", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_Z, category));
+        autoWalkKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+            "key.autospearswap.auto_walk", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_H, category));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             PvpHud.tick(client);
+            while (autoWalkKey.wasPressed()) {
+                autoWalkLatched = !autoWalkLatched;
+                AutoSpearSwapConfig.autoWalk = autoWalkLatched;
+                AutoSpearSwapConfig.save();
+            }
+            if (client.player == null || client.currentScreen != null || !AutoSpearSwapConfig.autoWalk) {
+                if (client.options != null) client.options.forwardKey.setPressed(false);
+            } else {
+                client.options.forwardKey.setPressed(true);
+            }
             if (originalGamma < 0.0) originalGamma = client.options.getGamma().getValue();
             client.options.getGamma().setValue(AutoSpearSwapConfig.fullbright ? 1.0 : originalGamma);
             boolean zooming = AutoSpearSwapConfig.zoomEnabled && zoomKey.isPressed()
