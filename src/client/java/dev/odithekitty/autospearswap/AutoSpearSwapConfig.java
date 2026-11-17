@@ -31,6 +31,7 @@ public final class AutoSpearSwapConfig {
     public static boolean fullbright = false;
     public static boolean zoomEnabled = false;
     public static boolean autoRespawn = false;
+    public static boolean autoEat = false;
     public static boolean triggerBotEnabled = false;
     public static int triggerBotDelayTicks = 2;
     public static boolean jumpResetEnabled = false;
@@ -61,6 +62,7 @@ public final class AutoSpearSwapConfig {
         fullbright = false;
         zoomEnabled = false;
         autoRespawn = false;
+        autoEat = false;
         hudCoordinates = true;
         hudCps = true;
         hudArmor = true;
@@ -131,6 +133,7 @@ public final class AutoSpearSwapConfig {
                     fullbright = data.fullbright;
                     zoomEnabled = data.zoomEnabled;
                     autoRespawn = data.autoRespawn;
+                    autoEat = data.autoEat;
                     triggerBotEnabled = data.triggerBotEnabled;
                     triggerBotDelayTicks = Math.max(1, Math.min(10, data.triggerBotDelayTicks));
                     jumpResetEnabled = data.jumpResetEnabled;
@@ -178,6 +181,7 @@ public final class AutoSpearSwapConfig {
             d.fullbright = fullbright;
             d.zoomEnabled = zoomEnabled;
             d.autoRespawn = autoRespawn;
+            d.autoEat = autoEat;
             d.triggerBotEnabled = triggerBotEnabled;
             d.triggerBotDelayTicks = triggerBotDelayTicks;
             d.jumpResetEnabled = jumpResetEnabled;
@@ -223,6 +227,7 @@ public final class AutoSpearSwapConfig {
         boolean fullbright = false;
         boolean zoomEnabled = false;
         boolean autoRespawn = false;
+        boolean autoEat = false;
         boolean triggerBotEnabled = false;
         int triggerBotDelayTicks = 2;
         boolean jumpResetEnabled = false;
