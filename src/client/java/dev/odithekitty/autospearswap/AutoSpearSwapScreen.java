@@ -28,7 +28,7 @@ public final class AutoSpearSwapScreen extends Screen {
         int buttonWidth = Math.min(142, (width - 30 - gap) / 2);
         int left = width / 2 - buttonWidth - gap / 2;
         int right = width / 2 + gap / 2;
-        int row = Math.max(34, height / 2 - 76);
+        int row = Math.max(36, height / 2 - 148);
         int rowGap = 25;
 
         addButton(left, row, buttonWidth, toggleText("Auto spear", AutoSpearSwapConfig.attributeSwapEnabled), b -> {
@@ -51,6 +51,28 @@ public final class AutoSpearSwapScreen extends Screen {
         });
 
         row += rowGap;
+        addToggle(left, right, row, buttonWidth, "Coordinates", AutoSpearSwapConfig.hudCoordinates,
+            () -> AutoSpearSwapConfig.hudCoordinates = !AutoSpearSwapConfig.hudCoordinates);
+        row += rowGap;
+        addToggle(left, right, row, buttonWidth, "CPS counter", AutoSpearSwapConfig.hudCps,
+            () -> AutoSpearSwapConfig.hudCps = !AutoSpearSwapConfig.hudCps);
+        row += rowGap;
+        addToggle(left, right, row, buttonWidth, "Armor status", AutoSpearSwapConfig.hudArmor,
+            () -> AutoSpearSwapConfig.hudArmor = !AutoSpearSwapConfig.hudArmor);
+        row += rowGap;
+        addToggle(left, right, row, buttonWidth, "Keystrokes", AutoSpearSwapConfig.hudKeystrokes,
+            () -> AutoSpearSwapConfig.hudKeystrokes = !AutoSpearSwapConfig.hudKeystrokes);
+        row += rowGap;
+        addToggle(left, right, row, buttonWidth, "Combat timer", AutoSpearSwapConfig.hudCombatTimer,
+            () -> AutoSpearSwapConfig.hudCombatTimer = !AutoSpearSwapConfig.hudCombatTimer);
+        row += rowGap;
+        addToggle(left, right, row, buttonWidth, "Low health alert", AutoSpearSwapConfig.lowHealthWarning,
+            () -> AutoSpearSwapConfig.lowHealthWarning = !AutoSpearSwapConfig.lowHealthWarning);
+        row += rowGap;
+        addToggle(left, right, row, buttonWidth, "Auto sprint", AutoSpearSwapConfig.autoSprint,
+            () -> AutoSpearSwapConfig.autoSprint = !AutoSpearSwapConfig.autoSprint);
+
+        row += rowGap;
         addButton(left, row, buttonWidth, Text.literal("FPS boost preset"), b -> {
             applyPerformancePreset();
             saveAndRefresh();
@@ -71,10 +93,17 @@ public final class AutoSpearSwapScreen extends Screen {
             saveAndRefresh();
         });
 
-        row += rowGap + 4;
+        row += rowGap + 3;
         addButton(left, row, buttonWidth * 2 + gap, Text.literal("Open / import resource packs"), b -> openResourcePacks());
-        row += rowGap + 4;
+        row += rowGap + 3;
         addButton(left, row, buttonWidth * 2 + gap, Text.literal("Done"), b -> close());
+    }
+
+    private void addToggle(int left, int right, int y, int buttonWidth, String label, boolean enabled, Runnable toggle) {
+        addButton(left, y, buttonWidth, toggleText(label, enabled), b -> {
+            toggle.run();
+            saveAndRefresh();
+        });
     }
 
     private void addButton(int x, int y, int w, Text label, ButtonWidget.PressAction action) {
@@ -151,17 +180,17 @@ public final class AutoSpearSwapScreen extends Screen {
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         renderBackground(context, mouseX, mouseY, delta);
-        int panelWidth = Math.min(320, width - 16);
-        int panelHeight = Math.min(220, height - 12);
+        int panelWidth = Math.min(340, width - 16);
+        int panelHeight = Math.min(390, height - 12);
         int x = (width - panelWidth) / 2;
         int y = (height - panelHeight) / 2;
         int alpha = Math.round(255 * (AutoSpearSwapConfig.uiOpacity / 100.0f));
         context.fill(x, y, x + panelWidth, y + panelHeight, (alpha << 24) | 0x00091420);
         context.fill(x, y, x + panelWidth, y + 3, accent());
-        context.drawCenteredTextWithShadow(textRenderer, title, width / 2, y + 10, accent());
+        context.drawCenteredTextWithShadow(textRenderer, title, width / 2, y + 8, accent());
         context.drawCenteredTextWithShadow(textRenderer,
-            Text.literal(capturing == null ? "Combat  •  Performance  •  Appearance" : "Press the key you want to bind"),
-            width / 2, y + 24, 0xFFD7E6F2);
+            Text.literal(capturing == null ? "PVP HUD  •  COMBAT  •  PERFORMANCE" : "Press the key you want to bind"),
+            width / 2, y + 20, 0xFFD7E6F2);
         super.render(context, mouseX, mouseY, delta);
     }
 
