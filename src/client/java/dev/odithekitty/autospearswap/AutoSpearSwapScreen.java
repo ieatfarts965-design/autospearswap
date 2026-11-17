@@ -163,6 +163,11 @@ public final class AutoSpearSwapScreen extends Screen {
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Direction", () -> AutoSpearSwapConfig.hudDirection, () -> AutoSpearSwapConfig.hudDirection = !AutoSpearSwapConfig.hudDirection, n);
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Biome", () -> AutoSpearSwapConfig.hudBiome, () -> AutoSpearSwapConfig.hudBiome = !AutoSpearSwapConfig.hudBiome, n);
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Server ping", () -> AutoSpearSwapConfig.hudPing, () -> AutoSpearSwapConfig.hudPing = !AutoSpearSwapConfig.hudPing, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Health", () -> AutoSpearSwapConfig.hudHealth, () -> AutoSpearSwapConfig.hudHealth = !AutoSpearSwapConfig.hudHealth, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Food", () -> AutoSpearSwapConfig.hudFood, () -> AutoSpearSwapConfig.hudFood = !AutoSpearSwapConfig.hudFood, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Held item", () -> AutoSpearSwapConfig.hudHeldItem, () -> AutoSpearSwapConfig.hudHeldItem = !AutoSpearSwapConfig.hudHeldItem, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Potion effects", () -> AutoSpearSwapConfig.hudEffects, () -> AutoSpearSwapConfig.hudEffects = !AutoSpearSwapConfig.hudEffects, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Low health warning", () -> AutoSpearSwapConfig.lowHealthWarning, () -> AutoSpearSwapConfig.lowHealthWarning = !AutoSpearSwapConfig.lowHealthWarning, n);
             }
             case 11 -> {
                 add(cx, y1, cw, h, "Reset HUD position", b -> { AutoSpearSwapConfig.hudX = 7; AutoSpearSwapConfig.hudY = 7; save(); });
