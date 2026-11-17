@@ -1,6 +1,7 @@
 package dev.odithekitty.autospearswap;
 
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.input.KeyInput;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.option.KeyBinding;
@@ -54,15 +55,15 @@ public final class AutoSpearSwapScreen extends Screen {
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+    public boolean keyPressed(KeyInput input) {
         if (capturing != null) {
-            capturing.setBoundKey(InputUtil.fromKeyCode(keyCode, scanCode));
+            capturing.setBoundKey(InputUtil.fromKeyCode(input));
             KeyBinding.updateKeysByCode();
             capturing = null;
             clearAndInit();
             return true;
         }
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        return super.keyPressed(input);
     }
 
     @Override
