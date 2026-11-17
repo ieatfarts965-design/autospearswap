@@ -24,7 +24,8 @@ public final class AutoSpearSwapScreen extends Screen {
     private KeyBinding capturing;
     private boolean openingPacks;
     private String moduleQuery = "";
-    private TextFieldWidget searchField;\n    private int modulePage;
+    private TextFieldWidget searchField;
+    private int modulePage;
 
     public AutoSpearSwapScreen() { super(Text.literal("NEXUS CLIENT")); }
 
