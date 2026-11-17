@@ -168,7 +168,7 @@ public final class PvpHud {
                 }
             }
         }
-        if (AutoSpearSwapConfig.lowHealthWarning && player.getHealth() <= 6.0f) {
+        NexusModuleRegistry.render(context, client, x, y, color);\n        if (AutoSpearSwapConfig.lowHealthWarning && player.getHealth() <= 6.0f) {
             String warning = "LOW HEALTH";
             int width = client.textRenderer.getWidth(warning);
             context.drawTextWithShadow(client.textRenderer, warning, (context.getScaledWindowWidth() - width) / 2,
