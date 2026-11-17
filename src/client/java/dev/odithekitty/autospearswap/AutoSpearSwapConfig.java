@@ -16,7 +16,14 @@ public final class AutoSpearSwapConfig {
     public static int maceSlot = 1;
     public static int lungeReturnDelayTicks = 1;
     public static int uiTheme = 0;
-    public static int uiOpacity = 65;\n    public static boolean hudCoordinates = true;\n    public static boolean hudCps = true;\n    public static boolean hudArmor = true;\n    public static boolean hudKeystrokes = true;\n    public static boolean hudCombatTimer = true;\n    public static boolean lowHealthWarning = true;\n    public static boolean autoSprint = false;
+    public static int uiOpacity = 65;
+    public static boolean hudCoordinates = true;
+    public static boolean hudCps = true;
+    public static boolean hudArmor = true;
+    public static boolean hudKeystrokes = true;
+    public static boolean hudCombatTimer = true;
+    public static boolean lowHealthWarning = true;
+    public static boolean autoSprint = false;
 
     private AutoSpearSwapConfig() {}
 
@@ -31,9 +38,18 @@ public final class AutoSpearSwapConfig {
                     maceSlot = clamp(data.maceSlot);
                     lungeReturnDelayTicks = Math.max(0, Math.min(10, data.lungeReturnDelayTicks));
                     uiTheme = Math.max(0, Math.min(4, data.uiTheme));
-                    uiOpacity = Math.max(25, Math.min(90, data.uiOpacity));\n                    hudCoordinates = data.hudCoordinates;\n                    hudCps = data.hudCps;\n                    hudArmor = data.hudArmor;\n                    hudKeystrokes = data.hudKeystrokes;\n                    hudCombatTimer = data.hudCombatTimer;\n                    lowHealthWarning = data.lowHealthWarning;\n                    autoSprint = data.autoSprint;
+                    uiOpacity = Math.max(25, Math.min(90, data.uiOpacity));
+                    hudCoordinates = data.hudCoordinates;
+                    hudCps = data.hudCps;
+                    hudArmor = data.hudArmor;
+                    hudKeystrokes = data.hudKeystrokes;
+                    hudCombatTimer = data.hudCombatTimer;
+                    lowHealthWarning = data.lowHealthWarning;
+                    autoSprint = data.autoSprint;
                 }
-            } else save();
+            } else {
+                save();
+            }
         } catch (Exception e) {
             System.err.println("[AutoSpearSwap] Could not load config: " + e.getMessage());
         }
@@ -49,14 +65,23 @@ public final class AutoSpearSwapConfig {
             d.maceSlot = maceSlot;
             d.lungeReturnDelayTicks = lungeReturnDelayTicks;
             d.uiTheme = uiTheme;
-            d.uiOpacity = uiOpacity;\n            d.hudCoordinates = hudCoordinates;\n            d.hudCps = hudCps;\n            d.hudArmor = hudArmor;\n            d.hudKeystrokes = hudKeystrokes;\n            d.hudCombatTimer = hudCombatTimer;\n            d.lowHealthWarning = lowHealthWarning;\n            d.autoSprint = autoSprint;
+            d.uiOpacity = uiOpacity;
+            d.hudCoordinates = hudCoordinates;
+            d.hudCps = hudCps;
+            d.hudArmor = hudArmor;
+            d.hudKeystrokes = hudKeystrokes;
+            d.hudCombatTimer = hudCombatTimer;
+            d.lowHealthWarning = lowHealthWarning;
+            d.autoSprint = autoSprint;
             Files.writeString(FILE, GSON.toJson(d));
         } catch (Exception e) {
             System.err.println("[AutoSpearSwap] Could not save config: " + e.getMessage());
         }
     }
 
-    private static int clamp(int slot) { return Math.max(0, Math.min(8, slot)); }
+    private static int clamp(int slot) {
+        return Math.max(0, Math.min(8, slot));
+    }
 
     private static final class Data {
         boolean attributeSwapEnabled;
@@ -65,6 +90,13 @@ public final class AutoSpearSwapConfig {
         int maceSlot = 1;
         int lungeReturnDelayTicks = 1;
         int uiTheme = 0;
-        int uiOpacity = 65;\n        boolean hudCoordinates = true;\n        boolean hudCps = true;\n        boolean hudArmor = true;\n        boolean hudKeystrokes = true;\n        boolean hudCombatTimer = true;\n        boolean lowHealthWarning = true;\n        boolean autoSprint = false;
+        int uiOpacity = 65;
+        boolean hudCoordinates = true;
+        boolean hudCps = true;
+        boolean hudArmor = true;
+        boolean hudKeystrokes = true;
+        boolean hudCombatTimer = true;
+        boolean lowHealthWarning = true;
+        boolean autoSprint = false;
     }
 }
