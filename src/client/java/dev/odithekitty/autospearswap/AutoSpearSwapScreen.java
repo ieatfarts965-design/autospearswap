@@ -25,6 +25,9 @@ public final class AutoSpearSwapScreen extends Screen {
     private boolean openingPacks;
     private String moduleQuery = "";
     private TextFieldWidget searchField;
+    private boolean draggingHudPreview;
+    private int hudDragOffsetX;
+    private int hudDragOffsetY;
 
     public AutoSpearSwapScreen() { super(Text.literal("NEXUS CLIENT")); }
 
@@ -339,7 +342,12 @@ public final class AutoSpearSwapScreen extends Screen {
             ctx.drawTextWithShadow(textRenderer, Text.literal("HUD POSITION"), x + 150, y + 154, ACCENT[t]);
             ctx.drawTextWithShadow(textRenderer, Text.literal("Use the controls to move your on-screen HUD."), x + 150, y + 174, 0xFFEAF6FF);
             ctx.drawTextWithShadow(textRenderer, Text.literal("X: " + AutoSpearSwapConfig.hudX + "   Y: " + AutoSpearSwapConfig.hudY), x + 150, y + 190, 0xFF9CB4C8);
-            ctx.drawTextWithShadow(textRenderer, Text.literal("Your layout is saved automatically."), x + 150, y + 214, 0xFF9CB4C8);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("Drag the preview below to position the HUD."), x + 150, y + 214, 0xFF9CB4C8);
+            int px = x + 160 + Math.floorMod(AutoSpearSwapConfig.hudX, Math.max(1, pw - 340));
+            int py = y + 250 + Math.floorMod(AutoSpearSwapConfig.hudY, 55);
+            ctx.fill(x + 150, y + 238, x + pw - 20, y + 322, 0xAA0A111A);
+            ctx.fill(px, py, px + 92, py + 24, 0xFF20384B);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("NEXUS HUD"), px + 8, py + 8, ACCENT[t]);
         }
         if (tab == 6) {
             ctx.drawTextWithShadow(textRenderer, Text.literal("VANILLA SKY TEXTURES"), x + 150, y + 154, ACCENT[t]);
@@ -360,6 +368,41 @@ public final class AutoSpearSwapScreen extends Screen {
             ctx.drawTextWithShadow(textRenderer, Text.literal("F8  •  " + (MacroEngine.isRunning() ? "RUNNING" : "READY")), x + 150, y + 356, 0xFF9CB4C8);
         }
         super.render(ctx, mx, my, delta);
+    }
+
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (tab == 11 && button == 0) {
+            int pw = Math.min(540, width - 20), ph = Math.min(440, height - 20);
+            int x = (width - pw) / 2, y = (height - ph) / 2;
+            int px = x + 160 + Math.floorMod(AutoSpearSwapConfig.hudX, Math.max(1, pw - 340));
+            int py = y + 250 + Math.floorMod(AutoSpearSwapConfig.hudY, 55);
+            if (mouseX >= px && mouseX <= px + 92 && mouseY >= py && mouseY <= py + 24) {
+                draggingHudPreview = true;
+                hudDragOffsetX = (int) mouseX - px;
+                hudDragOffsetY = (int) mouseY - py;
+                return true;
+            }
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+        if (draggingHudPreview && button == 0) {
+            AutoSpearSwapConfig.hudX = Math.max(0, Math.min(width - 92, (int) mouseX - hudDragOffsetX));
+            AutoSpearSwapConfig.hudY = Math.max(0, Math.min(height - 24, (int) mouseY - hudDragOffsetY));
+            AutoSpearSwapConfig.save();
+            return true;
+        }
+        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+    }
+
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        if (button == 0) draggingHudPreview = false;
+        return super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override public void close() { if (client != null) client.setScreen(null); }
