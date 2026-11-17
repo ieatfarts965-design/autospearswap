@@ -3,7 +3,7 @@
   "id": "autospearswap",
   "version": "${version}",
   "name": "Nexus Client",
-  "description": "Modular client utilities, configurable macros, combat tools, HUD, visual presets, and resource-pack management.",
+  "description": "Nexus client with combat utilities, macros, HUD, visual and FPS presets, and resource-pack management.",
   "environment": "client",
   "icon": "assets/icon.png",
   "entrypoints": {
