@@ -27,6 +27,22 @@ public final class AutoSpearSwapConfig {
     public static boolean triggerBotEnabled = false;
     public static int triggerBotDelayTicks = 2;
     public static boolean jumpResetEnabled = false;
+        boolean hudSpeed = true;
+        boolean hudDirection = true;
+        boolean hudBiome = false;
+        boolean hudPing = true;
+        boolean hudHealth = true;
+        boolean hudFood = false;
+        boolean hudHeldItem = false;
+        boolean hudEffects = false;
+    public static boolean hudSpeed = true;
+    public static boolean hudDirection = true;
+    public static boolean hudBiome = false;
+    public static boolean hudPing = true;
+    public static boolean hudHealth = true;
+    public static boolean hudFood = false;
+    public static boolean hudHeldItem = false;
+    public static boolean hudEffects = false;
 
     private AutoSpearSwapConfig() {}
 
@@ -52,6 +68,14 @@ public final class AutoSpearSwapConfig {
                     triggerBotEnabled = data.triggerBotEnabled;
                     triggerBotDelayTicks = Math.max(1, Math.min(10, data.triggerBotDelayTicks));
                     jumpResetEnabled = data.jumpResetEnabled;
+                    hudSpeed = data.hudSpeed;
+                    hudDirection = data.hudDirection;
+                    hudBiome = data.hudBiome;
+                    hudPing = data.hudPing;
+                    hudHealth = data.hudHealth;
+                    hudFood = data.hudFood;
+                    hudHeldItem = data.hudHeldItem;
+                    hudEffects = data.hudEffects;
                 }
             } else {
                 save();
@@ -82,6 +106,14 @@ public final class AutoSpearSwapConfig {
             d.triggerBotEnabled = triggerBotEnabled;
             d.triggerBotDelayTicks = triggerBotDelayTicks;
             d.jumpResetEnabled = jumpResetEnabled;
+            d.hudSpeed = hudSpeed;
+            d.hudDirection = hudDirection;
+            d.hudBiome = hudBiome;
+            d.hudPing = hudPing;
+            d.hudHealth = hudHealth;
+            d.hudFood = hudFood;
+            d.hudHeldItem = hudHeldItem;
+            d.hudEffects = hudEffects;
             Files.writeString(FILE, GSON.toJson(d));
         } catch (Exception e) {
             System.err.println("[AutoSpearSwap] Could not save config: " + e.getMessage());
