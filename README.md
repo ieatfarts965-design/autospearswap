@@ -52,3 +52,11 @@ This is a client-side utility mod. HUD values are local estimates: CPS counts in
 
 - Added optional jump reset: detects a fresh incoming hit while grounded and triggers a jump with a short cooldown. This is timing-sensitive and must be tested on the target server.
 - Proxy note: a client mod cannot falsify the public source IP of an established connection. Routing through a legitimate SOCKS/HTTP proxy is different; the remote server sees the proxy's exit IP, not a spoofed client IP.
+
+
+## Nexus Client 1.6.0
+
+- Refined the client menu with a stronger frame, accent rails, clearer section dividers, and an updated header.
+- Added separate aggressive FPS, balanced, and visual-quality presets. These adjust particles, clouds, entity render distance, biome blending, and entity shadows; actual FPS gains depend on the PC, world, and server.
+- Added direct access to the resource-pack folder and clearer install/reload steps. The pack manager rescans packs when opened; enable a pack and press Done to reload resources.
+- Added a Sky Packs help page. Vanilla resource packs can replace sun, moon, and cloud textures; OptiFine-style custom skyboxes require a compatible sky-rendering mod. This release does not claim native OptiFine custom-sky support.
