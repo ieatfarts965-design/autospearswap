@@ -24,7 +24,7 @@ public final class AutoSpearSwapScreen extends Screen {
     private KeyBinding capturing;
     private boolean openingPacks;
     private String moduleQuery = "";
-    private TextFieldWidget searchField;
+    private TextFieldWidget searchField;\n    private int modulePage;
 
     public AutoSpearSwapScreen() { super(Text.literal("NEXUS CLIENT")); }
 
@@ -168,42 +168,61 @@ public final class AutoSpearSwapScreen extends Screen {
                 searchField.setText(moduleQuery);
                 searchField.setChangedListener(value -> moduleQuery = value);
                 addDrawableChild(searchField);
-                add(cx, y1 + 38, cw, h, "Apply search", b -> clearAndInit());
                 String q = moduleQuery.toLowerCase(java.util.Locale.ROOT);
-                int n = 0;
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto sprint", () -> AutoSpearSwapConfig.autoSprint, () -> AutoSpearSwapConfig.autoSprint = !AutoSpearSwapConfig.autoSprint, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto jump", () -> AutoSpearSwapConfig.autoJump, () -> AutoSpearSwapConfig.autoJump = !AutoSpearSwapConfig.autoJump, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto tool", () -> AutoSpearSwapConfig.autoTool, () -> AutoSpearSwapConfig.autoTool = !AutoSpearSwapConfig.autoTool, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Toggle sneak", () -> AutoSpearSwapConfig.toggleSneak, () -> AutoSpearSwapConfig.toggleSneak = !AutoSpearSwapConfig.toggleSneak, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Fullbright", () -> AutoSpearSwapConfig.fullbright, () -> AutoSpearSwapConfig.fullbright = !AutoSpearSwapConfig.fullbright, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Zoom", () -> AutoSpearSwapConfig.zoomEnabled, () -> AutoSpearSwapConfig.zoomEnabled = !AutoSpearSwapConfig.zoomEnabled, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto respawn", () -> AutoSpearSwapConfig.autoRespawn, () -> AutoSpearSwapConfig.autoRespawn = !AutoSpearSwapConfig.autoRespawn, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto eat", () -> AutoSpearSwapConfig.autoEat, () -> AutoSpearSwapConfig.autoEat = !AutoSpearSwapConfig.autoEat, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto walk", () -> AutoSpearSwapConfig.autoWalk, () -> AutoSpearSwapConfig.autoWalk = !AutoSpearSwapConfig.autoWalk, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto swim", () -> AutoSpearSwapConfig.autoSwim, () -> AutoSpearSwapConfig.autoSwim = !AutoSpearSwapConfig.autoSwim, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Target HUD", () -> AutoSpearSwapConfig.hudTarget, () -> AutoSpearSwapConfig.hudTarget = !AutoSpearSwapConfig.hudTarget, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Durability alert", () -> AutoSpearSwapConfig.hudDurability, () -> AutoSpearSwapConfig.hudDurability = !AutoSpearSwapConfig.hudDurability, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "FPS counter", () -> AutoSpearSwapConfig.hudFps, () -> AutoSpearSwapConfig.hudFps = !AutoSpearSwapConfig.hudFps, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Clock", () -> AutoSpearSwapConfig.hudClock, () -> AutoSpearSwapConfig.hudClock = !AutoSpearSwapConfig.hudClock, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Triggerbot", () -> AutoSpearSwapConfig.triggerBotEnabled, () -> AutoSpearSwapConfig.triggerBotEnabled = !AutoSpearSwapConfig.triggerBotEnabled, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto spear", () -> AutoSpearSwapConfig.attributeSwapEnabled, () -> AutoSpearSwapConfig.attributeSwapEnabled = !AutoSpearSwapConfig.attributeSwapEnabled, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Jump reset", () -> AutoSpearSwapConfig.jumpResetEnabled, () -> AutoSpearSwapConfig.jumpResetEnabled = !AutoSpearSwapConfig.jumpResetEnabled, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto sprint", () -> AutoSpearSwapConfig.autoSprint, () -> AutoSpearSwapConfig.autoSprint = !AutoSpearSwapConfig.autoSprint, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Coordinates", () -> AutoSpearSwapConfig.hudCoordinates, () -> AutoSpearSwapConfig.hudCoordinates = !AutoSpearSwapConfig.hudCoordinates, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "CPS counter", () -> AutoSpearSwapConfig.hudCps, () -> AutoSpearSwapConfig.hudCps = !AutoSpearSwapConfig.hudCps, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Armor status", () -> AutoSpearSwapConfig.hudArmor, () -> AutoSpearSwapConfig.hudArmor = !AutoSpearSwapConfig.hudArmor, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Keystrokes", () -> AutoSpearSwapConfig.hudKeystrokes, () -> AutoSpearSwapConfig.hudKeystrokes = !AutoSpearSwapConfig.hudKeystrokes, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Combat timer", () -> AutoSpearSwapConfig.hudCombatTimer, () -> AutoSpearSwapConfig.hudCombatTimer = !AutoSpearSwapConfig.hudCombatTimer, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Low health", () -> AutoSpearSwapConfig.lowHealthWarning, () -> AutoSpearSwapConfig.lowHealthWarning = !AutoSpearSwapConfig.lowHealthWarning, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Movement speed", () -> AutoSpearSwapConfig.hudSpeed, () -> AutoSpearSwapConfig.hudSpeed = !AutoSpearSwapConfig.hudSpeed, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Direction", () -> AutoSpearSwapConfig.hudDirection, () -> AutoSpearSwapConfig.hudDirection = !AutoSpearSwapConfig.hudDirection, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Biome", () -> AutoSpearSwapConfig.hudBiome, () -> AutoSpearSwapConfig.hudBiome = !AutoSpearSwapConfig.hudBiome, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Server ping", () -> AutoSpearSwapConfig.hudPing, () -> AutoSpearSwapConfig.hudPing = !AutoSpearSwapConfig.hudPing, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Health", () -> AutoSpearSwapConfig.hudHealth, () -> AutoSpearSwapConfig.hudHealth = !AutoSpearSwapConfig.hudHealth, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Food", () -> AutoSpearSwapConfig.hudFood, () -> AutoSpearSwapConfig.hudFood = !AutoSpearSwapConfig.hudFood, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Held item", () -> AutoSpearSwapConfig.hudHeldItem, () -> AutoSpearSwapConfig.hudHeldItem = !AutoSpearSwapConfig.hudHeldItem, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Potion effects", () -> AutoSpearSwapConfig.hudEffects, () -> AutoSpearSwapConfig.hudEffects = !AutoSpearSwapConfig.hudEffects, n);
-                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Low health warning", () -> AutoSpearSwapConfig.lowHealthWarning, () -> AutoSpearSwapConfig.lowHealthWarning = !AutoSpearSwapConfig.lowHealthWarning, n);
+                java.util.List<Runnable> actions = new java.util.ArrayList<>();
+                java.util.List<String> labels = new java.util.ArrayList<>();
+                java.util.List<Boolean> states = new java.util.ArrayList<>();
+                addSearchEntry(labels, states, actions, q, "Auto sprint", AutoSpearSwapConfig.autoSprint, () -> AutoSpearSwapConfig.autoSprint = !AutoSpearSwapConfig.autoSprint);
+                addSearchEntry(labels, states, actions, q, "Auto jump", AutoSpearSwapConfig.autoJump, () -> AutoSpearSwapConfig.autoJump = !AutoSpearSwapConfig.autoJump);
+                addSearchEntry(labels, states, actions, q, "Auto tool", AutoSpearSwapConfig.autoTool, () -> AutoSpearSwapConfig.autoTool = !AutoSpearSwapConfig.autoTool);
+                addSearchEntry(labels, states, actions, q, "Toggle sneak", AutoSpearSwapConfig.toggleSneak, () -> AutoSpearSwapConfig.toggleSneak = !AutoSpearSwapConfig.toggleSneak);
+                addSearchEntry(labels, states, actions, q, "Fullbright", AutoSpearSwapConfig.fullbright, () -> AutoSpearSwapConfig.fullbright = !AutoSpearSwapConfig.fullbright);
+                addSearchEntry(labels, states, actions, q, "Zoom", AutoSpearSwapConfig.zoomEnabled, () -> AutoSpearSwapConfig.zoomEnabled = !AutoSpearSwapConfig.zoomEnabled);
+                addSearchEntry(labels, states, actions, q, "Auto respawn", AutoSpearSwapConfig.autoRespawn, () -> AutoSpearSwapConfig.autoRespawn = !AutoSpearSwapConfig.autoRespawn);
+                addSearchEntry(labels, states, actions, q, "Auto eat", AutoSpearSwapConfig.autoEat, () -> AutoSpearSwapConfig.autoEat = !AutoSpearSwapConfig.autoEat);
+                addSearchEntry(labels, states, actions, q, "Auto walk", AutoSpearSwapConfig.autoWalk, () -> AutoSpearSwapConfig.autoWalk = !AutoSpearSwapConfig.autoWalk);
+                addSearchEntry(labels, states, actions, q, "Auto swim", AutoSpearSwapConfig.autoSwim, () -> AutoSpearSwapConfig.autoSwim = !AutoSpearSwapConfig.autoSwim);
+                addSearchEntry(labels, states, actions, q, "Triggerbot", AutoSpearSwapConfig.triggerBotEnabled, () -> AutoSpearSwapConfig.triggerBotEnabled = !AutoSpearSwapConfig.triggerBotEnabled);
+                addSearchEntry(labels, states, actions, q, "Auto spear", AutoSpearSwapConfig.attributeSwapEnabled, () -> AutoSpearSwapConfig.attributeSwapEnabled = !AutoSpearSwapConfig.attributeSwapEnabled);
+                addSearchEntry(labels, states, actions, q, "Jump reset", AutoSpearSwapConfig.jumpResetEnabled, () -> AutoSpearSwapConfig.jumpResetEnabled = !AutoSpearSwapConfig.jumpResetEnabled);
+                addSearchEntry(labels, states, actions, q, "Coordinates", AutoSpearSwapConfig.hudCoordinates, () -> AutoSpearSwapConfig.hudCoordinates = !AutoSpearSwapConfig.hudCoordinates);
+                addSearchEntry(labels, states, actions, q, "CPS counter", AutoSpearSwapConfig.hudCps, () -> AutoSpearSwapConfig.hudCps = !AutoSpearSwapConfig.hudCps);
+                addSearchEntry(labels, states, actions, q, "Armor status", AutoSpearSwapConfig.hudArmor, () -> AutoSpearSwapConfig.hudArmor = !AutoSpearSwapConfig.hudArmor);
+                addSearchEntry(labels, states, actions, q, "Keystrokes", AutoSpearSwapConfig.hudKeystrokes, () -> AutoSpearSwapConfig.hudKeystrokes = !AutoSpearSwapConfig.hudKeystrokes);
+                addSearchEntry(labels, states, actions, q, "Combat timer", AutoSpearSwapConfig.hudCombatTimer, () -> AutoSpearSwapConfig.hudCombatTimer = !AutoSpearSwapConfig.hudCombatTimer);
+                addSearchEntry(labels, states, actions, q, "Low health warning", AutoSpearSwapConfig.lowHealthWarning, () -> AutoSpearSwapConfig.lowHealthWarning = !AutoSpearSwapConfig.lowHealthWarning);
+                addSearchEntry(labels, states, actions, q, "Target HUD", AutoSpearSwapConfig.hudTarget, () -> AutoSpearSwapConfig.hudTarget = !AutoSpearSwapConfig.hudTarget);
+                addSearchEntry(labels, states, actions, q, "Durability alert", AutoSpearSwapConfig.hudDurability, () -> AutoSpearSwapConfig.hudDurability = !AutoSpearSwapConfig.hudDurability);
+                addSearchEntry(labels, states, actions, q, "FPS counter", AutoSpearSwapConfig.hudFps, () -> AutoSpearSwapConfig.hudFps = !AutoSpearSwapConfig.hudFps);
+                addSearchEntry(labels, states, actions, q, "Clock", AutoSpearSwapConfig.hudClock, () -> AutoSpearSwapConfig.hudClock = !AutoSpearSwapConfig.hudClock);
+                addSearchEntry(labels, states, actions, q, "Movement speed", AutoSpearSwapConfig.hudSpeed, () -> AutoSpearSwapConfig.hudSpeed = !AutoSpearSwapConfig.hudSpeed);
+                addSearchEntry(labels, states, actions, q, "Direction", AutoSpearSwapConfig.hudDirection, () -> AutoSpearSwapConfig.hudDirection = !AutoSpearSwapConfig.hudDirection);
+                addSearchEntry(labels, states, actions, q, "Biome", AutoSpearSwapConfig.hudBiome, () -> AutoSpearSwapConfig.hudBiome = !AutoSpearSwapConfig.hudBiome);
+                addSearchEntry(labels, states, actions, q, "Server ping", AutoSpearSwapConfig.hudPing, () -> AutoSpearSwapConfig.hudPing = !AutoSpearSwapConfig.hudPing);
+                addSearchEntry(labels, states, actions, q, "Health", AutoSpearSwapConfig.hudHealth, () -> AutoSpearSwapConfig.hudHealth = !AutoSpearSwapConfig.hudHealth);
+                addSearchEntry(labels, states, actions, q, "Food", AutoSpearSwapConfig.hudFood, () -> AutoSpearSwapConfig.hudFood = !AutoSpearSwapConfig.hudFood);
+                addSearchEntry(labels, states, actions, q, "Held item", AutoSpearSwapConfig.hudHeldItem, () -> AutoSpearSwapConfig.hudHeldItem = !AutoSpearSwapConfig.hudHeldItem);
+                addSearchEntry(labels, states, actions, q, "Potion effects", AutoSpearSwapConfig.hudEffects, () -> AutoSpearSwapConfig.hudEffects = !AutoSpearSwapConfig.hudEffects);
+                for (NexusModuleRegistry.Module module : NexusModuleRegistry.modules()) {
+                    addSearchEntry(labels, states, actions, q, module.name(), NexusModuleRegistry.enabled(module.id()), () -> NexusModuleRegistry.toggle(module.id()));
+                }
+                int pageSize = 12;
+                int pages = Math.max(1, (labels.size() + pageSize - 1) / pageSize);
+                modulePage = Math.min(modulePage, pages - 1);
+                int from = modulePage * pageSize;
+                for (int i = from; i < Math.min(labels.size(), from + pageSize); i++) {
+                    final int index = i;
+                    int bx = cx + ((i - from) % 2) * (bw + gap);
+                    int by = y1 + 42 + ((i - from) / 2) * 35;
+                    add(bx, by, bw, h, (states.get(i) ? "● " : "○ ") + labels.get(i), b -> {
+                        actions.get(index).run();
+                        AutoSpearSwapConfig.save();
+                        clearAndInit();
+                    });
+                }
+                add(cx, y + ph - 76, bw, 26, "◀ Previous", b -> { modulePage = Math.max(0, modulePage - 1); clearAndInit(); });
+                add(cx + bw + gap, y + ph - 76, bw, 26, "Next ▶", b -> { modulePage++; clearAndInit(); });
+                add(cx, y + ph - 48, cw, 22, "Page " + (modulePage + 1) + " / " + pages + "  •  " + labels.size() + " matching modules", b -> {});
             }
             case 11 -> {
                 add(cx, y1, cw, h, "Reset HUD position", b -> { AutoSpearSwapConfig.hudX = 7; AutoSpearSwapConfig.hudY = 7; save(); });
@@ -214,6 +233,16 @@ public final class AutoSpearSwapScreen extends Screen {
             }
         }
         add(x + pw - 82, y + ph - 38, 70, 26, "Close", b -> close());
+    }
+
+    private void addSearchEntry(java.util.List<String> labels, java.util.List<Boolean> states,
+                                java.util.List<Runnable> actions, String query, String name,
+                                boolean enabled, Runnable action) {
+        if (query.isEmpty() || name.toLowerCase(java.util.Locale.ROOT).contains(query)) {
+            labels.add(name);
+            states.add(enabled);
+            actions.add(action);
+        }
     }
 
     private int searchModule(int x, int y, int w, int h, int gap, String query, String name,
