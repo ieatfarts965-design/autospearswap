@@ -1,8 +1,8 @@
-# Nexus PvP Client
+# Nexus Client 1.3.0
 
-Client-side Fabric PvP utility and configuration mod for Minecraft 1.21.11 (Java 21).
+Client-side Fabric utility client with category-based settings and a custom branded icon for Minecraft 1.21.11 (Java 21).
 
-## Open the menu
+## Nexus interface\n- Seven navigation pages: Combat, Movement, HUD, Visuals, Performance, Packs, and Keys.\n- Five full-panel themes: Nexus, Violet, Mint, Crimson, and Gold.\n- Adjustable panel opacity and persistent settings.\n\n## Open the menu
 - Press **Right Shift** to open the Nexus Client menu.
 - Rebind the menu and spear-swap keys from the menu.
 - Settings are saved in `config/autospearswap.json`.
@@ -15,7 +15,7 @@ Client-side Fabric PvP utility and configuration mod for Minecraft 1.21.11 (Java
 ## Triggerbot
 - Toggle with **G** or from the Nexus menu.
 - Automatically uses Minecraft's normal attack routine when another live, non-spectator player is under the crosshair.
-- Configurable re-attempt delay from 1 to 10 ticks; vanilla attack cooldown and server rules still apply.
+- Waits for vanilla's fully charged attack cooldown before attempting an attack; server rules still apply.
 - Disabled by default and only targets players, never animals or villagers.
 
 ## PvP HUD
