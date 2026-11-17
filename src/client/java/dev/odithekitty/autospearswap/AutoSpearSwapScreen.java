@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.input.KeyInput;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.pack.PackScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.option.CloudRenderMode;
@@ -12,8 +13,8 @@ import net.minecraft.particle.ParticlesMode;
 import net.minecraft.text.Text;
 
 public final class AutoSpearSwapScreen extends Screen {
-    private int centerX;
-    private int top;
+    private static final int[] ACCENTS = {0xFF36CFFF, 0xFFB58CFF, 0xFF62E6A5, 0xFFFF7777, 0xFFFFC857};
+    private static final String[] THEME_NAMES = {"Cyan", "Violet", "Mint", "Red", "Gold"};
     private KeyBinding capturing;
 
     public AutoSpearSwapScreen() {
@@ -22,49 +23,76 @@ public final class AutoSpearSwapScreen extends Screen {
 
     @Override
     protected void init() {
-        centerX = width / 2;
-        top = height / 2 - 92;
+        int gap = 6;
+        int buttonWidth = Math.min(142, (width - 30 - gap) / 2);
+        int left = width / 2 - buttonWidth - gap / 2;
+        int right = width / 2 + gap / 2;
+        int row = Math.max(34, height / 2 - 76);
+        int rowGap = 25;
 
-        addDrawableChild(ButtonWidget.builder(toggleText("Attribute swap helper", AutoSpearSwapConfig.attributeSwapEnabled), b -> {
+        addButton(left, row, buttonWidth, toggleText("Auto spear", AutoSpearSwapConfig.attributeSwapEnabled), b -> {
             AutoSpearSwapConfig.attributeSwapEnabled = !AutoSpearSwapConfig.attributeSwapEnabled;
-            AutoSpearSwapConfig.save();
-            clearAndInit();
-        }).dimensions(centerX - 115, top, 230, 20).build());
-        top += 25;
-
-        addDrawableChild(ButtonWidget.builder(Text.literal("Spear hotbar slot: " + (AutoSpearSwapConfig.spearSlot + 1) + "  >"), b -> {
+            saveAndRefresh();
+        });
+        addButton(right, row, buttonWidth, Text.literal("Spear slot: " + (AutoSpearSwapConfig.spearSlot + 1)), b -> {
             AutoSpearSwapConfig.spearSlot = (AutoSpearSwapConfig.spearSlot + 1) % 9;
-            AutoSpearSwapConfig.save();
-            clearAndInit();
-        }).dimensions(centerX - 115, top, 230, 20).build());
-        top += 25;
+            saveAndRefresh();
+        });
 
-        addDrawableChild(ButtonWidget.builder(bindText("Swap / restore key", AutoSpearSwapClient.swapToSpearKey), b -> {
+        row += rowGap;
+        addButton(left, row, buttonWidth, bindText("Swap key", AutoSpearSwapClient.swapToSpearKey), b -> {
             capturing = AutoSpearSwapClient.swapToSpearKey;
             clearAndInit();
-        }).dimensions(centerX - 115, top, 230, 20).build());
-        top += 25;
-
-        addDrawableChild(ButtonWidget.builder(bindText("Open menu key", AutoSpearSwapClient.openMenuKey), b -> {
+        });
+        addButton(right, row, buttonWidth, bindText("Menu key", AutoSpearSwapClient.openMenuKey), b -> {
             capturing = AutoSpearSwapClient.openMenuKey;
             clearAndInit();
-        }).dimensions(centerX - 115, top, 230, 20).build());
-        top += 32;
+        });
 
-        addDrawableChild(ButtonWidget.builder(Text.literal("Apply FPS-friendly settings"), b -> {
+        row += rowGap;
+        addButton(left, row, buttonWidth, Text.literal("FPS boost preset"), b -> {
             applyPerformancePreset();
-            clearAndInit();
-        }).dimensions(centerX - 115, top, 230, 20).build());
-        top += 25;
-
-        addDrawableChild(ButtonWidget.builder(Text.literal("Restore visual defaults"), b -> {
+            saveAndRefresh();
+        });
+        addButton(right, row, buttonWidth, Text.literal("Visual defaults"), b -> {
             restoreVisualDefaults();
-            clearAndInit();
-        }).dimensions(centerX - 115, top, 230, 20).build());
-        top += 32;
+            saveAndRefresh();
+        });
 
-        addDrawableChild(ButtonWidget.builder(Text.literal("Done"), b -> close())
-            .dimensions(centerX - 115, top, 230, 20).build());
+        row += rowGap;
+        addButton(left, row, buttonWidth, Text.literal("Theme: " + THEME_NAMES[AutoSpearSwapConfig.uiTheme]), b -> {
+            AutoSpearSwapConfig.uiTheme = (AutoSpearSwapConfig.uiTheme + 1) % THEME_NAMES.length;
+            saveAndRefresh();
+        });
+        addButton(right, row, buttonWidth, Text.literal("Panel: " + AutoSpearSwapConfig.uiOpacity + "%"), b -> {
+            AutoSpearSwapConfig.uiOpacity += 15;
+            if (AutoSpearSwapConfig.uiOpacity > 85) AutoSpearSwapConfig.uiOpacity = 40;
+            saveAndRefresh();
+        });
+
+        row += rowGap + 4;
+        addButton(left, row, buttonWidth * 2 + gap, Text.literal("Open / import resource packs"), b -> openResourcePacks());
+        row += rowGap + 4;
+        addButton(left, row, buttonWidth * 2 + gap, Text.literal("Done"), b -> close());
+    }
+
+    private void addButton(int x, int y, int w, Text label, ButtonWidget.PressAction action) {
+        addDrawableChild(ButtonWidget.builder(label, action).dimensions(x, y, w, 20).build());
+    }
+
+    private void saveAndRefresh() {
+        AutoSpearSwapConfig.save();
+        clearAndInit();
+    }
+
+    private void openResourcePacks() {
+        MinecraftClient mc = MinecraftClient.getInstance();
+        mc.setScreen(new PackScreen(
+            mc.getResourcePackManager(),
+            manager -> mc.reloadResources(),
+            mc.getResourcePackDir(),
+            Text.literal("Resource Packs")
+        ));
     }
 
     private static void applyPerformancePreset() {
@@ -92,9 +120,10 @@ public final class AutoSpearSwapScreen extends Screen {
     }
 
     private Text bindText(String name, KeyBinding key) {
-        return Text.literal((capturing == key ? "Press a key for " : "Rebind ") + name
-            + (capturing == key ? "..." : ": " + key.getBoundKeyLocalizedText().getString()));
+        return Text.literal((capturing == key ? "Press key..." : name + ": " + key.getBoundKeyLocalizedText().getString()));
     }
+
+    private int accent() { return ACCENTS[AutoSpearSwapConfig.uiTheme]; }
 
     @Override
     public boolean keyPressed(KeyInput input) {
@@ -102,6 +131,7 @@ public final class AutoSpearSwapScreen extends Screen {
             capturing.setBoundKey(InputUtil.fromKeyCode(input));
             KeyBinding.updateKeysByCode();
             capturing = null;
+            AutoSpearSwapConfig.save();
             clearAndInit();
             return true;
         }
@@ -111,10 +141,17 @@ public final class AutoSpearSwapScreen extends Screen {
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         renderBackground(context, mouseX, mouseY, delta);
-        context.drawCenteredTextWithShadow(textRenderer, title, centerX, height / 2 - 122, 0xFFFFFF);
+        int panelWidth = Math.min(320, width - 16);
+        int panelHeight = Math.min(220, height - 12);
+        int x = (width - panelWidth) / 2;
+        int y = (height - panelHeight) / 2;
+        int alpha = Math.round(255 * (AutoSpearSwapConfig.uiOpacity / 100.0f));
+        context.fill(x, y, x + panelWidth, y + panelHeight, (alpha << 24) | 0x00091420);
+        context.fill(x, y, x + panelWidth, y + 3, accent());
+        context.drawCenteredTextWithShadow(textRenderer, title, width / 2, y + 10, accent());
         context.drawCenteredTextWithShadow(textRenderer,
-            Text.literal(capturing == null ? "Combat tools  •  Performance" : "Press the key you want to bind"),
-            centerX, height / 2 - 107, 0xAFC8E8);
+            Text.literal(capturing == null ? "Combat  •  Performance  •  Appearance" : "Press the key you want to bind"),
+            width / 2, y + 24, 0xFFD7E6F2);
         super.render(context, mouseX, mouseY, delta);
     }
 
