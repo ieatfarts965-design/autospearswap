@@ -12,6 +12,12 @@ Client-side Fabric PvP utility and configuration mod for Minecraft 1.21.11 (Java
 - **Spear slot:** select any hotbar slot 1–9.
 - **Auto sprint:** automatically sprints while moving forward when the player is not sneaking or riding.
 
+## Triggerbot
+- Toggle with **G** or from the Nexus menu.
+- Automatically uses Minecraft's normal attack routine when another live, non-spectator player is under the crosshair.
+- Configurable re-attempt delay from 1 to 10 ticks; vanilla attack cooldown and server rules still apply.
+- Disabled by default and only targets players, never animals or villagers.
+
 ## PvP HUD
 Each module can be toggled independently:
 - **Coordinates:** live XYZ display.
