@@ -343,8 +343,8 @@ public final class AutoSpearSwapScreen extends Screen {
             ctx.drawTextWithShadow(textRenderer, Text.literal("Use the controls to move your on-screen HUD."), x + 150, y + 174, 0xFFEAF6FF);
             ctx.drawTextWithShadow(textRenderer, Text.literal("X: " + AutoSpearSwapConfig.hudX + "   Y: " + AutoSpearSwapConfig.hudY), x + 150, y + 190, 0xFF9CB4C8);
             ctx.drawTextWithShadow(textRenderer, Text.literal("Drag the preview below to position the HUD."), x + 150, y + 214, 0xFF9CB4C8);
-            int px = x + 160 + Math.floorMod(AutoSpearSwapConfig.hudX, Math.max(1, pw - 340));
-            int py = y + 250 + Math.floorMod(AutoSpearSwapConfig.hudY, 55);
+            int px = x + 150 + (int) ((double) AutoSpearSwapConfig.hudX / Math.max(1, width - 92) * (pw - 270));
+            int py = y + 238 + (int) ((double) AutoSpearSwapConfig.hudY / Math.max(1, height - 24) * 60);
             ctx.fill(x + 150, y + 238, x + pw - 20, y + 322, 0xAA0A111A);
             ctx.fill(px, py, px + 92, py + 24, 0xFF20384B);
             ctx.drawTextWithShadow(textRenderer, Text.literal("NEXUS HUD"), px + 8, py + 8, ACCENT[t]);
@@ -391,8 +391,10 @@ public final class AutoSpearSwapScreen extends Screen {
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
         if (draggingHudPreview && button == 0) {
-            AutoSpearSwapConfig.hudX = Math.max(0, Math.min(width - 92, (int) mouseX - hudDragOffsetX));
-            AutoSpearSwapConfig.hudY = Math.max(0, Math.min(height - 24, (int) mouseY - hudDragOffsetY));
+            int pw = Math.min(540, width - 20), ph = Math.min(440, height - 20);
+            int x = (width - pw) / 2, y = (height - ph) / 2;
+            AutoSpearSwapConfig.hudX = Math.max(0, Math.min(width - 92, (int) (((mouseX - hudDragOffsetX - x - 150) / Math.max(1.0, pw - 270)) * (width - 92))));
+            AutoSpearSwapConfig.hudY = Math.max(0, Math.min(height - 24, (int) (((mouseY - hudDragOffsetY - y - 238) / 60.0) * (height - 24))));
             AutoSpearSwapConfig.save();
             return true;
         }
