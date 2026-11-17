@@ -20,6 +20,8 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
     public static KeyBinding macroKey;
     private static int previousSlot = -1;
     private static int triggerBotTicks = 0;
+    private static int lastHurtTime = 0;
+    private static int jumpResetCooldown = 0;
 
     @Override
     public void onInitializeClient() {
@@ -39,6 +41,21 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             PvpHud.tick(client);
+            if (client.player == null || client.world == null) {
+                lastHurtTime = 0;
+                jumpResetCooldown = 0;
+            } else {
+                if (jumpResetCooldown > 0) jumpResetCooldown--;
+                int hurt = client.player.hurtTime;
+                if (AutoSpearSwapConfig.jumpResetEnabled && hurt > lastHurtTime
+                    && client.player.isOnGround() && !client.player.isSneaking()
+                    && !client.player.hasVehicle() && jumpResetCooldown == 0
+                    && client.currentScreen == null) {
+                    client.player.jump();
+                    jumpResetCooldown = 6;
+                }
+                lastHurtTime = hurt;
+            }
             MacroEngine.tick(client);
             while (macroKey.wasPressed()) MacroEngine.toggle();
             while (triggerBotKey.wasPressed()) {
