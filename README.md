@@ -39,3 +39,10 @@ Install the normal JAR from `build/libs/`; do not install the `-sources.jar` or 
 
 ## Notes
 This is a client-side utility mod. HUD values are local estimates: CPS counts input presses, and the combat timer tracks attack input rather than confirmed server hits. It does not bypass server-side combat rules or guarantee attack timing.
+
+
+## Nexus Client 1.4.0
+
+- Added a configurable macro sequencer with saved action sequences, adjustable tick delays, jump/attack/use and movement actions, and an F8 playback toggle.
+- Added visual presets alongside the five Nexus interface themes and vanilla resource-pack manager.
+- Macro playback uses normal Minecraft key bindings; server rules and server-side checks still apply. Use macros only where permitted.
