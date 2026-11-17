@@ -104,6 +104,7 @@ public final class AutoSpearSwapScreen extends Screen {
                 add(cx, y1 + 76, cw, h, keyText("Triggerbot key", AutoSpearSwapClient.triggerBotKey), b -> capture(AutoSpearSwapClient.triggerBotKey));
                 add(cx, y1 + 114, cw, h, keyText("Macro key", AutoSpearSwapClient.macroKey), b -> capture(AutoSpearSwapClient.macroKey));
                 add(cx, y1 + 152, cw, h, "Triggerbot mode  •  " + (AutoSpearSwapConfig.triggerBotHoldMode ? "HOLD" : "TOGGLE"), b -> { AutoSpearSwapConfig.triggerBotHoldMode = !AutoSpearSwapConfig.triggerBotHoldMode; AutoSpearSwapConfig.triggerBotEnabled = false; save(); });
+                add(cx, y1 + 190, cw, h, keyText("Zoom key", AutoSpearSwapClient.zoomKey), b -> capture(AutoSpearSwapClient.zoomKey));
             }
             case 8 -> {
                 add(cx, y1, bw, h, "Add Jump", b -> { MacroEngine.add("JUMP", MacroEngine.defaultTicks); clearAndInit(); });
@@ -162,6 +163,9 @@ public final class AutoSpearSwapScreen extends Screen {
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto jump", () -> AutoSpearSwapConfig.autoJump, () -> AutoSpearSwapConfig.autoJump = !AutoSpearSwapConfig.autoJump, n);
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto tool", () -> AutoSpearSwapConfig.autoTool, () -> AutoSpearSwapConfig.autoTool = !AutoSpearSwapConfig.autoTool, n);
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Toggle sneak", () -> AutoSpearSwapConfig.toggleSneak, () -> AutoSpearSwapConfig.toggleSneak = !AutoSpearSwapConfig.toggleSneak, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Fullbright", () -> AutoSpearSwapConfig.fullbright, () -> AutoSpearSwapConfig.fullbright = !AutoSpearSwapConfig.fullbright, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Zoom", () -> AutoSpearSwapConfig.zoomEnabled, () -> AutoSpearSwapConfig.zoomEnabled = !AutoSpearSwapConfig.zoomEnabled, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto respawn", () -> AutoSpearSwapConfig.autoRespawn, () -> AutoSpearSwapConfig.autoRespawn = !AutoSpearSwapConfig.autoRespawn, n);
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Triggerbot", () -> AutoSpearSwapConfig.triggerBotEnabled, () -> AutoSpearSwapConfig.triggerBotEnabled = !AutoSpearSwapConfig.triggerBotEnabled, n);
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto spear", () -> AutoSpearSwapConfig.attributeSwapEnabled, () -> AutoSpearSwapConfig.attributeSwapEnabled = !AutoSpearSwapConfig.attributeSwapEnabled, n);
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Jump reset", () -> AutoSpearSwapConfig.jumpResetEnabled, () -> AutoSpearSwapConfig.jumpResetEnabled = !AutoSpearSwapConfig.jumpResetEnabled, n);
