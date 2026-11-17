@@ -273,5 +273,6 @@ public final class AutoSpearSwapConfig {
         int hudX = 7;
         int hudY = 7;
         boolean triggerBotHoldMode = false;
+        Map<String, Boolean> extraModules = new LinkedHashMap<>();
     }
 }
