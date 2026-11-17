@@ -24,6 +24,7 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         AutoSpearSwapConfig.load();
+        MacroEngine.load();
         KeyBinding.Category category = KeyBinding.Category.create(Identifier.of("autospearswap", "main"));
         openMenuKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
             "key.autospearswap.open_menu", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_RIGHT_SHIFT, category));
