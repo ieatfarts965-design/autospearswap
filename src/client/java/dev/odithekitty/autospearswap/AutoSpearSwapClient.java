@@ -58,7 +58,14 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
             }
             MacroEngine.tick(client);
             while (macroKey.wasPressed()) MacroEngine.toggle();
-            while (triggerBotKey.wasPressed()) {
+            if (AutoSpearSwapConfig.triggerBotHoldMode) {
+                boolean held = triggerBotKey.isPressed();
+                if (AutoSpearSwapConfig.triggerBotEnabled != held) {
+                    AutoSpearSwapConfig.triggerBotEnabled = held;
+                    triggerBotTicks = 0;
+                    AutoSpearSwapConfig.save();
+                }
+            } else while (triggerBotKey.wasPressed()) {
                 AutoSpearSwapConfig.triggerBotEnabled = !AutoSpearSwapConfig.triggerBotEnabled;
                 triggerBotTicks = 0;
                 AutoSpearSwapConfig.save();
