@@ -15,7 +15,7 @@ import net.minecraft.particle.ParticlesMode;
 import net.minecraft.text.Text;
 
 public final class AutoSpearSwapScreen extends Screen {
-    private static final String[] TABS = {"Combat", "Movement", "HUD", "Visuals", "Performance", "Packs", "Skies", "Keys", "Macros", "Info", "Search"};
+    private static final String[] TABS = {"Combat", "Movement", "HUD", "Visuals", "Performance", "Packs", "Skies", "Keys", "Macros", "Info", "Search", "Editor"};
     private static final String[] THEMES = {"Nexus", "Violet", "Mint", "Crimson", "Gold", "Clarity"};
     private static final int[] ACCENT = {0xFF27C7FF, 0xFFB18CFF, 0xFF63E6B0, 0xFFFF647C, 0xFFFFC857, 0xFFB7C7D8};
     private static final int[] PANEL = {0xF0091728, 0xF0151028, 0xF00B211D, 0xF0201018, 0xF0221A0B, 0xF010141B};
@@ -94,6 +94,7 @@ public final class AutoSpearSwapScreen extends Screen {
                 add(cx, y1 + 38, cw, h, keyText("Spear key", AutoSpearSwapClient.swapToSpearKey), b -> capture(AutoSpearSwapClient.swapToSpearKey));
                 add(cx, y1 + 76, cw, h, keyText("Triggerbot key", AutoSpearSwapClient.triggerBotKey), b -> capture(AutoSpearSwapClient.triggerBotKey));
                 add(cx, y1 + 114, cw, h, keyText("Macro key", AutoSpearSwapClient.macroKey), b -> capture(AutoSpearSwapClient.macroKey));
+                add(cx, y1 + 152, cw, h, "Triggerbot mode  •  " + (AutoSpearSwapConfig.triggerBotHoldMode ? "HOLD" : "TOGGLE"), b -> { AutoSpearSwapConfig.triggerBotHoldMode = !AutoSpearSwapConfig.triggerBotHoldMode; AutoSpearSwapConfig.triggerBotEnabled = false; save(); });
             }
             case 8 -> {
                 add(cx, y1, bw, h, "Add Jump", b -> { MacroEngine.add("JUMP", MacroEngine.defaultTicks); clearAndInit(); });
@@ -162,6 +163,13 @@ public final class AutoSpearSwapScreen extends Screen {
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Direction", () -> AutoSpearSwapConfig.hudDirection, () -> AutoSpearSwapConfig.hudDirection = !AutoSpearSwapConfig.hudDirection, n);
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Biome", () -> AutoSpearSwapConfig.hudBiome, () -> AutoSpearSwapConfig.hudBiome = !AutoSpearSwapConfig.hudBiome, n);
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Server ping", () -> AutoSpearSwapConfig.hudPing, () -> AutoSpearSwapConfig.hudPing = !AutoSpearSwapConfig.hudPing, n);
+            }
+            case 11 -> {
+                add(cx, y1, cw, h, "Reset HUD position", b -> { AutoSpearSwapConfig.hudX = 7; AutoSpearSwapConfig.hudY = 7; save(); });
+                add(cx, y1 + 38, bw, h, "Move left", b -> { AutoSpearSwapConfig.hudX = Math.max(0, AutoSpearSwapConfig.hudX - 5); save(); });
+                add(cx + bw + gap, y1 + 38, bw, h, "Move right", b -> { AutoSpearSwapConfig.hudX += 5; save(); });
+                add(cx, y1 + 76, bw, h, "Move up", b -> { AutoSpearSwapConfig.hudY = Math.max(0, AutoSpearSwapConfig.hudY - 5); save(); });
+                add(cx + bw + gap, y1 + 76, bw, h, "Move down", b -> { AutoSpearSwapConfig.hudY += 5; save(); });
             }
         }
         add(x + pw - 82, y + ph - 38, 70, 26, "Close", b -> close());
@@ -322,6 +330,12 @@ public final class AutoSpearSwapScreen extends Screen {
         ctx.drawTextWithShadow(textRenderer, Text.literal("NEXUS  •  CLIENT"), x + pw - 90, y + 17, 0xFF9CB4C8);
         ctx.drawTextWithShadow(textRenderer, Text.literal(TABS[tab].toUpperCase()), x + 150, y + 24, 0xFFFFFFFF);
         ctx.drawTextWithShadow(textRenderer, Text.literal(capturing == null ? "CONFIGURE YOUR CLIENT" : "PRESS A KEY TO REBIND"), x + 150, y + 38, 0xFF9CB4C8);
+        if (tab == 11) {
+            ctx.drawTextWithShadow(textRenderer, Text.literal("HUD POSITION"), x + 150, y + 154, ACCENT[t]);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("Use the controls to move your on-screen HUD."), x + 150, y + 174, 0xFFEAF6FF);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("X: " + AutoSpearSwapConfig.hudX + "   Y: " + AutoSpearSwapConfig.hudY), x + 150, y + 190, 0xFF9CB4C8);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("Your layout is saved automatically."), x + 150, y + 214, 0xFF9CB4C8);
+        }
         if (tab == 6) {
             ctx.drawTextWithShadow(textRenderer, Text.literal("VANILLA SKY TEXTURES"), x + 150, y + 154, ACCENT[t]);
             ctx.drawTextWithShadow(textRenderer, Text.literal("Resource packs can replace the sun, moon and clouds."), x + 150, y + 174, 0xFFEAF6FF);
