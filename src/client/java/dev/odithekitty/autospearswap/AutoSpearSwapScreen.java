@@ -64,6 +64,7 @@ public final class AutoSpearSwapScreen extends Screen {
                 add(cx, y1 + 78, cw, h, "Toggle sneak key  •  " + keyText("Sneak", AutoSpearSwapClient.toggleSneakKey), b -> capture(AutoSpearSwapClient.toggleSneakKey));
                 toggle(cx, y1 + 117, cw, h, "Auto Walk", AutoSpearSwapConfig.autoWalk, () -> AutoSpearSwapConfig.autoWalk = !AutoSpearSwapConfig.autoWalk);
                 add(cx, y1 + 156, cw, h, keyText("Auto Walk key", AutoSpearSwapClient.autoWalkKey), b -> capture(AutoSpearSwapClient.autoWalkKey));
+                toggle(cx, y1 + 195, cw, h, "Auto Swim", AutoSpearSwapConfig.autoSwim, () -> AutoSpearSwapConfig.autoSwim = !AutoSpearSwapConfig.autoSwim);
             }
             case 2 -> {
                 toggle(cx, y1, bw, h, "Coordinates", AutoSpearSwapConfig.hudCoordinates, () -> AutoSpearSwapConfig.hudCoordinates = !AutoSpearSwapConfig.hudCoordinates);
@@ -179,6 +180,7 @@ public final class AutoSpearSwapScreen extends Screen {
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto respawn", () -> AutoSpearSwapConfig.autoRespawn, () -> AutoSpearSwapConfig.autoRespawn = !AutoSpearSwapConfig.autoRespawn, n);
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto eat", () -> AutoSpearSwapConfig.autoEat, () -> AutoSpearSwapConfig.autoEat = !AutoSpearSwapConfig.autoEat, n);
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto walk", () -> AutoSpearSwapConfig.autoWalk, () -> AutoSpearSwapConfig.autoWalk = !AutoSpearSwapConfig.autoWalk, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto swim", () -> AutoSpearSwapConfig.autoSwim, () -> AutoSpearSwapConfig.autoSwim = !AutoSpearSwapConfig.autoSwim, n);
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Target HUD", () -> AutoSpearSwapConfig.hudTarget, () -> AutoSpearSwapConfig.hudTarget = !AutoSpearSwapConfig.hudTarget, n);
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Durability alert", () -> AutoSpearSwapConfig.hudDurability, () -> AutoSpearSwapConfig.hudDurability = !AutoSpearSwapConfig.hudDurability, n);
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "FPS counter", () -> AutoSpearSwapConfig.hudFps, () -> AutoSpearSwapConfig.hudFps = !AutoSpearSwapConfig.hudFps, n);
