@@ -32,6 +32,11 @@ public final class AutoSpearSwapConfig {
     public static boolean zoomEnabled = false;
     public static boolean autoRespawn = false;
     public static boolean autoEat = false;
+    public static boolean autoWalk = false;
+    public static boolean hudTarget = true;
+    public static boolean hudDurability = true;
+    public static boolean hudFps = true;
+    public static boolean hudClock = false;
     public static boolean triggerBotEnabled = false;
     public static int triggerBotDelayTicks = 2;
     public static boolean jumpResetEnabled = false;
@@ -63,6 +68,7 @@ public final class AutoSpearSwapConfig {
         zoomEnabled = false;
         autoRespawn = false;
         autoEat = false;
+        autoWalk = false;
         hudCoordinates = true;
         hudCps = true;
         hudArmor = true;
@@ -134,6 +140,11 @@ public final class AutoSpearSwapConfig {
                     zoomEnabled = data.zoomEnabled;
                     autoRespawn = data.autoRespawn;
                     autoEat = data.autoEat;
+                    autoWalk = data.autoWalk;
+                    hudTarget = data.hudTarget;
+                    hudDurability = data.hudDurability;
+                    hudFps = data.hudFps;
+                    hudClock = data.hudClock;
                     triggerBotEnabled = data.triggerBotEnabled;
                     triggerBotDelayTicks = Math.max(1, Math.min(10, data.triggerBotDelayTicks));
                     jumpResetEnabled = data.jumpResetEnabled;
@@ -182,6 +193,11 @@ public final class AutoSpearSwapConfig {
             d.zoomEnabled = zoomEnabled;
             d.autoRespawn = autoRespawn;
             d.autoEat = autoEat;
+            d.autoWalk = autoWalk;
+            d.hudTarget = hudTarget;
+            d.hudDurability = hudDurability;
+            d.hudFps = hudFps;
+            d.hudClock = hudClock;
             d.triggerBotEnabled = triggerBotEnabled;
             d.triggerBotDelayTicks = triggerBotDelayTicks;
             d.jumpResetEnabled = jumpResetEnabled;
@@ -228,6 +244,11 @@ public final class AutoSpearSwapConfig {
         boolean zoomEnabled = false;
         boolean autoRespawn = false;
         boolean autoEat = false;
+        boolean autoWalk = false;
+        boolean hudTarget = true;
+        boolean hudDurability = true;
+        boolean hudFps = true;
+        boolean hudClock = false;
         boolean triggerBotEnabled = false;
         int triggerBotDelayTicks = 2;
         boolean jumpResetEnabled = false;
