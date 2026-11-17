@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "autospearswap",
+  "version": "${version}",
+  "name": "Auto Spear Swap",
+  "description": "Configurable automatic spear attribute swapping and PvP keybind tools.",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["dev.odithekitty.autospearswap.AutoSpearSwapClient"]
+  },
+  "mixins": ["autospearswap.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.18.4",
+    "minecraft": "1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
