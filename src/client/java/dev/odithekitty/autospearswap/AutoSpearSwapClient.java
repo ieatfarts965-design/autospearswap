@@ -46,6 +46,21 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
                     previousSlot = -1;
                 }
             }
+
+            // When enabled, holding the normal use key temporarily selects the configured spear.
+            if (client.player != null && AutoSpearSwapConfig.attributeSwapEnabled) {
+                boolean using = client.options.useKey.isPressed();
+                if (using && previousSlot < 0) {
+                    int selected = client.player.getInventory().getSelectedSlot();
+                    if (selected != AutoSpearSwapConfig.spearSlot) {
+                        previousSlot = selected;
+                        client.player.getInventory().setSelectedSlot(AutoSpearSwapConfig.spearSlot);
+                    }
+                } else if (!using && previousSlot >= 0) {
+                    client.player.getInventory().setSelectedSlot(previousSlot);
+                    previousSlot = -1;
+                }
+            }
         });
     }
 }
