@@ -83,6 +83,9 @@ public final class AutoSpearSwapScreen extends Screen {
                 add(cx, y1 + 39, cw, h, "Cycle visual preset", b -> { visualPreset(); save(); });
                 add(cx, y1 + 78, cw, h, "Apply LEGIT profile", b -> { AutoSpearSwapConfig.applyLegitPreset(); clearAndInit(); });
                 add(cx, y1 + 117, cw, h, "Clarity-style theme", b -> { AutoSpearSwapConfig.uiTheme = 5; AutoSpearSwapConfig.uiOpacity = 82; save(); });
+                toggle(cx, y1 + 156, bw, h, "Fullbright", AutoSpearSwapConfig.fullbright, () -> AutoSpearSwapConfig.fullbright = !AutoSpearSwapConfig.fullbright);
+                toggle(cx + bw + gap, y1 + 156, bw, h, "Zoom", AutoSpearSwapConfig.zoomEnabled, () -> AutoSpearSwapConfig.zoomEnabled = !AutoSpearSwapConfig.zoomEnabled);
+                toggle(cx, y1 + 195, cw, h, "Auto respawn", AutoSpearSwapConfig.autoRespawn, () -> AutoSpearSwapConfig.autoRespawn = !AutoSpearSwapConfig.autoRespawn);
             }
             case 4 -> {
                 add(cx, y1, cw, h, "MAX FPS  •  aggressive", b -> { performance(); save(); });
