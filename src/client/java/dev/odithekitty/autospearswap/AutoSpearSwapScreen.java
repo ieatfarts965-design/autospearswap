@@ -25,9 +25,6 @@ public final class AutoSpearSwapScreen extends Screen {
     private boolean openingPacks;
     private String moduleQuery = "";
     private TextFieldWidget searchField;
-    private boolean draggingHudPreview;
-    private int hudDragOffsetX;
-    private int hudDragOffsetY;
 
     public AutoSpearSwapScreen() { super(Text.literal("NEXUS CLIENT")); }
 
@@ -383,42 +380,6 @@ public final class AutoSpearSwapScreen extends Screen {
         super.render(ctx, mx, my, delta);
     }
 
-
-    @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (tab == 11 && button == 0) {
-            int pw = Math.min(540, width - 20), ph = Math.min(440, height - 20);
-            int x = (width - pw) / 2, y = (height - ph) / 2;
-            int px = x + 160 + Math.floorMod(AutoSpearSwapConfig.hudX, Math.max(1, pw - 340));
-            int py = y + 250 + Math.floorMod(AutoSpearSwapConfig.hudY, 55);
-            if (mouseX >= px && mouseX <= px + 92 && mouseY >= py && mouseY <= py + 24) {
-                draggingHudPreview = true;
-                hudDragOffsetX = (int) mouseX - px;
-                hudDragOffsetY = (int) mouseY - py;
-                return true;
-            }
-        }
-        return super.mouseClicked(mouseX, mouseY, button);
-    }
-
-    @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        if (draggingHudPreview && button == 0) {
-            int pw = Math.min(540, width - 20), ph = Math.min(440, height - 20);
-            int x = (width - pw) / 2, y = (height - ph) / 2;
-            AutoSpearSwapConfig.hudX = Math.max(0, Math.min(width - 92, (int) (((mouseX - hudDragOffsetX - x - 150) / Math.max(1.0, pw - 270)) * (width - 92))));
-            AutoSpearSwapConfig.hudY = Math.max(0, Math.min(height - 24, (int) (((mouseY - hudDragOffsetY - y - 238) / 60.0) * (height - 24))));
-            AutoSpearSwapConfig.save();
-            return true;
-        }
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
-    }
-
-    @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        if (button == 0) draggingHudPreview = false;
-        return super.mouseReleased(mouseX, mouseY, button);
-    }
 
     @Override public void close() { if (client != null) client.setScreen(null); }
 }
