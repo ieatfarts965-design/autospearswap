@@ -15,7 +15,7 @@ public final class AutoSpearSwapConfig {
     public static int spearSlot = 8;
     public static int maceSlot = 1;
     public static int lungeReturnDelayTicks = 1;
-    public static int uiTheme = 0;
+    public static int uiTheme = 5;
     public static int uiOpacity = 65;
     public static boolean hudCoordinates = true;
     public static boolean hudCps = true;
@@ -38,6 +38,32 @@ public final class AutoSpearSwapConfig {
 
     private AutoSpearSwapConfig() {}
 
+    /** Conservative, HUD-focused profile intended to keep gameplay manual. */
+    public static void applyLegitPreset() {
+        triggerBotEnabled = false;
+        jumpResetEnabled = false;
+        attributeSwapEnabled = false;
+        lungeSwapEnabled = false;
+        autoSprint = false;
+        hudCoordinates = true;
+        hudCps = true;
+        hudArmor = true;
+        hudKeystrokes = true;
+        hudCombatTimer = true;
+        lowHealthWarning = true;
+        hudSpeed = true;
+        hudDirection = true;
+        hudBiome = false;
+        hudPing = true;
+        hudHealth = true;
+        hudFood = false;
+        hudHeldItem = false;
+        hudEffects = false;
+        uiTheme = 5;
+        uiOpacity = 82;
+        save();
+    }
+
     public static void load() {
         try {
             if (Files.exists(FILE)) {
@@ -48,7 +74,7 @@ public final class AutoSpearSwapConfig {
                     spearSlot = clamp(data.spearSlot);
                     maceSlot = clamp(data.maceSlot);
                     lungeReturnDelayTicks = Math.max(0, Math.min(10, data.lungeReturnDelayTicks));
-                    uiTheme = Math.max(0, Math.min(4, data.uiTheme));
+                    uiTheme = Math.max(0, Math.min(5, data.uiTheme));
                     uiOpacity = Math.max(25, Math.min(90, data.uiOpacity));
                     hudCoordinates = data.hudCoordinates;
                     hudCps = data.hudCps;
@@ -122,7 +148,7 @@ public final class AutoSpearSwapConfig {
         int spearSlot = 8;
         int maceSlot = 1;
         int lungeReturnDelayTicks = 1;
-        int uiTheme = 0;
+        int uiTheme = 5;
         int uiOpacity = 65;
         boolean hudCoordinates = true;
         boolean hudCps = true;
