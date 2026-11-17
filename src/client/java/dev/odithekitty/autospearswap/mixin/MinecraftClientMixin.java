@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {
@@ -19,7 +19,7 @@ public abstract class MinecraftClientMixin {
     @Unique private int autospearswap$previousSlot = -1;
 
     @Inject(method = "doAttack", at = @At("HEAD"))
-    private void autospearswap$beforeAttack(CallbackInfo ci) {
+    private void autospearswap$beforeAttack(CallbackInfoReturnable<Boolean> cir) {
         if (!AutoSpearSwapConfig.attributeSwapEnabled || player == null || world == null) return;
         int spear = AutoSpearSwapConfig.spearSlot;
         int current = player.getInventory().getSelectedSlot();
@@ -30,7 +30,7 @@ public abstract class MinecraftClientMixin {
     }
 
     @Inject(method = "doAttack", at = @At("RETURN"))
-    private void autospearswap$afterAttack(CallbackInfo ci) {
+    private void autospearswap$afterAttack(CallbackInfoReturnable<Boolean> cir) {
         if (autospearswap$previousSlot < 0 || player == null) return;
         int restore = autospearswap$previousSlot;
         autospearswap$previousSlot = -1;
