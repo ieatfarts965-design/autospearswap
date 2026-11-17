@@ -16,6 +16,7 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
     public static KeyBinding openMenuKey;
     public static KeyBinding toggleAttributeSwapKey;
     public static KeyBinding swapToSpearKey;
+    public static KeyBinding triggerBotKey;
     private static int previousSlot = -1;
     private static int triggerBotTicks = 0;
 
@@ -29,7 +30,7 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
             "key.autospearswap.toggle_attribute", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_B, category));
         swapToSpearKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
             "key.autospearswap.swap_spear", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_V, category));
-        KeyBinding triggerBotKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        triggerBotKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
             "key.autospearswap.trigger_bot", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_G, category));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
