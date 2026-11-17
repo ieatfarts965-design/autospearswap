@@ -10,7 +10,6 @@ import org.lwjgl.glfw.GLFW;
 public final class AutoSpearSwapClient implements ClientModInitializer {
     public static KeyBinding openMenuKey;
     public static KeyBinding toggleAttributeSwapKey;
-    public static KeyBinding toggleLungeSwapKey;
 
     @Override
     public void onInitializeClient() {
@@ -21,9 +20,6 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
         toggleAttributeSwapKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
             "key.autospearswap.toggle_attribute", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_B,
             KeyBinding.Category.create(net.minecraft.util.Identifier.of("autospearswap", "main"))));
-        toggleLungeSwapKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-            "key.autospearswap.toggle_lunge", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_G,
-            KeyBinding.Category.create(net.minecraft.util.Identifier.of("autospearswap", "main"))));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (openMenuKey.wasPressed()) {
@@ -31,10 +27,6 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
             }
             while (toggleAttributeSwapKey.wasPressed()) {
                 AutoSpearSwapConfig.attributeSwapEnabled = !AutoSpearSwapConfig.attributeSwapEnabled;
-                AutoSpearSwapConfig.save();
-            }
-            while (toggleLungeSwapKey.wasPressed()) {
-                AutoSpearSwapConfig.lungeSwapEnabled = !AutoSpearSwapConfig.lungeSwapEnabled;
                 AutoSpearSwapConfig.save();
             }
         });
