@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import java.nio.file.Files;
-import java.nio.file.Path;\nimport java.util.LinkedHashMap;\nimport java.util.Map;
+import java.nio.file.Path;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public final class AutoSpearSwapConfig {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -51,7 +53,8 @@ public final class AutoSpearSwapConfig {
     public static boolean hudEffects = false;
     public static int hudX = 7;
     public static int hudY = 7;
-    public static boolean triggerBotHoldMode = false;\n    public static Map<String, Boolean> extraModules = new LinkedHashMap<>();
+    public static boolean triggerBotHoldMode = false;
+    public static Map<String, Boolean> extraModules = new LinkedHashMap<>();
 
     private AutoSpearSwapConfig() {}
 
@@ -161,7 +164,8 @@ public final class AutoSpearSwapConfig {
                     hudEffects = data.hudEffects;
                     hudX = Math.max(0, Math.min(10000, data.hudX));
                     hudY = Math.max(0, Math.min(10000, data.hudY));
-                    triggerBotHoldMode = data.triggerBotHoldMode;\n                    extraModules = data.extraModules == null ? new LinkedHashMap<>() : new LinkedHashMap<>(data.extraModules);
+                    triggerBotHoldMode = data.triggerBotHoldMode;
+                    extraModules = data.extraModules == null ? new LinkedHashMap<>() : new LinkedHashMap<>(data.extraModules);
                 }
             } else {
                 save();
@@ -215,7 +219,8 @@ public final class AutoSpearSwapConfig {
             d.hudEffects = hudEffects;
             d.hudX = hudX;
             d.hudY = hudY;
-            d.triggerBotHoldMode = triggerBotHoldMode;\n            d.extraModules = new LinkedHashMap<>(extraModules);
+            d.triggerBotHoldMode = triggerBotHoldMode;
+            d.extraModules = new LinkedHashMap<>(extraModules);
             Files.writeString(FILE, GSON.toJson(d));
         } catch (Exception e) {
             System.err.println("[AutoSpearSwap] Could not save config: " + e.getMessage());
