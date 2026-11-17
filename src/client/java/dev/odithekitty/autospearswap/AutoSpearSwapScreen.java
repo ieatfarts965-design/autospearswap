@@ -14,10 +14,10 @@ import net.minecraft.text.Text;
 
 public final class AutoSpearSwapScreen extends Screen {
     private static final String[] TABS = {"Combat", "Movement", "HUD", "Visuals", "Performance", "Packs", "Skies", "Keys", "Macros", "Info"};
-    private static final String[] THEMES = {"Nexus", "Violet", "Mint", "Crimson", "Gold"};
-    private static final int[] ACCENT = {0xFF27C7FF, 0xFFB18CFF, 0xFF63E6B0, 0xFFFF647C, 0xFFFFC857};
-    private static final int[] PANEL = {0xF0091728, 0xF0151028, 0xF00B211D, 0xF0201018, 0xF0221A0B};
-    private static final int[] SIDE = {0xF00B2034, 0xF01D1635, 0xF0103028, 0xF02A1420, 0xF02C220F};
+    private static final String[] THEMES = {"Nexus", "Violet", "Mint", "Crimson", "Gold", "Clarity"};
+    private static final int[] ACCENT = {0xFF27C7FF, 0xFFB18CFF, 0xFF63E6B0, 0xFFFF647C, 0xFFFFC857, 0xFFB7C7D8};
+    private static final int[] PANEL = {0xF0091728, 0xF0151028, 0xF00B211D, 0xF0201018, 0xF0221A0B, 0xF010141B};
+    private static final int[] SIDE = {0xF00B2034, 0xF01D1635, 0xF0103028, 0xF02A1420, 0xF02C220F, 0xF018202B};
     private int tab;
     private KeyBinding capturing;
     private boolean openingPacks;
@@ -68,6 +68,8 @@ public final class AutoSpearSwapScreen extends Screen {
                     save();
                 });
                 add(cx, y1 + 39, cw, h, "Cycle visual preset", b -> { visualPreset(); save(); });
+                add(cx, y1 + 78, cw, h, "Apply LEGIT profile", b -> { AutoSpearSwapConfig.applyLegitPreset(); clearAndInit(); });
+                add(cx, y1 + 117, cw, h, "Clarity-style theme", b -> { AutoSpearSwapConfig.uiTheme = 5; AutoSpearSwapConfig.uiOpacity = 82; save(); });
             }
             case 4 -> {
                 add(cx, y1, cw, h, "MAX FPS  •  aggressive", b -> { performance(); save(); });
@@ -254,7 +256,7 @@ public final class AutoSpearSwapScreen extends Screen {
     @Override
     public void render(DrawContext ctx, int mx, int my, float delta) {
         renderBackground(ctx, mx, my, delta);
-        int t = Math.max(0, Math.min(4, AutoSpearSwapConfig.uiTheme));
+        int t = Math.max(0, Math.min(5, AutoSpearSwapConfig.uiTheme));
         int pw = Math.min(540, width - 20), ph = Math.min(440, height - 20);
         int x = (width - pw) / 2, y = (height - ph) / 2;
         int a = Math.round(255 * (AutoSpearSwapConfig.uiOpacity / 100.0f));
@@ -267,8 +269,8 @@ public final class AutoSpearSwapScreen extends Screen {
         ctx.fill(x + 144, y + 55, x + pw - 14, y + 56, 0x443D7898);
         ctx.fill(x + 144, y + ph - 50, x + pw - 14, y + ph - 49, 0x443D7898);
         ctx.drawTextWithShadow(textRenderer, Text.literal("NEXUS"), x + 16, y + 13, 0xFFFFFFFF);
-        ctx.drawTextWithShadow(textRenderer, Text.literal("CLIENT  /  MODULE CENTER"), x + 16, y + 27, ACCENT[t]);
-        ctx.drawTextWithShadow(textRenderer, Text.literal("NEXUS  •  1.6"), x + pw - 90, y + 17, 0xFF9CB4C8);
+        ctx.drawTextWithShadow(textRenderer, Text.literal("CLIENT  /  MODULES"), x + 16, y + 27, ACCENT[t]);
+        ctx.drawTextWithShadow(textRenderer, Text.literal("NEXUS  •  CLIENT"), x + pw - 90, y + 17, 0xFF9CB4C8);
         ctx.drawTextWithShadow(textRenderer, Text.literal(TABS[tab].toUpperCase()), x + 150, y + 24, 0xFFFFFFFF);
         ctx.drawTextWithShadow(textRenderer, Text.literal(capturing == null ? "CONFIGURE YOUR CLIENT" : "PRESS A KEY TO REBIND"), x + 150, y + 38, 0xFF9CB4C8);
         if (tab == 6) {
