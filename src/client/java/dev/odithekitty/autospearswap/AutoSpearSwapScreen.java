@@ -55,8 +55,17 @@ public final class AutoSpearSwapScreen extends Screen {
                 toggle(cx, y1 + 78, cw, h, "Jump reset", AutoSpearSwapConfig.jumpResetEnabled,
                     () -> AutoSpearSwapConfig.jumpResetEnabled = !AutoSpearSwapConfig.jumpResetEnabled);
             }
-            case 1 -> toggle(cx, y1, bw, h, "Auto sprint", AutoSpearSwapConfig.autoSprint,
-                () -> AutoSpearSwapConfig.autoSprint = !AutoSpearSwapConfig.autoSprint);
+            case 1 -> {
+                toggle(cx, y1, bw, h, "Auto sprint", AutoSpearSwapConfig.autoSprint,
+                    () -> AutoSpearSwapConfig.autoSprint = !AutoSpearSwapConfig.autoSprint);
+                toggle(cx + bw + gap, y1, bw, h, "Auto jump", AutoSpearSwapConfig.autoJump,
+                    () -> AutoSpearSwapConfig.autoJump = !AutoSpearSwapConfig.autoJump);
+                toggle(cx, y1 + 39, bw, h, "Auto tool", AutoSpearSwapConfig.autoTool,
+                    () -> AutoSpearSwapConfig.autoTool = !AutoSpearSwapConfig.autoTool);
+                toggle(cx + bw + gap, y1 + 39, bw, h, "Toggle sneak", AutoSpearSwapConfig.toggleSneak,
+                    () -> AutoSpearSwapConfig.toggleSneak = !AutoSpearSwapConfig.toggleSneak);
+                add(cx, y1 + 78, cw, h, "Toggle sneak key  •  " + keyText("Sneak", AutoSpearSwapClient.toggleSneakKey), b -> capture(AutoSpearSwapClient.toggleSneakKey));
+            }
             case 2 -> {
                 toggle(cx, y1, bw, h, "Coordinates", AutoSpearSwapConfig.hudCoordinates, () -> AutoSpearSwapConfig.hudCoordinates = !AutoSpearSwapConfig.hudCoordinates);
                 toggle(cx + bw + gap, y1, bw, h, "CPS counter", AutoSpearSwapConfig.hudCps, () -> AutoSpearSwapConfig.hudCps = !AutoSpearSwapConfig.hudCps);
@@ -152,6 +161,10 @@ public final class AutoSpearSwapScreen extends Screen {
                 add(cx, y1 + 38, cw, h, "Apply search", b -> clearAndInit());
                 String q = moduleQuery.toLowerCase(java.util.Locale.ROOT);
                 int n = 0;
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto sprint", () -> AutoSpearSwapConfig.autoSprint, () -> AutoSpearSwapConfig.autoSprint = !AutoSpearSwapConfig.autoSprint, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto jump", () -> AutoSpearSwapConfig.autoJump, () -> AutoSpearSwapConfig.autoJump = !AutoSpearSwapConfig.autoJump, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto tool", () -> AutoSpearSwapConfig.autoTool, () -> AutoSpearSwapConfig.autoTool = !AutoSpearSwapConfig.autoTool, n);
+                n = searchModule(cx, y1 + 78, bw, h, gap, q, "Toggle sneak", () -> AutoSpearSwapConfig.toggleSneak, () -> AutoSpearSwapConfig.toggleSneak = !AutoSpearSwapConfig.toggleSneak, n);
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Triggerbot", () -> AutoSpearSwapConfig.triggerBotEnabled, () -> AutoSpearSwapConfig.triggerBotEnabled = !AutoSpearSwapConfig.triggerBotEnabled, n);
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Auto spear", () -> AutoSpearSwapConfig.attributeSwapEnabled, () -> AutoSpearSwapConfig.attributeSwapEnabled = !AutoSpearSwapConfig.attributeSwapEnabled, n);
                 n = searchModule(cx, y1 + 78, bw, h, gap, q, "Jump reset", () -> AutoSpearSwapConfig.jumpResetEnabled, () -> AutoSpearSwapConfig.jumpResetEnabled = !AutoSpearSwapConfig.jumpResetEnabled, n);
