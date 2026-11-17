@@ -169,6 +169,7 @@ public final class AutoSpearSwapScreen extends Screen {
                 searchField.setText(moduleQuery);
                 searchField.setChangedListener(value -> moduleQuery = value);
                 addDrawableChild(searchField);
+                add(cx + cw - 66, y1, 66, h, "Apply", b -> { modulePage = 0; clearAndInit(); });
                 String q = moduleQuery.toLowerCase(java.util.Locale.ROOT);
                 java.util.List<Runnable> actions = new java.util.ArrayList<>();
                 java.util.List<String> labels = new java.util.ArrayList<>();
