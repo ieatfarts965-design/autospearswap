@@ -2,6 +2,11 @@
   "required": true,
   "package": "dev.odithekitty.autospearswap.mixin",
   "compatibilityLevel": "JAVA_21",
-  "client": ["MinecraftClientMixin"],
-  "injectors": { "defaultRequire": 1 }
+  "client": [
+    "MinecraftClientMixin",
+    "InGameHudMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }
