@@ -16,7 +16,7 @@ public final class AutoSpearSwapConfig {
     public static int maceSlot = 1;
     public static int lungeReturnDelayTicks = 1;
     public static int uiTheme = 0;
-    public static int uiOpacity = 65;
+    public static int uiOpacity = 65;\n    public static boolean hudCoordinates = true;\n    public static boolean hudCps = true;\n    public static boolean hudArmor = true;\n    public static boolean hudKeystrokes = true;\n    public static boolean hudCombatTimer = true;\n    public static boolean lowHealthWarning = true;\n    public static boolean autoSprint = false;
 
     private AutoSpearSwapConfig() {}
 
@@ -31,7 +31,7 @@ public final class AutoSpearSwapConfig {
                     maceSlot = clamp(data.maceSlot);
                     lungeReturnDelayTicks = Math.max(0, Math.min(10, data.lungeReturnDelayTicks));
                     uiTheme = Math.max(0, Math.min(4, data.uiTheme));
-                    uiOpacity = Math.max(25, Math.min(90, data.uiOpacity));
+                    uiOpacity = Math.max(25, Math.min(90, data.uiOpacity));\n                    hudCoordinates = data.hudCoordinates;\n                    hudCps = data.hudCps;\n                    hudArmor = data.hudArmor;\n                    hudKeystrokes = data.hudKeystrokes;\n                    hudCombatTimer = data.hudCombatTimer;\n                    lowHealthWarning = data.lowHealthWarning;\n                    autoSprint = data.autoSprint;
                 }
             } else save();
         } catch (Exception e) {
@@ -49,7 +49,7 @@ public final class AutoSpearSwapConfig {
             d.maceSlot = maceSlot;
             d.lungeReturnDelayTicks = lungeReturnDelayTicks;
             d.uiTheme = uiTheme;
-            d.uiOpacity = uiOpacity;
+            d.uiOpacity = uiOpacity;\n            d.hudCoordinates = hudCoordinates;\n            d.hudCps = hudCps;\n            d.hudArmor = hudArmor;\n            d.hudKeystrokes = hudKeystrokes;\n            d.hudCombatTimer = hudCombatTimer;\n            d.lowHealthWarning = lowHealthWarning;\n            d.autoSprint = autoSprint;
             Files.writeString(FILE, GSON.toJson(d));
         } catch (Exception e) {
             System.err.println("[AutoSpearSwap] Could not save config: " + e.getMessage());
@@ -65,6 +65,6 @@ public final class AutoSpearSwapConfig {
         int maceSlot = 1;
         int lungeReturnDelayTicks = 1;
         int uiTheme = 0;
-        int uiOpacity = 65;
+        int uiOpacity = 65;\n        boolean hudCoordinates = true;\n        boolean hudCps = true;\n        boolean hudArmor = true;\n        boolean hudKeystrokes = true;\n        boolean hudCombatTimer = true;\n        boolean lowHealthWarning = true;\n        boolean autoSprint = false;
     }
 }
