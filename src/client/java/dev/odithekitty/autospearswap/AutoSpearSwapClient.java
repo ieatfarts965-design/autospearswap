@@ -8,6 +8,8 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.block.BlockState;
 import dev.odithekitty.autospearswap.mixin.MinecraftClientAccessor;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
@@ -18,6 +20,9 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
     public static KeyBinding swapToSpearKey;
     public static KeyBinding triggerBotKey;
     public static KeyBinding macroKey;
+    public static KeyBinding toggleSneakKey;
+    private static boolean sneakLatched;
+    private static int autoJumpCooldown;
     private static int previousSlot = -1;
     private static int triggerBotTicks = 0;
     private static int lastHurtTime = 0;
@@ -38,14 +43,42 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
             "key.autospearswap.trigger_bot", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_G, category));
         macroKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
             "key.autospearswap.macro", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_F8, category));
+        toggleSneakKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+            "key.autospearswap.toggle_sneak", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_C, category));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             PvpHud.tick(client);
             if (client.player == null || client.world == null) {
                 lastHurtTime = 0;
                 jumpResetCooldown = 0;
+                autoJumpCooldown = 0;
+                sneakLatched = false;
             } else {
                 if (jumpResetCooldown > 0) jumpResetCooldown--;
+                if (autoJumpCooldown > 0) autoJumpCooldown--;
+                while (toggleSneakKey.wasPressed()) sneakLatched = !sneakLatched;
+                client.player.setSneaking(AutoSpearSwapConfig.toggleSneak && sneakLatched);
+                if (!AutoSpearSwapConfig.toggleSneak) sneakLatched = false;
+                if (AutoSpearSwapConfig.autoJump && client.options.forwardKey.isPressed()
+                    && client.player.isOnGround() && !client.player.isSneaking()
+                    && !client.player.hasVehicle() && client.currentScreen == null && autoJumpCooldown == 0) {
+                    client.player.jump();
+                    autoJumpCooldown = 2;
+                }
+                if (AutoSpearSwapConfig.autoTool && client.options.attackKey.isPressed()
+                    && client.currentScreen == null && client.crosshairTarget instanceof BlockHitResult blockHit) {
+                    BlockState state = client.world.getBlockState(blockHit.getBlockPos());
+                    int bestSlot = client.player.getInventory().getSelectedSlot();
+                    float bestSpeed = client.player.getInventory().getStack(bestSlot).getMiningSpeedMultiplier(state);
+                    for (int slot = 0; slot < 9; slot++) {
+                        float speed = client.player.getInventory().getStack(slot).getMiningSpeedMultiplier(state);
+                        if (speed > bestSpeed) {
+                            bestSpeed = speed;
+                            bestSlot = slot;
+                        }
+                    }
+                    client.player.getInventory().setSelectedSlot(bestSlot);
+                }
                 int hurt = client.player.hurtTime;
                 if (AutoSpearSwapConfig.jumpResetEnabled && hurt > lastHurtTime
                     && client.player.isOnGround() && !client.player.isSneaking()
