@@ -5,12 +5,14 @@ A client-side Fabric mod for Minecraft 1.21.11.
 ## Features
 - Right Shift opens the custom settings screen.
 - B toggles automatic attribute swapping.
-- G toggles lunge-swap mode (the lunge action handler is a planned follow-up).
-- Configure the spear and primary hotbar slots in the GUI.
+- Rebind both controls directly in the in-game settings screen.
+- Configure the spear hotbar slot (1–9).
 - Settings persist in `config/autospearswap.json`.
 
-## Build
-Requires Java 21. Run `gradle build` or use the included GitHub Actions workflow. The jar is written to `build/libs/`.
+When enabled, every normal attack is wrapped in a rapid selected-slot change to the configured spear slot, then the original held slot is restored. The swap and attack packets are sent in order so the server can process them in the same attack sequence.
 
-## Important
-Attribute swapping relies on server-side handling of rapid held-slot changes and attacks. Some server software patches this vanilla mechanic, so client automation cannot force it to work where the server disables it.
+## Build
+Requires Java 21. Run `gradle build`. The jar is written to `build/libs/`. GitHub Actions builds the project on pushes to `main`.
+
+## Server compatibility
+Attribute swapping depends on the server allowing vanilla held-item attribute updates during attacks. Some server software patches this mechanic, so a client mod cannot force it to work where the server disables it.
