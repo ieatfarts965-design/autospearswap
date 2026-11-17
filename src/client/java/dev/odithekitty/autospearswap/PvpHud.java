@@ -88,6 +88,47 @@ public final class PvpHud {
             drawKey(context, client, "LMB", client.options.attackKey.isPressed(), x, y + 26, color);
             drawKey(context, client, "RMB", client.options.useKey.isPressed(), x + 28, y + 26, color);
         }
+        if (AutoSpearSwapConfig.hudSpeed) {
+            double horizontal = Math.sqrt(player.getVelocity().x * player.getVelocity().x + player.getVelocity().z * player.getVelocity().z) * 20.0;
+            draw(context, client, Text.literal(String.format("SPEED  %.2f m/s", horizontal)), x, y, color);
+            y += 11;
+        }
+        if (AutoSpearSwapConfig.hudDirection) {
+            String[] directions = {"S", "SW", "W", "NW", "N", "NE", "E", "SE"};
+            int index = Math.floorMod(Math.round(player.getYaw() / 45.0f), 8);
+            draw(context, client, Text.literal("FACING  " + directions[index]), x, y, color);
+            y += 11;
+        }
+        if (AutoSpearSwapConfig.hudBiome && client.world != null) {
+            String biome = client.world.getBiome(player.getBlockPos()).getKey().map(k -> k.getValue().getPath()).orElse("unknown");
+            draw(context, client, Text.literal("BIOME  " + biome), x, y, color);
+            y += 11;
+        }
+        if (AutoSpearSwapConfig.hudPing && client.getNetworkHandler() != null) {
+            var entry = client.getNetworkHandler().getPlayerListEntry(player.getUuid());
+            if (entry != null) {
+                draw(context, client, Text.literal("PING  " + entry.getLatency() + " ms"), x, y, color);
+                y += 11;
+            }
+        }
+        if (AutoSpearSwapConfig.hudHealth) {
+            draw(context, client, Text.literal(String.format("HEALTH  %.1f / %.1f", player.getHealth(), player.getMaxHealth())), x, y, color);
+            y += 11;
+        }
+        if (AutoSpearSwapConfig.hudFood) {
+            draw(context, client, Text.literal("FOOD  " + player.getHungerManager().getFoodLevel() + "/20"), x, y, color);
+            y += 11;
+        }
+        if (AutoSpearSwapConfig.hudHeldItem) {
+            String held = player.getMainHandStack().isEmpty() ? "Empty" : player.getMainHandStack().getName().getString();
+            draw(context, client, Text.literal("HELD  " + held), x, y, color);
+            y += 11;
+        }
+        if (AutoSpearSwapConfig.hudEffects && !player.getStatusEffects().isEmpty()) {
+            String effects = player.getStatusEffects().stream().map(e -> e.getEffectType().value().getName().getString()).limit(3).collect(java.util.stream.Collectors.joining(", "));
+            draw(context, client, Text.literal("EFFECTS  " + effects), x, y, color);
+            y += 11;
+        }
         if (AutoSpearSwapConfig.lowHealthWarning && player.getHealth() <= 6.0f) {
             String warning = "LOW HEALTH";
             int width = client.textRenderer.getWidth(warning);
