@@ -41,6 +41,7 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         AutoSpearSwapConfig.load();
+        autoWalkLatched = AutoSpearSwapConfig.autoWalk;
         MacroEngine.load();
         KeyBinding.Category category = KeyBinding.Category.create(Identifier.of("autospearswap", "main"));
         openMenuKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
@@ -65,12 +66,11 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
             while (autoWalkKey.wasPressed()) {
                 autoWalkLatched = !autoWalkLatched;
                 AutoSpearSwapConfig.autoWalk = autoWalkLatched;
+                if (!autoWalkLatched && client.options != null) client.options.forwardKey.setPressed(false);
                 AutoSpearSwapConfig.save();
             }
-            if (client.player == null || client.currentScreen != null || !AutoSpearSwapConfig.autoWalk) {
-                if (client.options != null) client.options.forwardKey.setPressed(false);
-            } else {
-                client.options.forwardKey.setPressed(true);
+            if (AutoSpearSwapConfig.autoWalk && client.options != null) {
+                client.options.forwardKey.setPressed(client.player != null && client.currentScreen == null);
             }
             if (originalGamma < 0.0) originalGamma = client.options.getGamma().getValue();
             client.options.getGamma().setValue(AutoSpearSwapConfig.fullbright ? 1.0 : originalGamma);
