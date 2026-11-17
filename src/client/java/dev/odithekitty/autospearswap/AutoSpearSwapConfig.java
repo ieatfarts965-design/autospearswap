@@ -28,6 +28,9 @@ public final class AutoSpearSwapConfig {
     public static boolean autoTool = false;
     public static boolean autoJump = false;
     public static boolean toggleSneak = false;
+    public static boolean fullbright = false;
+    public static boolean zoomEnabled = false;
+    public static boolean autoRespawn = false;
     public static boolean triggerBotEnabled = false;
     public static int triggerBotDelayTicks = 2;
     public static boolean jumpResetEnabled = false;
@@ -55,6 +58,9 @@ public final class AutoSpearSwapConfig {
         autoTool = false;
         autoJump = false;
         toggleSneak = false;
+        fullbright = false;
+        zoomEnabled = false;
+        autoRespawn = false;
         hudCoordinates = true;
         hudCps = true;
         hudArmor = true;
@@ -122,6 +128,9 @@ public final class AutoSpearSwapConfig {
                     autoTool = data.autoTool;
                     autoJump = data.autoJump;
                     toggleSneak = data.toggleSneak;
+                    fullbright = data.fullbright;
+                    zoomEnabled = data.zoomEnabled;
+                    autoRespawn = data.autoRespawn;
                     triggerBotEnabled = data.triggerBotEnabled;
                     triggerBotDelayTicks = Math.max(1, Math.min(10, data.triggerBotDelayTicks));
                     jumpResetEnabled = data.jumpResetEnabled;
@@ -166,6 +175,9 @@ public final class AutoSpearSwapConfig {
             d.autoTool = autoTool;
             d.autoJump = autoJump;
             d.toggleSneak = toggleSneak;
+            d.fullbright = fullbright;
+            d.zoomEnabled = zoomEnabled;
+            d.autoRespawn = autoRespawn;
             d.triggerBotEnabled = triggerBotEnabled;
             d.triggerBotDelayTicks = triggerBotDelayTicks;
             d.jumpResetEnabled = jumpResetEnabled;
@@ -208,6 +220,9 @@ public final class AutoSpearSwapConfig {
         boolean autoTool = false;
         boolean autoJump = false;
         boolean toggleSneak = false;
+        boolean fullbright = false;
+        boolean zoomEnabled = false;
+        boolean autoRespawn = false;
         boolean triggerBotEnabled = false;
         int triggerBotDelayTicks = 2;
         boolean jumpResetEnabled = false;
