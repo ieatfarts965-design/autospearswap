@@ -10,6 +10,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.block.BlockState;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.util.Hand;
 import dev.odithekitty.autospearswap.mixin.MinecraftClientAccessor;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
@@ -25,6 +27,8 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
     private static int originalFov = -1;
     private static boolean wasZooming;
     private static double originalGamma = -1.0;
+    private static int autoEatPreviousSlot = -1;
+    private static int autoEatCooldown;
     private static boolean sneakLatched;
     private static int autoJumpCooldown;
     private static int previousSlot = -1;
@@ -77,6 +81,34 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
             } else {
                 if (jumpResetCooldown > 0) jumpResetCooldown--;
                 if (autoJumpCooldown > 0) autoJumpCooldown--;
+                if (autoEatCooldown > 0) autoEatCooldown--;
+                if (!AutoSpearSwapConfig.autoEat) {
+                    if (autoEatPreviousSlot >= 0) {
+                        client.player.getInventory().setSelectedSlot(autoEatPreviousSlot);
+                        autoEatPreviousSlot = -1;
+                    }
+                } else if (client.currentScreen == null && !client.player.isUsingItem()) {
+                    int food = client.player.getHungerManager().getFoodLevel();
+                    if (food >= 19 && autoEatPreviousSlot >= 0) {
+                        client.player.getInventory().setSelectedSlot(autoEatPreviousSlot);
+                        autoEatPreviousSlot = -1;
+                    } else if (food <= 14 && autoEatCooldown == 0 && client.interactionManager != null) {
+                        int selected = client.player.getInventory().getSelectedSlot();
+                        int foodSlot = -1;
+                        for (int slot = 0; slot < 9; slot++) {
+                            if (client.player.getInventory().getStack(slot).contains(DataComponentTypes.FOOD)) {
+                                foodSlot = slot;
+                                break;
+                            }
+                        }
+                        if (foodSlot >= 0) {
+                            if (autoEatPreviousSlot < 0) autoEatPreviousSlot = selected;
+                            client.player.getInventory().setSelectedSlot(foodSlot);
+                            client.interactionManager.interactItem(client.player, Hand.MAIN_HAND);
+                            autoEatCooldown = 20;
+                        }
+                    }
+                }
                 while (toggleSneakKey.wasPressed()) sneakLatched = !sneakLatched;
                 client.player.setSneaking(AutoSpearSwapConfig.toggleSneak && sneakLatched);
                 if (!AutoSpearSwapConfig.toggleSneak) sneakLatched = false;
