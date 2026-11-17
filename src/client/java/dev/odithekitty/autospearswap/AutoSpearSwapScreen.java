@@ -6,6 +6,8 @@ import net.minecraft.client.input.KeyInput;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.pack.PackScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import java.util.function.BooleanSupplier;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.option.CloudRenderMode;
 import net.minecraft.client.util.InputUtil;
@@ -13,7 +15,7 @@ import net.minecraft.particle.ParticlesMode;
 import net.minecraft.text.Text;
 
 public final class AutoSpearSwapScreen extends Screen {
-    private static final String[] TABS = {"Combat", "Movement", "HUD", "Visuals", "Performance", "Packs", "Skies", "Keys", "Macros", "Info"};
+    private static final String[] TABS = {"Combat", "Movement", "HUD", "Visuals", "Performance", "Packs", "Skies", "Keys", "Macros", "Info", "Search"};
     private static final String[] THEMES = {"Nexus", "Violet", "Mint", "Crimson", "Gold", "Clarity"};
     private static final int[] ACCENT = {0xFF27C7FF, 0xFFB18CFF, 0xFF63E6B0, 0xFFFF647C, 0xFFFFC857, 0xFFB7C7D8};
     private static final int[] PANEL = {0xF0091728, 0xF0151028, 0xF00B211D, 0xF0201018, 0xF0221A0B, 0xF010141B};
@@ -21,6 +23,8 @@ public final class AutoSpearSwapScreen extends Screen {
     private int tab;
     private KeyBinding capturing;
     private boolean openingPacks;
+    private String moduleQuery = "";
+    private TextFieldWidget searchField;
 
     public AutoSpearSwapScreen() { super(Text.literal("NEXUS CLIENT")); }
 
@@ -129,6 +133,19 @@ public final class AutoSpearSwapScreen extends Screen {
             }
         }
         add(x + pw - 82, y + ph - 38, 70, 26, "Close", b -> close());
+    }
+
+    private int searchModule(int x, int y, int w, int h, int gap, String query, String name,
+                             BooleanSupplier enabled, Runnable action, int index) {
+        if (!query.isEmpty() && !name.toLowerCase(java.util.Locale.ROOT).contains(query)) return index;
+        int bx = x + (index % 2) * (w + gap);
+        int by = y + (index / 2) * 35;
+        add(bx, by, w, h, (enabled.getAsBoolean() ? "● " : "○ ") + name, b -> {
+            action.run();
+            AutoSpearSwapConfig.save();
+            clearAndInit();
+        });
+        return index + 1;
     }
 
     private void add(int x, int y, int w, int h, String label, ButtonWidget.PressAction action) {
