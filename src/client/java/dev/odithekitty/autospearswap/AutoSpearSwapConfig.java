@@ -33,6 +33,7 @@ public final class AutoSpearSwapConfig {
     public static boolean autoRespawn = false;
     public static boolean autoEat = false;
     public static boolean autoWalk = false;
+    public static boolean autoSwim = false;
     public static boolean hudTarget = true;
     public static boolean hudDurability = true;
     public static boolean hudFps = true;
@@ -69,6 +70,7 @@ public final class AutoSpearSwapConfig {
         autoRespawn = false;
         autoEat = false;
         autoWalk = false;
+        autoSwim = false;
         hudCoordinates = true;
         hudCps = true;
         hudArmor = true;
@@ -141,6 +143,7 @@ public final class AutoSpearSwapConfig {
                     autoRespawn = data.autoRespawn;
                     autoEat = data.autoEat;
                     autoWalk = data.autoWalk;
+                    autoSwim = data.autoSwim;
                     hudTarget = data.hudTarget;
                     hudDurability = data.hudDurability;
                     hudFps = data.hudFps;
@@ -194,6 +197,7 @@ public final class AutoSpearSwapConfig {
             d.autoRespawn = autoRespawn;
             d.autoEat = autoEat;
             d.autoWalk = autoWalk;
+            d.autoSwim = autoSwim;
             d.hudTarget = hudTarget;
             d.hudDurability = hudDurability;
             d.hudFps = hudFps;
@@ -245,6 +249,7 @@ public final class AutoSpearSwapConfig {
         boolean autoRespawn = false;
         boolean autoEat = false;
         boolean autoWalk = false;
+        boolean autoSwim = false;
         boolean hudTarget = true;
         boolean hudDurability = true;
         boolean hudFps = true;
