@@ -6,7 +6,7 @@ import net.minecraft.client.input.KeyInput;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.pack.PackScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.widget.TextFieldWidget;\nimport net.minecraft.client.gl.RenderPipelines;\nimport net.minecraft.util.Identifier;
 import java.util.function.BooleanSupplier;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.option.CloudRenderMode;
@@ -15,19 +15,19 @@ import net.minecraft.particle.ParticlesMode;
 import net.minecraft.text.Text;
 
 public final class AutoSpearSwapScreen extends Screen {
-    private static final String[] TABS = {"Combat", "Movement", "HUD", "Visuals", "Performance", "Packs", "Skies", "Keys", "Macros", "Info", "Search", "Editor"};
-    private static final String[] THEMES = {"Nexus", "Violet", "Mint", "Crimson", "Gold", "Clarity", "Obsidian", "Arctic", "Rose"};
-    private static final int[] ACCENT = {0xFF27C7FF, 0xFFB18CFF, 0xFF63E6B0, 0xFFFF647C, 0xFFFFC857, 0xFFB7C7D8, 0xFF9BA7B8, 0xFF71D8FF, 0xFFFF8FAF};
-    private static final int[] PANEL = {0xF0091728, 0xF0151028, 0xF00B211D, 0xF0201018, 0xF0221A0B, 0xF010141B, 0xF00C1017, 0xF0081B29, 0xF01D1019};
-    private static final int[] SIDE = {0xF00B2034, 0xF01D1635, 0xF0103028, 0xF02A1420, 0xF02C220F, 0xF018202B, 0xF017202D, 0xF00C2C40, 0xF02C1924};
+    private static final String[] TABS = {"Combat", "Movement", "HUD", "Visuals", "Performance", "Packs", "Skies", "Keys", "Macros", "Info", "Search", "Editor", "Spotify"};
+    private static final String[] THEMES = {"Dropout", "Afterhours", "Ghostland", "Nocturne", "Static", "Bloodmoon", "VHS", "Blackout", "Ashes"};
+    private static final int[] ACCENT = {0xFFF2E9E9, 0xFFE5BFC2, 0xFFFF5B69, 0xFFD9D0D0, 0xFFB73A4A, 0xFFFF7F83, 0xFFC8B9BB, 0xFFE8E1E1, 0xFF9D7D83};
+    private static final int[] PANEL = {0xD90D080B, 0xD9160A10, 0xD90E090D, 0xD9180B10, 0xD910080B, 0xD91D0A10, 0xD90A080B, 0xD9100A0E, 0xD9140B0E};
+    private static final int[] SIDE = {0xD91A0D12, 0xD9230E14, 0xD91C0D12, 0xD9261016, 0xD9180B0F, 0xD92A0C13, 0xD9140A0D, 0xD9200D12, 0xD91D0C10};
     private int tab;
     private KeyBinding capturing;
     private boolean openingPacks;
     private String moduleQuery = "";
-    private TextFieldWidget searchField;
+    private TextFieldWidget searchField;\n    private TextFieldWidget spotifyClientField;
     private int modulePage;
 
-    public AutoSpearSwapScreen() { super(Text.literal("NEXUS CLIENT")); }
+    public AutoSpearSwapScreen() { super(Text.literal("OVERTONIGHT CLIENT")); }
 
     @Override
     protected void init() {
@@ -36,7 +36,7 @@ public final class AutoSpearSwapScreen extends Screen {
         int sx = x + 12, sy = y + 58, sw = Math.min(112, pw / 4);
         for (int i = 0; i < TABS.length; i++) {
             final int index = i;
-            add(sx, sy + i * 32, sw, 27, (tab == i ? "◆  " : "   ") + TABS[i],
+            add(sx, sy + i * 29, sw, 25, (tab == i ? "◆  " : "   ") + TABS[i],
                 b -> { tab = index; clearAndInit(); });
         }
         int cx = sx + sw + 14, cw = pw - (cx - x) - 14, gap = 8, bw = (cw - gap) / 2;
@@ -226,6 +226,24 @@ public final class AutoSpearSwapScreen extends Screen {
                 add(cx + bw + gap, y + ph - 76, bw, 26, "Next ▶", b -> { modulePage++; clearAndInit(); });
                 add(cx, y + ph - 48, cw, 22, "Page " + (modulePage + 1) + " / " + pages + "  •  " + labels.size() + " matching modules", b -> {});
             }
+            case 12 -> {
+                spotifyClientField = new TextFieldWidget(textRenderer, cx, y1, cw, h, Text.literal("Spotify Client ID"));
+                spotifyClientField.setMaxLength(96);
+                spotifyClientField.setText(AutoSpearSwapConfig.spotifyClientId == null ? "" : AutoSpearSwapConfig.spotifyClientId);
+                addDrawableChild(spotifyClientField);
+                add(cx, y1 + 38, bw, h, "Save Client ID", b -> {
+                    AutoSpearSwapConfig.spotifyClientId = spotifyClientField.getText().trim();
+                    AutoSpearSwapConfig.save();
+                    clearAndInit();
+                });
+                add(cx + bw + gap, y1 + 38, bw, h, "Connect Spotify", b -> SpotifyService.connect());
+                add(cx, y1 + 76, bw, h, "Refresh playback", b -> SpotifyService.refresh());
+                add(cx + bw + gap, y1 + 76, bw, h, "Disconnect", b -> SpotifyService.disconnect());
+                add(cx, y1 + 114, bw, h, "Previous track", b -> SpotifyService.previous());
+                add(cx + bw + gap, y1 + 114, bw, h, "Next track", b -> SpotifyService.next());
+                add(cx, y1 + 152, bw, h, SpotifyService.isPlaying() ? "Pause playback" : "Resume playback", b -> SpotifyService.togglePlayback());
+                add(cx + bw + gap, y1 + 152, bw, h, "Play dropout", b -> SpotifyService.playDropout());
+            }
             case 11 -> {
                 add(cx, y1, cw, h, "Reset HUD position", b -> { AutoSpearSwapConfig.hudX = 7; AutoSpearSwapConfig.hudY = 7; save(); });
                 add(cx, y1 + 38, bw, h, "Move left", b -> { AutoSpearSwapConfig.hudX = Math.max(0, AutoSpearSwapConfig.hudX - 5); save(); });
@@ -385,6 +403,10 @@ public final class AutoSpearSwapScreen extends Screen {
     @Override
     public void render(DrawContext ctx, int mx, int my, float delta) {
         renderBackground(ctx, mx, my, delta);
+        ctx.drawTexture(RenderPipelines.GUI_TEXTURED,
+            Identifier.of("autospearswap", "textures/gui/overtonight-cover.jpg"),
+            0, 0, 0.0f, 0.0f, width, height, 640, 640, 0x72FFFFFF);
+        ctx.fill(0, 0, width, height, 0x9A09060A);
         int t = Math.max(0, Math.min(8, AutoSpearSwapConfig.uiTheme));
         int pw = Math.min(540, width - 20), ph = Math.min(440, height - 20);
         int x = (width - pw) / 2, y = (height - ph) / 2;
@@ -393,13 +415,13 @@ public final class AutoSpearSwapScreen extends Screen {
         ctx.fill(x, y, x + pw, y + ph, (PANEL[t] & 0x00FFFFFF) | (a << 24));
         ctx.fill(x, y, x + pw, y + 3, ACCENT[t]);
         ctx.fill(x, y + 3, x + 3, y + ph, ACCENT[t] & 0x66FFFFFF);
-        ctx.fill(x + 8, y + 54, x + 132, y + ph - 48, (SIDE[t] & 0x00FFFFFF) | (a << 24));
+        ctx.fill(x + 8, y + 54, x + 132, y + ph - 8, (SIDE[t] & 0x00FFFFFF) | (a << 24));
         ctx.fill(x + 10, y + 48, x + pw - 10, y + 49, 0x883D7898);
         ctx.fill(x + 144, y + 55, x + pw - 14, y + 56, 0x443D7898);
         ctx.fill(x + 144, y + ph - 50, x + pw - 14, y + ph - 49, 0x443D7898);
-        ctx.drawTextWithShadow(textRenderer, Text.literal("NEXUS"), x + 16, y + 13, 0xFFFFFFFF);
-        ctx.drawTextWithShadow(textRenderer, Text.literal("CLIENT  /  MODULES"), x + 16, y + 27, ACCENT[t]);
-        ctx.drawTextWithShadow(textRenderer, Text.literal("NEXUS  •  CLIENT"), x + pw - 90, y + 17, 0xFF9CB4C8);
+        ctx.drawTextWithShadow(textRenderer, Text.literal("OVERTONIGHT"), x + 16, y + 13, 0xFFFFFFFF);
+        ctx.drawTextWithShadow(textRenderer, Text.literal("CLIENT  /  AFTERHOURS"), x + 16, y + 27, ACCENT[t]);
+        ctx.drawTextWithShadow(textRenderer, Text.literal("EST. AFTER DARK"), x + pw - 90, y + 17, 0xFF9CB4C8);
         ctx.drawTextWithShadow(textRenderer, Text.literal(TABS[tab].toUpperCase()), x + 150, y + 24, 0xFFFFFFFF);
         ctx.drawTextWithShadow(textRenderer, Text.literal(capturing == null ? "CONFIGURE YOUR CLIENT" : "PRESS A KEY TO REBIND"), x + 150, y + 38, 0xFF9CB4C8);
         if (tab == 11) {
@@ -411,7 +433,7 @@ public final class AutoSpearSwapScreen extends Screen {
             int py = y + 238 + (int) ((double) AutoSpearSwapConfig.hudY / Math.max(1, height - 24) * 60);
             ctx.fill(x + 150, y + 238, x + pw - 20, y + 322, 0xAA0A111A);
             ctx.fill(px, py, px + 92, py + 24, 0xFF20384B);
-            ctx.drawTextWithShadow(textRenderer, Text.literal("NEXUS HUD"), px + 8, py + 8, ACCENT[t]);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("OVERTONIGHT HUD"), px + 8, py + 8, ACCENT[t]);
         }
         if (tab == 6) {
             ctx.drawTextWithShadow(textRenderer, Text.literal("VANILLA SKY TEXTURES"), x + 150, y + 154, ACCENT[t]);
@@ -423,6 +445,17 @@ public final class AutoSpearSwapScreen extends Screen {
             ctx.drawTextWithShadow(textRenderer, Text.literal("RESOURCE PACKS"), x + 150, y + 154, ACCENT[t]);
             ctx.drawTextWithShadow(textRenderer, Text.literal("Drop .zip packs into the opened folder."), x + 150, y + 174, 0xFFEAF6FF);
             ctx.drawTextWithShadow(textRenderer, Text.literal("Reopen the manager to rescan, enable, then press Done."), x + 150, y + 190, 0xFF9CB4C8);
+        }
+        if (tab == 12) {
+            SpotifyService.pollIfNeeded();
+            String status = SpotifyService.status();
+            if (status.length() > 48) status = status.substring(0, 48) + "…";
+            ctx.drawTextWithShadow(textRenderer, Text.literal("SPOTIFY  /  " + status), x + 150, y + 292, ACCENT[t]);
+            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.currentTrack()), x + 150, y + 316, 0xFFFFFFFF);
+            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.currentArtist()), x + 150, y + 334, 0xFFE2D7D9);
+            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.currentAlbum()), x + 150, y + 352, 0xFFBBAEB1);
+            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.progressText()), x + 150, y + 370, ACCENT[t]);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("Controls use your Spotify Connect device."), x + 150, y + 388, 0xFFBBAEB1);
         }
         if (tab == 8) {
             String sequence = MacroEngine.STEPS.isEmpty() ? "No steps yet" : "Sequence: " +
