@@ -52,6 +52,7 @@ public final class SpotifyService {
     private static volatile boolean playing;
     private static volatile long progressMs;
     private static volatile long durationMs;
+    private static volatile int volumePercent = 50;
     private static volatile long expiresAt;
     private static volatile long lastPollAt;
     private static volatile String pendingVerifier = "";
@@ -310,11 +311,18 @@ public final class SpotifyService {
                 playing = false;
                 progressMs = 0;
                 durationMs = 0;
+                volumePercent = 50;
                 state = "Connected · no active playback";
                 return;
             }
             JsonObject root = JsonParser.parseString(response.body()).getAsJsonObject();
             playing = root.has("is_playing") && root.get("is_playing").getAsBoolean();
+            if (root.has("device") && root.get("device").isJsonObject()) {
+                JsonObject device = root.getAsJsonObject("device");
+                if (device.has("volume_percent") && !device.get("volume_percent").isJsonNull()) {
+                    volumePercent = device.get("volume_percent").getAsInt();
+                }
+            }
             progressMs = root.has("progress_ms") && !root.get("progress_ms").isJsonNull()
                 ? root.get("progress_ms").getAsLong() : 0;
             if (root.has("item") && root.get("item").isJsonObject()) {
@@ -352,6 +360,23 @@ public final class SpotifyService {
 
     public static void next() { command(() -> { api("POST", "/me/player/next", null); refreshPlaybackNow(); }); }
     public static void previous() { command(() -> { api("POST", "/me/player/previous", null); refreshPlaybackNow(); }); }
+
+    public static void seekBy(long offsetMs) {
+        command(() -> {
+            long end = Math.max(0, durationMs - 1000);
+            long target = Math.max(0, Math.min(end, progressMs + offsetMs));
+            api("PUT", "/me/player/seek?position_ms=" + target, null);
+            progressMs = target;
+        });
+    }
+
+    public static void changeVolume(int delta) {
+        command(() -> {
+            int target = Math.max(0, Math.min(100, volumePercent + delta));
+            api("PUT", "/me/player/volume?volume_percent=" + target, null);
+            volumePercent = target;
+        });
+    }
 
     public static void playDropout() {
         command(() -> {
