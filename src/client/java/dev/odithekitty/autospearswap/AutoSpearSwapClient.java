@@ -42,6 +42,7 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         AutoSpearSwapConfig.load();
+        SpotifyService.load();
         autoWalkLatched = AutoSpearSwapConfig.autoWalk;
         MacroEngine.load();
         KeyBinding.Category category = KeyBinding.Category.create(Identifier.of("autospearswap", "main"));
