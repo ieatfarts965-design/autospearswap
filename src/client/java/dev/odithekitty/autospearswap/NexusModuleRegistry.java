@@ -50,7 +50,27 @@ public final class NexusModuleRegistry {
         new Module("target_block", "Target Block", "World", "Shows the block under your crosshair"),
         new Module("target_block_coords", "Target Block Position", "World", "Shows target block coordinates"),
         new Module("target_entity_distance", "Target Entity Range", "Combat", "Shows distance to crosshair entity"),
-        new Module("spawn_distance", "Spawn Distance", "World", "Shows distance from world spawn")
+        new Module("spawn_distance", "Spawn Distance", "World", "Shows distance from world spawn"),
+        new Module("health_percent", "Health Percent", "Player", "Displays health as a percentage"),
+        new Module("main_hand_durability", "Held Durability", "Inventory", "Shows remaining durability of held item"),
+        new Module("offhand_durability", "Offhand Durability", "Inventory", "Shows remaining durability of offhand item"),
+        new Module("head_durability", "Helmet Durability", "Inventory", "Shows remaining helmet durability"),
+        new Module("chest_durability", "Chestplate Durability", "Inventory", "Shows remaining chestplate durability"),
+        new Module("legs_durability", "Leggings Durability", "Inventory", "Shows remaining leggings durability"),
+        new Module("boots_durability", "Boots Durability", "Inventory", "Shows remaining boots durability"),
+        new Module("ender_pearls", "Ender Pearls", "Inventory", "Counts ender pearls"),
+        new Module("firework_rockets", "Firework Rockets", "Inventory", "Counts firework rockets"),
+        new Module("obsidian", "Obsidian", "Inventory", "Counts obsidian blocks"),
+        new Module("end_crystals", "End Crystals", "Inventory", "Counts end crystals"),
+        new Module("cobwebs", "Cobwebs", "Inventory", "Counts cobwebs"),
+        new Module("golden_carrots", "Golden Carrots", "Inventory", "Counts golden carrots"),
+        new Module("effect_count", "Active Effects", "Player", "Counts active potion effects"),
+        new Module("player_x", "X Position", "World", "Shows precise X position"),
+        new Module("player_y", "Y Position", "World", "Shows precise Y position"),
+        new Module("player_z", "Z Position", "World", "Shows precise Z position"),
+        new Module("chunk_section", "Chunk Section", "World", "Shows the vertical chunk section"),
+        new Module("target_entity_name", "Target Name", "Combat", "Shows the crosshair entity name"),
+        new Module("target_entity_health", "Target Health", "Combat", "Shows crosshair entity health")
     );
 
     private NexusModuleRegistry() {}
@@ -70,6 +90,12 @@ public final class NexusModuleRegistry {
                 y += 11;
             }
         }
+    }
+
+    private static String durability(net.minecraft.item.ItemStack stack) {
+        if (stack.isEmpty() || !stack.isDamageable()) return "N/A";
+        int remaining = Math.max(0, stack.getMaxDamage() - stack.getDamage());
+        return Math.round(remaining * 100.0f / stack.getMaxDamage()) + "%";
     }
 
     private static int countItem(PlayerEntity player, net.minecraft.item.Item item) {
@@ -149,6 +175,29 @@ public final class NexusModuleRegistry {
             case "target_entity_distance" -> c.crosshairTarget instanceof net.minecraft.util.hit.EntityHitResult hit
                 ? String.format("%.1f blocks", hit.getEntity().distanceTo(p)) : "None";
             case "spawn_distance" -> String.format("%.1f blocks", Math.sqrt(pos.getSquaredDistance(c.world.getSpawnPoint().getPos())));
+            case "health_percent" -> Math.round(p.getHealth() * 100.0f / Math.max(1.0f, p.getMaxHealth())) + "%";
+            case "main_hand_durability" -> durability(p.getMainHandStack());
+            case "offhand_durability" -> durability(p.getOffHandStack());
+            case "head_durability" -> durability(p.getEquippedStack(net.minecraft.entity.EquipmentSlot.HEAD));
+            case "chest_durability" -> durability(p.getEquippedStack(net.minecraft.entity.EquipmentSlot.CHEST));
+            case "legs_durability" -> durability(p.getEquippedStack(net.minecraft.entity.EquipmentSlot.LEGS));
+            case "boots_durability" -> durability(p.getEquippedStack(net.minecraft.entity.EquipmentSlot.FEET));
+            case "ender_pearls" -> Integer.toString(countItem(p, net.minecraft.item.Items.ENDER_PEARL));
+            case "firework_rockets" -> Integer.toString(countItem(p, net.minecraft.item.Items.FIREWORK_ROCKET));
+            case "obsidian" -> Integer.toString(countItem(p, net.minecraft.item.Items.OBSIDIAN));
+            case "end_crystals" -> Integer.toString(countItem(p, net.minecraft.item.Items.END_CRYSTAL));
+            case "cobwebs" -> Integer.toString(countItem(p, net.minecraft.item.Items.COBWEB));
+            case "golden_carrots" -> Integer.toString(countItem(p, net.minecraft.item.Items.GOLDEN_CARROT));
+            case "effect_count" -> p.getStatusEffects().size() + " active";
+            case "player_x" -> String.format("%.2f", p.getX());
+            case "player_y" -> String.format("%.2f", p.getY());
+            case "player_z" -> String.format("%.2f", p.getZ());
+            case "chunk_section" -> "Y " + (pos.getY() >> 4);
+            case "target_entity_name" -> c.crosshairTarget instanceof net.minecraft.util.hit.EntityHitResult hit
+                ? hit.getEntity().getName().getString() : "None";
+            case "target_entity_health" -> c.crosshairTarget instanceof net.minecraft.util.hit.EntityHitResult hit
+                && hit.getEntity() instanceof net.minecraft.entity.LivingEntity living
+                ? String.format("%.1f / %.1f HP", living.getHealth(), living.getMaxHealth()) : "None";
             default -> null;
         };
     }
