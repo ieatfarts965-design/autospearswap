@@ -255,6 +255,10 @@ public final class AutoSpearSwapScreen extends Screen {
                 add(cx + bw + gap, y1 + 114, bw, h, "Next track", b -> SpotifyService.next());
                 add(cx, y1 + 152, bw, h, "Play / Pause", b -> SpotifyService.togglePlayback());
                 add(cx + bw + gap, y1 + 152, bw, h, "Play dropout", b -> SpotifyService.playDropout());
+                add(cx, y1 + 190, bw, h, "Seek -10s", b -> SpotifyService.seekBy(-10000));
+                add(cx + bw + gap, y1 + 190, bw, h, "Seek +10s", b -> SpotifyService.seekBy(10000));
+                add(cx, y1 + 228, bw, h, "Volume -10", b -> SpotifyService.changeVolume(-10));
+                add(cx + bw + gap, y1 + 228, bw, h, "Volume +10", b -> SpotifyService.changeVolume(10));
             }
             case 11 -> {
                 add(cx, y1, cw, h, "Reset HUD position", b -> { AutoSpearSwapConfig.hudX = 7; AutoSpearSwapConfig.hudY = 7; save(); });
@@ -462,12 +466,12 @@ public final class AutoSpearSwapScreen extends Screen {
             SpotifyService.pollIfNeeded();
             String status = SpotifyService.status();
             if (status.length() > 48) status = status.substring(0, 48) + "…";
-            ctx.drawTextWithShadow(textRenderer, Text.literal("SPOTIFY  /  " + status), x + 150, y + 292, ACCENT[t]);
-            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.currentTrack()), x + 150, y + 316, 0xFFFFFFFF);
-            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.currentArtist()), x + 150, y + 334, 0xFFE2D7D9);
-            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.currentAlbum()), x + 150, y + 352, 0xFFBBAEB1);
-            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.progressText()), x + 150, y + 370, ACCENT[t]);
-            ctx.drawTextWithShadow(textRenderer, Text.literal("Controls use your Spotify Connect device."), x + 150, y + 388, 0xFFBBAEB1);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("SPOTIFY  /  " + status), x + 150, y + 348, ACCENT[t]);
+            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.currentTrack()), x + 150, y + 364, 0xFFFFFFFF);
+            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.currentArtist()), x + 150, y + 380, 0xFFE2D7D9);
+            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.currentAlbum()), x + 150, y + 396, 0xFFBBAEB1);
+            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.progressText()), x + 150, y + 412, ACCENT[t]);
+            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.volumeText()), x + 150, y + 428, 0xFFBBAEB1);
         }
         if (tab == 8) {
             String sequence = MacroEngine.STEPS.isEmpty() ? "No steps yet" : "Sequence: " +
