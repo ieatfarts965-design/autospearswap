@@ -262,7 +262,6 @@ public final class AutoSpearSwapScreen extends Screen {
             }
             default -> defaults();
         }
-        c.options.write();
     }
 
     private void addSearchEntry(java.util.List<String> labels, java.util.List<Boolean> states,
