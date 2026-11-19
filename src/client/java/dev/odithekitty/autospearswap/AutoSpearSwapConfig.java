@@ -38,6 +38,7 @@ public final class AutoSpearSwapConfig {
     public static boolean autoSwim = false;
     public static boolean autoTotem = false;
     public static boolean autoRefill = false;
+    public static boolean autoArmor = false;
     public static boolean hudTarget = true;
     public static boolean hudDurability = true;
     public static boolean hudFps = true;
@@ -152,6 +153,7 @@ public final class AutoSpearSwapConfig {
                     autoSwim = data.autoSwim;
                     autoTotem = data.autoTotem;
                     autoRefill = data.autoRefill;
+                    autoArmor = data.autoArmor;
                     hudTarget = data.hudTarget;
                     hudDurability = data.hudDurability;
                     hudFps = data.hudFps;
@@ -210,6 +212,7 @@ public final class AutoSpearSwapConfig {
             d.autoSwim = autoSwim;
             d.autoTotem = autoTotem;
             d.autoRefill = autoRefill;
+            d.autoArmor = autoArmor;
             d.hudTarget = hudTarget;
             d.hudDurability = hudDurability;
             d.hudFps = hudFps;
@@ -266,6 +269,7 @@ public final class AutoSpearSwapConfig {
         boolean autoSwim = false;
         boolean autoTotem = false;
         boolean autoRefill = false;
+        boolean autoArmor = false;
         boolean hudTarget = true;
         boolean hudDurability = true;
         boolean hudFps = true;
