@@ -12,6 +12,9 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.util.Hand;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
+import net.minecraft.screen.slot.SlotActionType;
 import dev.odithekitty.autospearswap.mixin.MinecraftClientAccessor;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
@@ -38,6 +41,7 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
     private static int triggerBotTicks = 0;
     private static int lastHurtTime = 0;
     private static int jumpResetCooldown = 0;
+    private static final Item[] LAST_HOTBAR_ITEMS = new Item[9];
 
     @Override
     public void onInitializeClient() {
@@ -95,6 +99,53 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
                 autoJumpCooldown = 0;
                 sneakLatched = false;
             } else {
+                if (client.currentScreen == null && client.interactionManager != null) {
+                    if (AutoSpearSwapConfig.autoTotem
+                        && !client.player.getOffHandStack().isOf(Items.TOTEM_OF_UNDYING)) {
+                        int totemSlot = -1;
+                        for (int slot = 0; slot < 36; slot++) {
+                            if (client.player.getInventory().getStack(slot).isOf(Items.TOTEM_OF_UNDYING)) {
+                                totemSlot = slot;
+                                break;
+                            }
+                        }
+                        if (totemSlot >= 0) {
+                            int handlerSlot = totemSlot < 9 ? totemSlot + 36 : totemSlot;
+                            client.interactionManager.clickSlot(
+                                client.player.currentScreenHandler.syncId,
+                                handlerSlot, 40, SlotActionType.SWAP, client.player);
+                        }
+                    }
+                    if (AutoSpearSwapConfig.autoRefill
+                        && client.player.currentScreenHandler.getCursorStack().isEmpty()) {
+                        for (int hotbar = 0; hotbar < 9; hotbar++) {
+                            var hotbarStack = client.player.getInventory().getStack(hotbar);
+                            if (!hotbarStack.isEmpty()) {
+                                LAST_HOTBAR_ITEMS[hotbar] = hotbarStack.getItem();
+                                continue;
+                            }
+                            Item previousItem = LAST_HOTBAR_ITEMS[hotbar];
+                            if (previousItem == null) continue;
+                            for (int inventory = 9; inventory < 36; inventory++) {
+                                var candidate = client.player.getInventory().getStack(inventory);
+                                if (!candidate.isEmpty() && candidate.isOf(previousItem)) {
+                                    client.interactionManager.clickSlot(
+                                        client.player.currentScreenHandler.syncId,
+                                        inventory, 0, SlotActionType.PICKUP, client.player);
+                                    client.interactionManager.clickSlot(
+                                        client.player.currentScreenHandler.syncId,
+                                        hotbar + 36, 0, SlotActionType.PICKUP, client.player);
+                                    if (!client.player.currentScreenHandler.getCursorStack().isEmpty()) {
+                                        client.interactionManager.clickSlot(
+                                            client.player.currentScreenHandler.syncId,
+                                            inventory, 0, SlotActionType.PICKUP, client.player);
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
                 if (jumpResetCooldown > 0) jumpResetCooldown--;
                 if (autoJumpCooldown > 0) autoJumpCooldown--;
                 if (autoSwimCooldown > 0) autoSwimCooldown--;
