@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "autospearswap",
   "version": "${version}",
-  "name": "Nexus Client",
-  "description": "Nexus client with combat utilities, macros, HUD, visual and FPS presets, and resource-pack management.",
+  "name": "Overtonight Client",
+  "description": "Overtonight-themed Fabric client with Spotify Connect, combat utilities, expanded modules, HUD and visual presets.",
   "environment": "client",
   "icon": "assets/icon.png",
   "entrypoints": {
