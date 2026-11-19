@@ -123,7 +123,7 @@ public final class NexusModuleRegistry {
             case "glide_state" -> p.isGliding() ? "GLIDING" : "NOT GLIDING";
             case "vehicle_state" -> p.hasVehicle() ? p.getVehicle().getName().getString() : "ON FOOT";
             case "fire_ticks" -> p.getFireTicks() + " ticks";
-            case "wet_state" -> p.isWet() ? "WET" : "DRY";
+            case "wet_state" -> p.isTouchingWaterOrRain() ? "WET" : "DRY";
             case "inventory_empty" -> {
                 int empty = 0;
                 for (int i = 0; i < 36; i++) if (p.getInventory().getStack(i).isEmpty()) empty++;
@@ -148,7 +148,7 @@ public final class NexusModuleRegistry {
                 ? block.getBlockPos().getX() + ", " + block.getBlockPos().getY() + ", " + block.getBlockPos().getZ() : "None";
             case "target_entity_distance" -> c.crosshairTarget instanceof net.minecraft.util.hit.EntityHitResult hit
                 ? String.format("%.1f blocks", hit.getEntity().distanceTo(p)) : "None";
-            case "spawn_distance" -> String.format("%.1f blocks", Math.sqrt(pos.getSquaredDistance(c.world.getSpawnPos())));
+            case "spawn_distance" -> String.format("%.1f blocks", Math.sqrt(pos.getSquaredDistance(c.world.getSpawnPoint().getPos())));
             default -> null;
         };
     }
