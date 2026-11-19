@@ -62,7 +62,7 @@ public final class NexusModuleRegistry {
         new Module("boots_durability", "Boots Durability", "Inventory", "Shows remaining boots durability"),
         new Module("ender_pearls", "Ender Pearls", "Inventory", "Counts ender pearls"),
         new Module("firework_rockets", "Firework Rockets", "Inventory", "Counts firework rockets"),
-        new Module("diamond_horse_armor", "Obsidian", "Inventory", "Counts obsidian blocks"),
+        new Module("obsidian", "Obsidian", "Inventory", "Counts obsidian blocks"),
         new Module("end_crystals", "End Crystals", "Inventory", "Counts end crystals"),
         new Module("cobwebs", "Cobwebs", "Inventory", "Counts cobwebs"),
         new Module("golden_carrots", "Golden Carrots", "Inventory", "Counts golden carrots"),
@@ -137,7 +137,7 @@ public final class NexusModuleRegistry {
         new Module("item_copper_ingot", "Copper Ingot Count", "Inventory", "Counts copper ingot in your inventory"),
         new Module("item_copper_nugget", "Copper Nugget Count", "Inventory", "Counts copper nugget in your inventory"),
         new Module("item_crossbow", "Crossbow Count", "Inventory", "Counts crossbow in your inventory"),
-        new Module("item_crying_obsidian", "Crying Diamond Horse Armor Count", "Inventory", "Counts crying obsidian in your inventory"),
+        new Module("item_crying_obsidian", "Crying Obsidian Count", "Inventory", "Counts crying obsidian in your inventory"),
         new Module("item_diamond", "Diamond Count", "Inventory", "Counts diamond in your inventory"),
         new Module("item_diamond_axe", "Diamond Axe Count", "Inventory", "Counts diamond axe in your inventory"),
         new Module("item_diamond_block", "Diamond Block Count", "Inventory", "Counts diamond block in your inventory"),
@@ -347,7 +347,7 @@ public final class NexusModuleRegistry {
             case "boots_durability" -> durability(p.getEquippedStack(net.minecraft.entity.EquipmentSlot.FEET));
             case "ender_pearls" -> Integer.toString(countItem(p, net.minecraft.item.Items.ENDER_PEARL));
             case "firework_rockets" -> Integer.toString(countItem(p, net.minecraft.item.Items.FIREWORK_ROCKET));
-            case "diamond_horse_armor" -> Integer.toString(countItem(p, net.minecraft.item.Items.OBSIDIAN));
+            case "obsidian" -> Integer.toString(countItem(p, net.minecraft.item.Items.OBSIDIAN));
             case "end_crystals" -> Integer.toString(countItem(p, net.minecraft.item.Items.END_CRYSTAL));
             case "cobwebs" -> Integer.toString(countItem(p, net.minecraft.item.Items.COBWEB));
             case "golden_carrots" -> Integer.toString(countItem(p, net.minecraft.item.Items.GOLDEN_CARROT));
