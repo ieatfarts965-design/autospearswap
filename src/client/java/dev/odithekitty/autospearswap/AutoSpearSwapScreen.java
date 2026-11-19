@@ -55,6 +55,10 @@ public final class AutoSpearSwapScreen extends Screen {
                 });
                 toggle(cx, y1 + 78, cw, h, "Jump reset", AutoSpearSwapConfig.jumpResetEnabled,
                     () -> AutoSpearSwapConfig.jumpResetEnabled = !AutoSpearSwapConfig.jumpResetEnabled);
+                toggle(cx, y1 + 117, bw, h, "Auto totem", AutoSpearSwapConfig.autoTotem,
+                    () -> AutoSpearSwapConfig.autoTotem = !AutoSpearSwapConfig.autoTotem);
+                toggle(cx + bw + gap, y1 + 117, bw, h, "Auto refill", AutoSpearSwapConfig.autoRefill,
+                    () -> AutoSpearSwapConfig.autoRefill = !AutoSpearSwapConfig.autoRefill);
             }
             case 1 -> {
                 toggle(cx, y1, bw, h, "Auto sprint", AutoSpearSwapConfig.autoSprint,
@@ -190,6 +194,8 @@ public final class AutoSpearSwapScreen extends Screen {
                 addSearchEntry(labels, states, actions, q, "Triggerbot", AutoSpearSwapConfig.triggerBotEnabled, () -> AutoSpearSwapConfig.triggerBotEnabled = !AutoSpearSwapConfig.triggerBotEnabled);
                 addSearchEntry(labels, states, actions, q, "Auto spear", AutoSpearSwapConfig.attributeSwapEnabled, () -> AutoSpearSwapConfig.attributeSwapEnabled = !AutoSpearSwapConfig.attributeSwapEnabled);
                 addSearchEntry(labels, states, actions, q, "Jump reset", AutoSpearSwapConfig.jumpResetEnabled, () -> AutoSpearSwapConfig.jumpResetEnabled = !AutoSpearSwapConfig.jumpResetEnabled);
+                addSearchEntry(labels, states, actions, q, "Auto totem", AutoSpearSwapConfig.autoTotem, () -> AutoSpearSwapConfig.autoTotem = !AutoSpearSwapConfig.autoTotem);
+                addSearchEntry(labels, states, actions, q, "Auto refill", AutoSpearSwapConfig.autoRefill, () -> AutoSpearSwapConfig.autoRefill = !AutoSpearSwapConfig.autoRefill);
                 addSearchEntry(labels, states, actions, q, "Coordinates", AutoSpearSwapConfig.hudCoordinates, () -> AutoSpearSwapConfig.hudCoordinates = !AutoSpearSwapConfig.hudCoordinates);
                 addSearchEntry(labels, states, actions, q, "CPS counter", AutoSpearSwapConfig.hudCps, () -> AutoSpearSwapConfig.hudCps = !AutoSpearSwapConfig.hudCps);
                 addSearchEntry(labels, states, actions, q, "Armor status", AutoSpearSwapConfig.hudArmor, () -> AutoSpearSwapConfig.hudArmor = !AutoSpearSwapConfig.hudArmor);
