@@ -115,7 +115,7 @@ public final class NexusModuleRegistry {
             }
             case "entity_target_type" -> c.crosshairTarget instanceof net.minecraft.util.hit.EntityHitResult hit
                 ? hit.getEntity().getType().getName().getString() : "None";
-            case "player_name" -> p.getGameProfile().getName();
+            case "player_name" -> p.getName().getString();
             case "attack_charge" -> Math.round(p.getAttackCooldownProgress(0.5f) * 100) + "%";
             case "sprint_state" -> p.isSprinting() ? "SPRINTING" : "WALKING";
             case "swim_state" -> p.isSwimming() ? "SWIMMING" : "NOT SWIMMING";
