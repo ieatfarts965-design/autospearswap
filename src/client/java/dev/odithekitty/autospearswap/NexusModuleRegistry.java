@@ -267,7 +267,8 @@ public final class NexusModuleRegistry {
     }
 
     private static int countItemId(PlayerEntity player, String path) {
-        return countItem(player, Registries.ITEM.get(Identifier.of("minecraft", path)));
+        var item = Registries.ITEM.get(Identifier.of("minecraft", path));
+        return item == net.minecraft.item.Items.AIR ? 0 : countItem(player, item);
     }
 
     private static String value(String id, MinecraftClient c, PlayerEntity p, BlockPos pos) {
