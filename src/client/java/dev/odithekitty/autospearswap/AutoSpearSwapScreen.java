@@ -17,7 +17,7 @@ import net.minecraft.particle.ParticlesMode;
 import net.minecraft.text.Text;
 
 public final class AutoSpearSwapScreen extends Screen {
-    private static final String[] TABS = {"Combat", "Movement", "HUD", "Visuals", "Performance", "Packs", "Skies", "Keys", "Macros", "Info", "Search", "Editor", "Spotify"};
+    private static final String[] TABS = {"Combat", "Movement", "HUD", "Visuals", "Performance", "Packs", "Skies", "Keys", "Macros", "Info", "Search", "Editor", "Music"};
     private static final String[] THEMES = {"Dropout", "Afterhours", "Ghostland", "Nocturne", "Static", "Bloodmoon", "VHS", "Blackout", "Ashes"};
     private static final int[] ACCENT = {0xFFF2E9E9, 0xFFE5BFC2, 0xFFFF5B69, 0xFFD9D0D0, 0xFFB73A4A, 0xFFFF7F83, 0xFFC8B9BB, 0xFFE8E1E1, 0xFF9D7D83};
     private static final int[] PANEL = {0xD90D080B, 0xD9160A10, 0xD90E090D, 0xD9180B10, 0xD910080B, 0xD91D0A10, 0xD90A080B, 0xD9100A0E, 0xD9140B0E};
@@ -255,26 +255,9 @@ public final class AutoSpearSwapScreen extends Screen {
                 add(cx, y + ph - 48, cw, 22, "Page " + (modulePage + 1) + " / " + pages + "  •  " + labels.size() + " matching modules", b -> {});
             }
             case 12 -> {
-                spotifyClientField = new TextFieldWidget(textRenderer, cx, y1, cw, h, Text.literal("Spotify Client ID"));
-                spotifyClientField.setMaxLength(96);
-                spotifyClientField.setText(AutoSpearSwapConfig.spotifyClientId == null ? "" : AutoSpearSwapConfig.spotifyClientId);
-                addDrawableChild(spotifyClientField);
-                add(cx, y1 + 38, bw, h, "Save Client ID", b -> {
-                    AutoSpearSwapConfig.spotifyClientId = spotifyClientField.getText().trim();
-                    AutoSpearSwapConfig.save();
-                    clearAndInit();
-                });
-                add(cx + bw + gap, y1 + 38, bw, h, "Connect Spotify", b -> SpotifyService.connect());
-                add(cx, y1 + 76, bw, h, "Refresh playback", b -> SpotifyService.refresh());
-                add(cx + bw + gap, y1 + 76, bw, h, "Disconnect", b -> SpotifyService.disconnect());
-                add(cx, y1 + 114, bw, h, "Previous track", b -> SpotifyService.previous());
-                add(cx + bw + gap, y1 + 114, bw, h, "Next track", b -> SpotifyService.next());
-                add(cx, y1 + 152, bw, h, "Play / Pause", b -> SpotifyService.togglePlayback());
-                add(cx + bw + gap, y1 + 152, bw, h, "Play dropout", b -> SpotifyService.playDropout());
-                add(cx, y1 + 190, bw, h, "Seek -10s", b -> SpotifyService.seekBy(-10000));
-                add(cx + bw + gap, y1 + 190, bw, h, "Seek +10s", b -> SpotifyService.seekBy(10000));
-                add(cx, y1 + 228, bw, h, "Volume -10", b -> SpotifyService.changeVolume(-10));
-                add(cx + bw + gap, y1 + 228, bw, h, "Volume +10", b -> SpotifyService.changeVolume(10));
+                add(cx, y1, bw, h, "Previous track", b -> MediaKeyService.previous());
+                add(cx + bw + gap, y1, bw, h, "Next track", b -> MediaKeyService.next());
+                add(cx, y1 + 38, cw, h, "Play / Pause  •  Windows media session", b -> MediaKeyService.togglePlayback());
             }
             case 11 -> {
                 add(cx, y1, cw, h, "Reset HUD position", b -> { AutoSpearSwapConfig.hudX = 7; AutoSpearSwapConfig.hudY = 7; save(); });
@@ -517,15 +500,11 @@ public final class AutoSpearSwapScreen extends Screen {
             ctx.drawTextWithShadow(textRenderer, Text.literal("Reopen the manager to rescan, enable, then press Done."), x + 160, y + 204, 0xFFBBAAB0);
         }
         if (tab == 12) {
-            SpotifyService.pollIfNeeded();
-            String status = SpotifyService.status();
-            if (status.length() > 48) status = status.substring(0, 48) + "…";
-            ctx.drawTextWithShadow(textRenderer, Text.literal("MUSIC  /  " + status), x + 160, y + 348, ACCENT[t]);
-            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.currentTrack()), x + 160, y + 364, 0xFFFFFFFF);
-            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.currentArtist()), x + 160, y + 380, 0xFFE2D7D9);
-            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.currentAlbum()), x + 160, y + 396, 0xFFBBAAB0);
-            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.progressText()), x + 160, y + 412, ACCENT[t]);
-            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.volumeText()), x + 160, y + 428, 0xFFBBAAB0);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("MUSIC  /  FREE DESKTOP CONTROLS"), x + 160, y + 300, ACCENT[t]);
+            ctx.drawTextWithShadow(textRenderer, Text.literal(MediaKeyService.status()), x + 160, y + 318, 0xFFFFFFFF);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("Controls the active Windows media session (browser, player, etc.)."), x + 160, y + 338, 0xFFE2D7D9);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("No Spotify account, API key, subscription or extra app required."), x + 160, y + 356, 0xFFBBAAB0);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("Track metadata is not exposed by this lightweight media-key bridge."), x + 160, y + 374, 0xFFBBAAB0);
         }
         if (tab == 8) {
             String sequence = MacroEngine.STEPS.isEmpty() ? "No steps yet" : "Sequence: " +
