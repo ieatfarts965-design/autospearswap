@@ -6,7 +6,9 @@ import net.minecraft.client.input.KeyInput;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.pack.PackScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.TextFieldWidget;\nimport net.minecraft.client.gl.RenderPipelines;\nimport net.minecraft.util.Identifier;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gl.RenderPipelines;
+import net.minecraft.util.Identifier;
 import java.util.function.BooleanSupplier;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.option.CloudRenderMode;
@@ -24,7 +26,8 @@ public final class AutoSpearSwapScreen extends Screen {
     private KeyBinding capturing;
     private boolean openingPacks;
     private String moduleQuery = "";
-    private TextFieldWidget searchField;\n    private TextFieldWidget spotifyClientField;
+    private TextFieldWidget searchField;
+    private TextFieldWidget spotifyClientField;
     private int modulePage;
 
     public AutoSpearSwapScreen() { super(Text.literal("OVERTONIGHT CLIENT")); }
