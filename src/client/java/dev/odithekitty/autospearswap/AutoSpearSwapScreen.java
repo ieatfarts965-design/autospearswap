@@ -17,7 +17,7 @@ import net.minecraft.particle.ParticlesMode;
 import net.minecraft.text.Text;
 
 public final class AutoSpearSwapScreen extends Screen {
-    private static final String[] TABS = {"Combat", "Movement", "HUD", "Visuals", "Performance", "Packs", "Skies", "Keys", "Macros", "Info", "Search", "Editor", "Media", "Spotify"};
+    private static final String[] TABS = {"Combat", "Movement", "HUD", "Visuals", "Performance", "Packs", "Skies", "Keys", "Macros", "Info", "Search", "Editor", "Music"};
     private static final String[] THEMES = {"Dropout", "Afterhours", "Ghostland", "Nocturne", "Static", "Bloodmoon", "VHS", "Blackout", "Ashes"};
     private static final int[] ACCENT = {0xFFF2E9E9, 0xFFE5BFC2, 0xFFFF5B69, 0xFFD9D0D0, 0xFFB73A4A, 0xFFFF7F83, 0xFFC8B9BB, 0xFFE8E1E1, 0xFF9D7D83};
     private static final int[] PANEL = {0xD90D080B, 0xD9160A10, 0xD90E090D, 0xD9180B10, 0xD910080B, 0xD91D0A10, 0xD90A080B, 0xD9100A0E, 0xD9140B0E};
@@ -27,7 +27,6 @@ public final class AutoSpearSwapScreen extends Screen {
     private boolean openingPacks;
     private String moduleQuery = "";
     private TextFieldWidget searchField;
-    private TextFieldWidget spotifyClientField;
     private int modulePage;
     private boolean addingNavigation;
     private int gridIndex;
@@ -263,190 +262,6 @@ public final class AutoSpearSwapScreen extends Screen {
                 add(cx + bw + gap, y1, bw, h, "Next track", b -> MediaKeyService.next());
                 add(cx, y1 + 38, cw, h, "Play / Pause  •  Windows media session", b -> MediaKeyService.togglePlayback());
             }
-            case 13 -> {
-                int sh = 34;
-                int controlsWidth = Math.min(470, cw);
-                int swb = (controlsWidth - gap) / 2;
-                spotifyClientField = new TextFieldWidget(textRenderer, cx, y1, cw, 42, Text.literal("Spotify Client ID"));
-                spotifyClientField.setMaxLength(96);
-                spotifyClientField.setText(AutoSpearSwapConfig.spotifyClientId == null ? "" : AutoSpearSwapConfig.spotifyClientId);
-                addDrawableChild(spotifyClientField);
-                add(cx, y1 + 50, swb, sh, "Save Client ID", b -> {
-                    AutoSpearSwapConfig.spotifyClientId = spotifyClientField.getText().trim();
-                    AutoSpearSwapConfig.save();
-                    clearAndInit();
-                });
-                add(cx + swb + gap, y1 + 50, swb, sh, "Connect Spotify", b -> SpotifyService.connect());
-                add(cx, y1 + 88, swb, sh, "Refresh playback", b -> SpotifyService.refresh());
-                add(cx + swb + gap, y1 + 88, swb, sh, "Disconnect", b -> SpotifyService.disconnect());
-                add(cx, y1 + 126, swb, sh, "Previous track", b -> SpotifyService.previous());
-                add(cx + swb + gap, y1 + 126, swb, sh, "Next track", b -> SpotifyService.next());
-                add(cx, y1 + 164, swb, sh, "Play / Pause", b -> SpotifyService.togglePlayback());
-                add(cx + swb + gap, y1 + 164, swb, sh, "Play dropout", b -> SpotifyService.playDropout());
-                add(cx, y1 + 202, swb, sh, "Seek -10s", b -> SpotifyService.seekBy(-10000));
-                add(cx + swb + gap, y1 + 202, swb, sh, "Seek +10s", b -> SpotifyService.seekBy(10000));
-                add(cx, y1 + 240, swb, sh, "Volume -10", b -> SpotifyService.changeVolume(-10));
-                add(cx + swb + gap, y1 + 240, swb, sh, "Volume +10", b -> SpotifyService.changeVolume(10));
-                add(cx, y1 + 278, controlsWidth, sh, "Open Spotify Developer Dashboard", b ->
-                    net.minecraft.util.Util.getOperatingSystem().open(java.net.URI.create("https://developer.spotify.com/dashboard")));
-            }
-            case 11 -> {
-                add(cx, y1, cw, h, "Reset HUD position", b -> { AutoSpearSwapConfig.hudX = 7; AutoSpearSwapConfig.hudY = 7; save(); });
-                add(cx, y1 + 38, bw, h, "Move left", b -> { AutoSpearSwapConfig.hudX = Math.max(0, AutoSpearSwapConfig.hudX - 5); save(); });
-                add(cx + bw + gap, y1 + 38, bw, h, "Move right", b -> { AutoSpearSwapConfig.hudX += 5; save(); });
-                add(cx, y1 + 76, bw, h, "Move up", b -> { AutoSpearSwapConfig.hudY = Math.max(0, AutoSpearSwapConfig.hudY - 5); save(); });
-                add(cx + bw + gap, y1 + 76, bw, h, "Move down", b -> { AutoSpearSwapConfig.hudY += 5; save(); });
-            }
-        }
-        add(x + pw - 82, y + ph - 38, 70, 26, "Close", b -> close());
-    }
-
-    private void addSearchEntry(java.util.List<String> labels, java.util.List<Boolean> states,
-                                java.util.List<Runnable> actions, String query, String name,
-                                boolean enabled, Runnable action) {
-        if (query.isEmpty() || name.toLowerCase(java.util.Locale.ROOT).contains(query)) {
-            labels.add(name);
-            states.add(enabled);
-            actions.add(action);
-        }
-    }
-
-    private int searchModule(int x, int y, int w, int h, int gap, String query, String name,
-                             BooleanSupplier enabled, Runnable action, int index) {
-        if (!query.isEmpty() && !name.toLowerCase(java.util.Locale.ROOT).contains(query)) return index;
-        int bx = x + (index % 2) * (w + gap);
-        int by = y + (index / 2) * 35;
-        add(bx, by, w, h, (enabled.getAsBoolean() ? "● " : "○ ") + name, b -> {
-            action.run();
-            AutoSpearSwapConfig.save();
-            clearAndInit();
-        });
-        return index + 1;
-    }
-
-    private void add(int x, int y, int w, int h, String label, ButtonWidget.PressAction action) {
-        if (addingNavigation) {
-            addDrawableChild(ButtonWidget.builder(Text.literal(label), action)
-                .dimensions(x, y, w, h).build());
-            return;
-        }
-        if ("Close".equals(label)) {
-            addDrawableChild(ButtonWidget.builder(Text.literal(label), action)
-                .dimensions(panelX + panelWidth - 84, panelY + panelHeight - 34, 70, 24).build());
-            return;
-        }
-        int columns = cwColumns();
-        int gap = 9;
-        int cardWidth = (panelWidth - 176 - gap * (columns - 1)) / columns;
-        int cardHeight = 52;
-        int contentLeft = panelX + 160;
-        int contentTop = panelY + (tab == 12 ? 144 : 92);
-        int column = gridIndex % columns;
-        int row = gridIndex / columns;
-        int px = contentLeft + column * (cardWidth + gap);
-        int py = contentTop + row * 61;
-        boolean active = label.startsWith("●") || label.endsWith("ON");
-        cards.add(new CardRect(px, py, cardWidth, cardHeight, active));
-        gridIndex++;
-        addDrawableChild(ButtonWidget.builder(Text.literal(label), action)
-            .dimensions(px, py, cardWidth, cardHeight).build());
-    }
-
-    private int cwColumns() {
-        int contentWidth = panelWidth - 176;
-        return contentWidth >= 700 ? 4 : contentWidth >= 510 ? 3 : 2;
-    }
-
-    private void toggle(int x, int y, int w, int h, String label, boolean value, Runnable action) {
-        add(x, y, w, h, (value ? "●  " : "○  ") + label + (value ? "   ON" : "   OFF"), b -> { action.run(); save(); });
-    }
-
-    private void save() { AutoSpearSwapConfig.save(); clearAndInit(); }
-    private void capture(KeyBinding key) { capturing = key; clearAndInit(); }
-    private String keyText(String name, KeyBinding key) {
-        return (capturing == key ? "PRESS A KEY  •  " : name + "  •  ") + key.getBoundKeyLocalizedText().getString();
-    }
-
-    private void openPackFolder() {
-        if (client == null) return;
-        try {
-            java.nio.file.Files.createDirectories(client.getResourcePackDir());
-            net.minecraft.util.Util.getOperatingSystem().open(client.getResourcePackDir().toFile());
-        } catch (Exception e) {
-            System.err.println("[Nexus] Could not open resource pack folder: " + e.getMessage());
-        }
-    }
-
-    private void packs() {
-        if (openingPacks || client == null) return;
-        openingPacks = true;
-        MinecraftClient mc = client;
-        Screen parent = this;
-        mc.getResourcePackManager().scanPacks();
-        mc.setScreen(new PackScreen(mc.getResourcePackManager(), manager -> mc.reloadResources(),
-            mc.getResourcePackDir(), Text.literal("Resource Packs")) {
-            @Override public void close() { openingPacks = false; mc.setScreen(parent); }
-        });
-    }
-
-    private static void performance() {
-        MinecraftClient c = MinecraftClient.getInstance();
-        c.options.getParticles().setValue(ParticlesMode.MINIMAL);
-        c.options.getCloudRenderMode().setValue(CloudRenderMode.OFF);
-        c.options.getEntityDistanceScaling().setValue(0.25);
-        c.options.getBiomeBlendRadius().setValue(0);
-        c.options.getEntityShadows().setValue(false);
-        c.options.write();
-    }
-
-    private static void balancedPerformance() {
-        MinecraftClient c = MinecraftClient.getInstance();
-        c.options.getParticles().setValue(ParticlesMode.DECREASED);
-        c.options.getCloudRenderMode().setValue(CloudRenderMode.FAST);
-        c.options.getEntityDistanceScaling().setValue(0.75);
-        c.options.getBiomeBlendRadius().setValue(1);
-        c.options.getEntityShadows().setValue(false);
-        c.options.write();
-    }
-
-    private static void visualQuality() {
-        MinecraftClient c = MinecraftClient.getInstance();
-        c.options.getParticles().setValue(ParticlesMode.ALL);
-        c.options.getCloudRenderMode().setValue(CloudRenderMode.FANCY);
-        c.options.getEntityDistanceScaling().setValue(1.0);
-        c.options.getBiomeBlendRadius().setValue(5);
-        c.options.getEntityShadows().setValue(true);
-        c.options.write();
-    }
-
-    private static int visualPresetIndex = 0;
-    private static final String[] VISUAL_PRESETS = {"Clean", "Competitive", "Vibrant", "Classic", "Low Effects"};
-
-    private static void visualPreset() {
-        MinecraftClient c = MinecraftClient.getInstance();
-        visualPresetIndex = (visualPresetIndex + 1) % VISUAL_PRESETS.length;
-        switch (visualPresetIndex) {
-            case 1 -> {
-                c.options.getParticles().setValue(ParticlesMode.MINIMAL);
-                c.options.getCloudRenderMode().setValue(CloudRenderMode.OFF);
-                c.options.getEntityDistanceScaling().setValue(0.5);
-                c.options.getEntityShadows().setValue(false);
-            }
-            case 2 -> {
-                c.options.getParticles().setValue(ParticlesMode.ALL);
-                c.options.getCloudRenderMode().setValue(CloudRenderMode.FANCY);
-                c.options.getEntityDistanceScaling().setValue(1.0);
-                c.options.getEntityShadows().setValue(true);
-            }
-            case 3 -> {
-                c.options.getParticles().setValue(ParticlesMode.DECREASED);
-            }
-            case 4 -> {
-                c.options.getParticles().setValue(ParticlesMode.MINIMAL);
-                c.options.getCloudRenderMode().setValue(CloudRenderMode.OFF);
-                c.options.getEntityDistanceScaling().setValue(0.75);
-                c.options.getEntityShadows().setValue(false);
-            }
             default -> defaults();
         }
         c.options.write();
@@ -537,29 +352,7 @@ public final class AutoSpearSwapScreen extends Screen {
             ctx.drawTextWithShadow(textRenderer, Text.literal("No account, API key, subscription or extra app required."), x + 160, y + 356, 0xFFBBAAB0);
             ctx.drawTextWithShadow(textRenderer, Text.literal("Track metadata is not exposed by this lightweight media-key bridge."), x + 160, y + 374, 0xFFBBAAB0);
         }
-        if (tab == 13) {
-            SpotifyService.pollIfNeeded();
-            int artX = x + 160 + 480;
-            int artY = y + 150;
-            ctx.fill(artX - 8, artY - 8, x + pw - 18, y + 390, 0xAA160C11);
-            ctx.drawTexture(RenderPipelines.GUI_TEXTURED,
-                Identifier.of("autospearswap", "textures/gui/overtonight-cover.jpg"),
-                artX, artY, 0.0f, 0.0f, 128, 128, 640, 640, 0xFFFFFFFF);
-            String status = SpotifyService.status();
-            if (status.length() > 32) status = status.substring(0, 32) + "…";
-            int textX = artX + 138;
-            int infoWidth = Math.max(100, x + pw - 24 - textX);
-            ctx.drawTextWithShadow(textRenderer, Text.literal("SPOTIFY CONNECT"), textX, artY + 5, ACCENT[t]);
-            ctx.drawTextWithShadow(textRenderer, Text.literal(textRenderer.trimToWidth(status, infoWidth)), textX, artY + 24, 0xFFE8DADD);
-            ctx.drawTextWithShadow(textRenderer, Text.literal(textRenderer.trimToWidth(SpotifyService.currentTrack(), infoWidth)), textX, artY + 54, 0xFFFFFFFF);
-            ctx.drawTextWithShadow(textRenderer, Text.literal(textRenderer.trimToWidth(SpotifyService.currentArtist(), infoWidth)), textX, artY + 72, 0xFFE8DADD);
-            ctx.drawTextWithShadow(textRenderer, Text.literal(textRenderer.trimToWidth(SpotifyService.currentAlbum(), infoWidth)), textX, artY + 90, 0xFFBBAAB0);
-            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.progressText()), textX, artY + 116, ACCENT[t]);
-            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.volumeText()), textX, artY + 132, 0xFFBBAAB0);
-            ctx.drawTextWithShadow(textRenderer, Text.literal("SETUP  •  Add this redirect URI to your Spotify Developer app:"), x + 160, y + 432, 0xFFE8DADD);
-            ctx.drawTextWithShadow(textRenderer, Text.literal("http://127.0.0.1:8888/callback"), x + 160, y + 450, ACCENT[t]);
-            ctx.drawTextWithShadow(textRenderer, Text.literal("Paste your Client ID, Save it, then Connect. Playback controls require Premium."), x + 160, y + 468, 0xFFBBAAB0);
-        }
+
         if (tab == 8) {
             String sequence = MacroEngine.STEPS.isEmpty() ? "No steps yet" : "Sequence: " +
                 MacroEngine.STEPS.stream().map(s -> s.action + "(" + s.ticks + "t)").limit(5)
