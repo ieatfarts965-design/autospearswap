@@ -539,20 +539,21 @@ public final class AutoSpearSwapScreen extends Screen {
         }
         if (tab == 13) {
             SpotifyService.pollIfNeeded();
-            int artX = x + 160 + 492;
+            int artX = x + 160 + 480;
             int artY = y + 150;
             ctx.fill(artX - 8, artY - 8, x + pw - 18, y + 390, 0xAA160C11);
             ctx.drawTexture(RenderPipelines.GUI_TEXTURED,
                 Identifier.of("autospearswap", "textures/gui/overtonight-cover.jpg"),
-                artX, artY, 0.0f, 0.0f, 146, 146, 640, 640, 0xFFFFFFFF);
+                artX, artY, 0.0f, 0.0f, 128, 128, 640, 640, 0xFFFFFFFF);
             String status = SpotifyService.status();
             if (status.length() > 32) status = status.substring(0, 32) + "…";
-            int textX = artX + 158;
+            int textX = artX + 138;
+            int infoWidth = Math.max(100, x + pw - 24 - textX);
             ctx.drawTextWithShadow(textRenderer, Text.literal("SPOTIFY CONNECT"), textX, artY + 5, ACCENT[t]);
-            ctx.drawTextWithShadow(textRenderer, Text.literal(textRenderer.trimToWidth(status, 178)), textX, artY + 24, 0xFFE8DADD);
-            ctx.drawTextWithShadow(textRenderer, Text.literal(textRenderer.trimToWidth(SpotifyService.currentTrack(), 178)), textX, artY + 54, 0xFFFFFFFF);
-            ctx.drawTextWithShadow(textRenderer, Text.literal(textRenderer.trimToWidth(SpotifyService.currentArtist(), 178)), textX, artY + 72, 0xFFE8DADD);
-            ctx.drawTextWithShadow(textRenderer, Text.literal(textRenderer.trimToWidth(SpotifyService.currentAlbum(), 178)), textX, artY + 90, 0xFFBBAAB0);
+            ctx.drawTextWithShadow(textRenderer, Text.literal(textRenderer.trimToWidth(status, infoWidth)), textX, artY + 24, 0xFFE8DADD);
+            ctx.drawTextWithShadow(textRenderer, Text.literal(textRenderer.trimToWidth(SpotifyService.currentTrack(), infoWidth)), textX, artY + 54, 0xFFFFFFFF);
+            ctx.drawTextWithShadow(textRenderer, Text.literal(textRenderer.trimToWidth(SpotifyService.currentArtist(), infoWidth)), textX, artY + 72, 0xFFE8DADD);
+            ctx.drawTextWithShadow(textRenderer, Text.literal(textRenderer.trimToWidth(SpotifyService.currentAlbum(), infoWidth)), textX, artY + 90, 0xFFBBAAB0);
             ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.progressText()), textX, artY + 116, ACCENT[t]);
             ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.volumeText()), textX, artY + 132, 0xFFBBAAB0);
             ctx.drawTextWithShadow(textRenderer, Text.literal("SETUP  •  Add this redirect URI to your Spotify Developer app:"), x + 160, y + 432, 0xFFE8DADD);
