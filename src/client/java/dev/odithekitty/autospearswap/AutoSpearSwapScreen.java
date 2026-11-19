@@ -29,21 +29,43 @@ public final class AutoSpearSwapScreen extends Screen {
     private TextFieldWidget searchField;
     private TextFieldWidget spotifyClientField;
     private int modulePage;
+    private boolean addingNavigation;
+    private int gridIndex;
+    private int panelX, panelY, panelWidth, panelHeight;
+    private final java.util.List<CardRect> cards = new java.util.ArrayList<>();
+    private record CardRect(int x, int y, int width, int height, boolean active) {}
 
     public AutoSpearSwapScreen() { super(Text.literal("OVERTONIGHT CLIENT")); }
 
     @Override
     protected void init() {
-        int pw = Math.min(540, width - 20), ph = Math.min(440, height - 20);
+        int pw = Math.min(960, width - 24), ph = Math.min(560, height - 24);
         int x = (width - pw) / 2, y = (height - ph) / 2;
-        int sx = x + 12, sy = y + 58, sw = Math.min(112, pw / 4);
+        panelX = x; panelY = y; panelWidth = pw; panelHeight = ph;
+        cards.clear();
+        gridIndex = 0;
+        int sx = x + 12, sy = y + 78, sw = 132;
+        addingNavigation = true;
         for (int i = 0; i < TABS.length; i++) {
             final int index = i;
-            add(sx, sy + i * 29, sw, 25, (tab == i ? "◆  " : "   ") + TABS[i],
-                b -> { tab = index; clearAndInit(); });
+            add(sx, sy + i * 27, sw, 24, (tab == i ? "◆  " : "   ") + TABS[i],
+                b -> { tab = index; modulePage = 0; clearAndInit(); });
         }
-        int cx = sx + sw + 14, cw = pw - (cx - x) - 14, gap = 8, bw = (cw - gap) / 2;
-        int y1 = y + 78, h = 30;
+        addingNavigation = false;
+
+        int cx = x + 160, cw = pw - 176, gap = 10, bw = (cw - gap) / 2;
+        int y1 = y + 92, h = 52;
+
+        searchField = new TextFieldWidget(textRenderer, x + pw - 238, y + 17, 190, 24, Text.literal("Search modules"));
+        searchField.setMaxLength(32);
+        searchField.setText(moduleQuery);
+        searchField.setChangedListener(value -> moduleQuery = value);
+        addDrawableChild(searchField);
+        addDrawableChild(ButtonWidget.builder(Text.literal("GO"), b -> {
+            tab = 10;
+            modulePage = 0;
+            clearAndInit();
+        }).dimensions(x + pw - 42, y + 16, 30, 26).build());
         switch (tab) {
             case 0 -> {
                 toggle(cx, y1, bw, h, "Triggerbot", AutoSpearSwapConfig.triggerBotEnabled,
@@ -173,12 +195,6 @@ public final class AutoSpearSwapScreen extends Screen {
                 add(cx + bw + gap, y1 + 266, bw, h, "Load Performance", b -> { AutoSpearSwapConfig.loadProfile("Performance"); clearAndInit(); });
             }
             case 10 -> {
-                searchField = new TextFieldWidget(textRenderer, cx, y1, cw - 72, h, Text.literal("Search modules"));
-                searchField.setMaxLength(32);
-                searchField.setText(moduleQuery);
-                searchField.setChangedListener(value -> moduleQuery = value);
-                addDrawableChild(searchField);
-                add(cx + cw - 66, y1, 66, h, "Apply", b -> { modulePage = 0; clearAndInit(); });
                 String q = moduleQuery.toLowerCase(java.util.Locale.ROOT);
                 java.util.List<Runnable> actions = new java.util.ArrayList<>();
                 java.util.List<String> labels = new java.util.ArrayList<>();
@@ -295,7 +311,36 @@ public final class AutoSpearSwapScreen extends Screen {
     }
 
     private void add(int x, int y, int w, int h, String label, ButtonWidget.PressAction action) {
-        addDrawableChild(ButtonWidget.builder(Text.literal(label), action).dimensions(x, y, w, h).build());
+        if (addingNavigation) {
+            addDrawableChild(ButtonWidget.builder(Text.literal(label), action)
+                .dimensions(x, y, w, h).build());
+            return;
+        }
+        if ("Close".equals(label)) {
+            addDrawableChild(ButtonWidget.builder(Text.literal(label), action)
+                .dimensions(panelX + panelWidth - 84, panelY + panelHeight - 34, 70, 24).build());
+            return;
+        }
+        int columns = cwColumns();
+        int gap = 9;
+        int cardWidth = (panelWidth - 176 - gap * (columns - 1)) / columns;
+        int cardHeight = 52;
+        int contentLeft = panelX + 160;
+        int contentTop = panelY + (tab == 12 ? 144 : 92);
+        int column = gridIndex % columns;
+        int row = gridIndex / columns;
+        int px = contentLeft + column * (cardWidth + gap);
+        int py = contentTop + row * 61;
+        boolean active = label.startsWith("●") || label.endsWith("ON");
+        cards.add(new CardRect(px, py, cardWidth, cardHeight, active));
+        gridIndex++;
+        addDrawableChild(ButtonWidget.builder(Text.literal(label), action)
+            .dimensions(px, py, cardWidth, cardHeight).build());
+    }
+
+    private int cwColumns() {
+        int contentWidth = panelWidth - 176;
+        return contentWidth >= 700 ? 4 : contentWidth >= 510 ? 3 : 2;
     }
 
     private void toggle(int x, int y, int w, int h, String label, boolean value, Runnable action) {
@@ -422,63 +467,72 @@ public final class AutoSpearSwapScreen extends Screen {
         ctx.drawTexture(RenderPipelines.GUI_TEXTURED,
             Identifier.of("autospearswap", "textures/gui/overtonight-cover.jpg"),
             0, 0, 0.0f, 0.0f, width, height, 640, 640, 0x72FFFFFF);
-        ctx.fill(0, 0, width, height, 0x9A09060A);
+        ctx.fill(0, 0, width, height, 0xB8070508);
         int t = Math.max(0, Math.min(8, AutoSpearSwapConfig.uiTheme));
-        int pw = Math.min(540, width - 20), ph = Math.min(440, height - 20);
+        int pw = Math.min(960, width - 24), ph = Math.min(560, height - 24);
         int x = (width - pw) / 2, y = (height - ph) / 2;
         int a = Math.round(255 * (AutoSpearSwapConfig.uiOpacity / 100.0f));
-        ctx.fill(x - 3, y - 3, x + pw + 3, y + ph + 3, 0x66000000);
+        ctx.fill(x - 4, y - 4, x + pw + 4, y + ph + 4, 0x90000000);
         ctx.fill(x, y, x + pw, y + ph, (PANEL[t] & 0x00FFFFFF) | (a << 24));
         ctx.fill(x, y, x + pw, y + 3, ACCENT[t]);
         ctx.fill(x, y + 3, x + 3, y + ph, ACCENT[t] & 0x66FFFFFF);
-        ctx.fill(x + 8, y + 54, x + 132, y + ph - 8, (SIDE[t] & 0x00FFFFFF) | (a << 24));
-        ctx.fill(x + 10, y + 48, x + pw - 10, y + 49, 0x883D7898);
-        ctx.fill(x + 144, y + 55, x + pw - 14, y + 56, 0x443D7898);
-        ctx.fill(x + 144, y + ph - 50, x + pw - 14, y + ph - 49, 0x443D7898);
-        ctx.drawTextWithShadow(textRenderer, Text.literal("OVERTONIGHT"), x + 16, y + 13, 0xFFFFFFFF);
-        ctx.drawTextWithShadow(textRenderer, Text.literal("CLIENT  /  AFTERHOURS"), x + 16, y + 27, ACCENT[t]);
-        ctx.drawTextWithShadow(textRenderer, Text.literal("EST. AFTER DARK"), x + pw - 90, y + 17, 0xFF9CB4C8);
-        ctx.drawTextWithShadow(textRenderer, Text.literal(TABS[tab].toUpperCase()), x + 150, y + 24, 0xFFFFFFFF);
-        ctx.drawTextWithShadow(textRenderer, Text.literal(capturing == null ? "CONFIGURE YOUR CLIENT" : "PRESS A KEY TO REBIND"), x + 150, y + 38, 0xFF9CB4C8);
+        ctx.fill(x + 8, y + 68, x + 146, y + ph - 8, (SIDE[t] & 0x00FFFFFF) | (a << 24));
+        ctx.fill(x + 10, y + 58, x + pw - 10, y + 60, 0x773E2028);
+        ctx.fill(x + 150, y + 68, x + 151, y + ph - 48, 0x553E2028);
+        ctx.fill(x + 154, y + ph - 48, x + pw - 14, y + ph - 47, 0x443E2028);
+        int navY = y + 78 + tab * 27;
+        ctx.fill(x + 10, navY - 2, x + 142, navY + 23, 0x66A83B4A);
+        ctx.fill(x + 10, navY - 2, x + 12, navY + 23, ACCENT[t]);
+        for (CardRect card : cards) {
+            int edge = card.active() ? (ACCENT[t] & 0x99FFFFFF) : 0x443E3037;
+            ctx.fill(card.x() - 1, card.y() - 1, card.x() + card.width() + 1, card.y() + card.height() + 1, edge);
+            ctx.fill(card.x(), card.y(), card.x() + card.width(), card.y() + card.height(),
+                card.active() ? 0xAA1B1015 : 0x99110D11);
+        }
+        ctx.drawTextWithShadow(textRenderer, Text.literal("OVERTONIGHT"), x + 18, y + 14, 0xFFF7ECEE);
+        ctx.drawTextWithShadow(textRenderer, Text.literal("CLIENT  /  DROP OUT EDITION"), x + 18, y + 29, ACCENT[t]);
+        ctx.drawTextWithShadow(textRenderer, Text.literal("1.21.11  •  FABRIC"), x + pw - 335, y + 24, 0xFFBBAAB0);
+        ctx.drawTextWithShadow(textRenderer, Text.literal(TABS[tab].toUpperCase()), x + 160, y + 20, 0xFFFFFFFF);
+        ctx.drawTextWithShadow(textRenderer, Text.literal(capturing == null ? "MODULE CONFIGURATION" : "PRESS A KEY TO REBIND"), x + 160, y + 36, 0xFFBBAAB0);
         if (tab == 11) {
-            ctx.drawTextWithShadow(textRenderer, Text.literal("HUD POSITION"), x + 150, y + 154, ACCENT[t]);
-            ctx.drawTextWithShadow(textRenderer, Text.literal("Use the controls to move your on-screen HUD."), x + 150, y + 174, 0xFFEAF6FF);
-            ctx.drawTextWithShadow(textRenderer, Text.literal("X: " + AutoSpearSwapConfig.hudX + "   Y: " + AutoSpearSwapConfig.hudY), x + 150, y + 190, 0xFF9CB4C8);
-            ctx.drawTextWithShadow(textRenderer, Text.literal("Drag the preview below to position the HUD."), x + 150, y + 214, 0xFF9CB4C8);
-            int px = x + 150 + (int) ((double) AutoSpearSwapConfig.hudX / Math.max(1, width - 92) * (pw - 270));
-            int py = y + 238 + (int) ((double) AutoSpearSwapConfig.hudY / Math.max(1, height - 24) * 60);
-            ctx.fill(x + 150, y + 238, x + pw - 20, y + 322, 0xAA0A111A);
-            ctx.fill(px, py, px + 92, py + 24, 0xFF20384B);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("HUD POSITION"), x + 160, y + 284, ACCENT[t]);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("Use the controls above to move the on-screen HUD."), x + 160, y + 302, 0xFFEAF6FF);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("X: " + AutoSpearSwapConfig.hudX + "   Y: " + AutoSpearSwapConfig.hudY), x + 160, y + 318, 0xFFBBAAB0);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("Preview"), x + 160, y + 342, 0xFFBBAAB0);
+            int px = x + 160 + (int) ((double) AutoSpearSwapConfig.hudX / Math.max(1, width - 92) * (pw - 270));
+            int py = y + 366 + (int) ((double) AutoSpearSwapConfig.hudY / Math.max(1, height - 24) * 42);
+            ctx.fill(x + 156, y + 360, x + pw - 20, y + 426, 0xAA0A080C);
+            ctx.fill(px, py, px + 92, py + 24, 0xFF3A1C25);
             ctx.drawTextWithShadow(textRenderer, Text.literal("OVERTONIGHT HUD"), px + 8, py + 8, ACCENT[t]);
         }
         if (tab == 6) {
-            ctx.drawTextWithShadow(textRenderer, Text.literal("VANILLA SKY TEXTURES"), x + 150, y + 154, ACCENT[t]);
-            ctx.drawTextWithShadow(textRenderer, Text.literal("Resource packs can replace the sun, moon and clouds."), x + 150, y + 174, 0xFFEAF6FF);
-            ctx.drawTextWithShadow(textRenderer, Text.literal("Custom skyboxes need a compatible sky-rendering mod."), x + 150, y + 190, 0xFF9CB4C8);
-            ctx.drawTextWithShadow(textRenderer, Text.literal("Use the folder button, add your pack, then reopen Packs."), x + 150, y + 214, 0xFF9CB4C8);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("SKY TEXTURES"), x + 160, y + 166, ACCENT[t]);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("Resource packs can replace the sun, moon and clouds."), x + 160, y + 186, 0xFFEAF6FF);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("Custom skyboxes need a compatible sky-rendering mod."), x + 160, y + 204, 0xFFBBAAB0);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("Add your pack, then reopen the pack manager."), x + 160, y + 222, 0xFFBBAAB0);
         }
         if (tab == 5) {
-            ctx.drawTextWithShadow(textRenderer, Text.literal("RESOURCE PACKS"), x + 150, y + 154, ACCENT[t]);
-            ctx.drawTextWithShadow(textRenderer, Text.literal("Drop .zip packs into the opened folder."), x + 150, y + 174, 0xFFEAF6FF);
-            ctx.drawTextWithShadow(textRenderer, Text.literal("Reopen the manager to rescan, enable, then press Done."), x + 150, y + 190, 0xFF9CB4C8);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("RESOURCE PACKS"), x + 160, y + 166, ACCENT[t]);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("Drop .zip packs into the opened folder."), x + 160, y + 186, 0xFFEAF6FF);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("Reopen the manager to rescan, enable, then press Done."), x + 160, y + 204, 0xFFBBAAB0);
         }
         if (tab == 12) {
             SpotifyService.pollIfNeeded();
             String status = SpotifyService.status();
             if (status.length() > 48) status = status.substring(0, 48) + "…";
-            ctx.drawTextWithShadow(textRenderer, Text.literal("SPOTIFY  /  " + status), x + 150, y + 348, ACCENT[t]);
-            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.currentTrack()), x + 150, y + 364, 0xFFFFFFFF);
-            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.currentArtist()), x + 150, y + 380, 0xFFE2D7D9);
-            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.currentAlbum()), x + 150, y + 396, 0xFFBBAEB1);
-            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.progressText()), x + 150, y + 412, ACCENT[t]);
-            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.volumeText()), x + 150, y + 428, 0xFFBBAEB1);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("MUSIC  /  " + status), x + 160, y + 348, ACCENT[t]);
+            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.currentTrack()), x + 160, y + 364, 0xFFFFFFFF);
+            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.currentArtist()), x + 160, y + 380, 0xFFE2D7D9);
+            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.currentAlbum()), x + 160, y + 396, 0xFFBBAAB0);
+            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.progressText()), x + 160, y + 412, ACCENT[t]);
+            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.volumeText()), x + 160, y + 428, 0xFFBBAAB0);
         }
         if (tab == 8) {
             String sequence = MacroEngine.STEPS.isEmpty() ? "No steps yet" : "Sequence: " +
                 MacroEngine.STEPS.stream().map(s -> s.action + "(" + s.ticks + "t)").limit(5)
                     .collect(java.util.stream.Collectors.joining("  >  "));
-            ctx.drawTextWithShadow(textRenderer, Text.literal(sequence), x + 150, y + 340, ACCENT[t]);
-            ctx.drawTextWithShadow(textRenderer, Text.literal("F8  •  " + (MacroEngine.isRunning() ? "RUNNING" : "READY")), x + 150, y + 356, 0xFF9CB4C8);
+            ctx.drawTextWithShadow(textRenderer, Text.literal(sequence), x + 160, y + 340, ACCENT[t]);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("F8  •  " + (MacroEngine.isRunning() ? "RUNNING" : "READY")), x + 160, y + 356, 0xFFBBAAB0);
         }
         super.render(ctx, mx, my, delta);
     }
