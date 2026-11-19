@@ -102,13 +102,29 @@ public final class NexusModuleRegistry {
         PlayerEntity p = client.player;
         if (p == null || client.world == null) return;
         BlockPos pos = p.getBlockPos();
+        java.util.List<String> lines = new java.util.ArrayList<>();
         for (Module module : MODULES) {
             if (!enabled(module.id())) continue;
             String value = value(module.id(), client, p, pos);
-            if (value != null) {
-                ctx.drawTextWithShadow(client.textRenderer, module.name().toUpperCase() + "  " + value, x, y, color);
-                y += 11;
-            }
+            if (value != null) lines.add(module.name().toUpperCase() + "  " + value);
+        }
+        if (lines.isEmpty()) return;
+
+        int screenWidth = client.getWindow().getScaledWidth();
+        int screenHeight = client.getWindow().getScaledHeight();
+        int availableRows = Math.max(1, (screenHeight - y - 10) / 11);
+        int maxColumns = Math.max(1, (screenWidth - x - 8) / 200);
+        int requiredColumns = (lines.size() + availableRows - 1) / availableRows;
+        int columns = Math.max(1, Math.min(maxColumns, requiredColumns));
+        int rowsPerColumn = (lines.size() + columns - 1) / columns;
+
+        for (int i = 0; i < lines.size(); i++) {
+            int column = i / rowsPerColumn;
+            int row = i % rowsPerColumn;
+            int drawX = x + column * 200;
+            int drawY = y + row * 11;
+            if (drawY + 10 > screenHeight || drawX + 196 > screenWidth) continue;
+            ctx.drawTextWithShadow(client.textRenderer, lines.get(i), drawX, drawY, color);
         }
     }
 
