@@ -47,19 +47,6 @@ public final class PvpHud {
     public static void render(DrawContext context, MinecraftClient client) {
         PlayerEntity player = client.player;
         if (player == null || client.textRenderer == null) return;
-        if (AutoSpearSwapConfig.hudSpotify) {
-            SpotifyService.pollIfNeeded();
-            int right = context.getScaledWindowWidth() - 10;
-            int cardWidth = 218;
-            int left = right - cardWidth;
-            context.fill(left, 8, right, 49, 0xCC160B11);
-            context.fill(left, 8, right, 10, 0xFFE04A5B);
-            context.drawTextWithShadow(client.textRenderer, Text.literal("NOW PLAYING  /  SPOTIFY"), left + 9, 14, 0xFFF2DDE1);
-            String track = client.textRenderer.trimToWidth(SpotifyService.currentTrack(), cardWidth - 18);
-            String artist = client.textRenderer.trimToWidth(SpotifyService.currentArtist(), cardWidth - 18);
-            context.drawTextWithShadow(client.textRenderer, Text.literal(track), left + 9, 25, 0xFFFFFFFF);
-            context.drawTextWithShadow(client.textRenderer, Text.literal(artist), left + 9, 37, 0xFFCCB9BE);
-        }
         int x = AutoSpearSwapConfig.hudX;
         int y = AutoSpearSwapConfig.hudY;
         int color = 0xFFEAF6FF;
