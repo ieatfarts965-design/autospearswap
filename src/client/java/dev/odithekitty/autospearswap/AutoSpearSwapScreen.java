@@ -140,6 +140,8 @@ public final class AutoSpearSwapScreen extends Screen {
             case 6 -> {
                 add(cx, y1, cw, h, "Open resource packs folder", b -> openPackFolder());
                 add(cx, y1 + 38, cw, h, "Open resource pack manager", b -> packs());
+                add(cx, y1 + 76, cw, h, "Get Nuit custom sky engine", b ->
+                    net.minecraft.util.Util.getOperatingSystem().open(java.net.URI.create("https://modrinth.com/mod/YBz7DOs8")));
             }
             case 7 -> {
                 add(cx, y1, cw, h, keyText("Menu key", AutoSpearSwapClient.openMenuKey), b -> capture(AutoSpearSwapClient.openMenuKey));
@@ -491,8 +493,8 @@ public final class AutoSpearSwapScreen extends Screen {
         if (tab == 6) {
             ctx.drawTextWithShadow(textRenderer, Text.literal("SKY TEXTURES"), x + 160, y + 166, ACCENT[t]);
             ctx.drawTextWithShadow(textRenderer, Text.literal("Resource packs can replace the sun, moon and clouds."), x + 160, y + 186, 0xFFEAF6FF);
-            ctx.drawTextWithShadow(textRenderer, Text.literal("Custom skyboxes need a compatible sky-rendering mod."), x + 160, y + 204, 0xFFBBAAB0);
-            ctx.drawTextWithShadow(textRenderer, Text.literal("Add your pack, then reopen the pack manager."), x + 160, y + 222, 0xFFBBAAB0);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("Install Nuit for Fabric 1.21.11 custom skybox rendering."), x + 160, y + 204, 0xFFBBAAB0);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("Use a Nuit-format sky pack, enable it, then reload resources."), x + 160, y + 222, 0xFFBBAAB0);
         }
         if (tab == 5) {
             ctx.drawTextWithShadow(textRenderer, Text.literal("RESOURCE PACKS"), x + 160, y + 166, ACCENT[t]);
