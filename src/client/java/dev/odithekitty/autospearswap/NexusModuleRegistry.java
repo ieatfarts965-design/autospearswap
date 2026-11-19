@@ -251,9 +251,12 @@ public final class NexusModuleRegistry {
             case "velocity_y" -> String.format("%.3f", p.getVelocity().y);
             case "velocity_z" -> String.format("%.3f", p.getVelocity().z);
             case "target_block_distance" -> c.crosshairTarget instanceof net.minecraft.util.hit.BlockHitResult block
-                ? String.format("%.1f blocks", p.getPos().distanceTo(block.getBlockPos().toCenterPos())) : "None";
+                ? String.format("%.1f blocks", Math.sqrt(
+                    Math.pow(p.getX() - block.getBlockPos().getX() - 0.5, 2)
+                    + Math.pow(p.getY() - block.getBlockPos().getY() - 0.5, 2)
+                    + Math.pow(p.getZ() - block.getBlockPos().getZ() - 0.5, 2))) : "None";
             case "target_block_face" -> c.crosshairTarget instanceof net.minecraft.util.hit.BlockHitResult block
-                ? block.getSide().getName() : "None";
+                ? block.getSide().toString().toLowerCase(java.util.Locale.ROOT) : "None";
             case "target_entity_is_player" -> c.crosshairTarget instanceof net.minecraft.util.hit.EntityHitResult hit
                 ? (hit.getEntity() instanceof PlayerEntity ? "YES" : "NO") : "None";
             case "target_entity_alive" -> c.crosshairTarget instanceof net.minecraft.util.hit.EntityHitResult hit
