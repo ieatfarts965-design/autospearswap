@@ -17,7 +17,7 @@ import net.minecraft.particle.ParticlesMode;
 import net.minecraft.text.Text;
 
 public final class AutoSpearSwapScreen extends Screen {
-    private static final String[] TABS = {"Combat", "Movement", "HUD", "Visuals", "Performance", "Packs", "Skies", "Keys", "Macros", "Info", "Search", "Editor", "Music"};
+    private static final String[] TABS = {"Combat", "Movement", "HUD", "Visuals", "Performance", "Packs", "Skies", "Keys", "Macros", "Info", "Search", "Editor", "Media", "Spotify"};
     private static final String[] THEMES = {"Dropout", "Afterhours", "Ghostland", "Nocturne", "Static", "Bloodmoon", "VHS", "Blackout", "Ashes"};
     private static final int[] ACCENT = {0xFFF2E9E9, 0xFFE5BFC2, 0xFFFF5B69, 0xFFD9D0D0, 0xFFB73A4A, 0xFFFF7F83, 0xFFC8B9BB, 0xFFE8E1E1, 0xFF9D7D83};
     private static final int[] PANEL = {0xD90D080B, 0xD9160A10, 0xD90E090D, 0xD9180B10, 0xD910080B, 0xD91D0A10, 0xD90A080B, 0xD9100A0E, 0xD9140B0E};
@@ -109,6 +109,7 @@ public final class AutoSpearSwapScreen extends Screen {
                 toggle(cx + bw + gap, y1 + 114, bw, h, "Durability alert", AutoSpearSwapConfig.hudDurability, () -> AutoSpearSwapConfig.hudDurability = !AutoSpearSwapConfig.hudDurability);
                 toggle(cx, y1 + 152, bw, h, "FPS counter", AutoSpearSwapConfig.hudFps, () -> AutoSpearSwapConfig.hudFps = !AutoSpearSwapConfig.hudFps);
                 toggle(cx + bw + gap, y1 + 152, bw, h, "Clock", AutoSpearSwapConfig.hudClock, () -> AutoSpearSwapConfig.hudClock = !AutoSpearSwapConfig.hudClock);
+                toggle(cx, y1 + 190, bw, h, "Spotify now playing", AutoSpearSwapConfig.hudSpotify, () -> AutoSpearSwapConfig.hudSpotify = !AutoSpearSwapConfig.hudSpotify);
             }
             case 3 -> {
                 add(cx, y1, bw, h, "Theme  •  " + THEMES[AutoSpearSwapConfig.uiTheme], b -> {
@@ -121,7 +122,7 @@ public final class AutoSpearSwapScreen extends Screen {
                 });
                 add(cx, y1 + 39, cw, h, "Cycle visual preset", b -> { visualPreset(); save(); });
                 add(cx, y1 + 78, cw, h, "Apply LEGIT profile", b -> { AutoSpearSwapConfig.applyLegitPreset(); clearAndInit(); });
-                add(cx, y1 + 117, cw, h, "Clarity-style theme", b -> { AutoSpearSwapConfig.uiTheme = 5; AutoSpearSwapConfig.uiOpacity = 82; save(); });
+                add(cx, y1 + 117, cw, h, "Overtonight / Drop Out theme", b -> { AutoSpearSwapConfig.uiTheme = 0; AutoSpearSwapConfig.uiOpacity = 82; save(); });
                 toggle(cx, y1 + 156, bw, h, "Fullbright", AutoSpearSwapConfig.fullbright, () -> AutoSpearSwapConfig.fullbright = !AutoSpearSwapConfig.fullbright);
                 toggle(cx + bw + gap, y1 + 156, bw, h, "Zoom", AutoSpearSwapConfig.zoomEnabled, () -> AutoSpearSwapConfig.zoomEnabled = !AutoSpearSwapConfig.zoomEnabled);
                 toggle(cx, y1 + 195, cw, h, "Auto respawn", AutoSpearSwapConfig.autoRespawn, () -> AutoSpearSwapConfig.autoRespawn = !AutoSpearSwapConfig.autoRespawn);
@@ -227,6 +228,7 @@ public final class AutoSpearSwapScreen extends Screen {
                 addSearchEntry(labels, states, actions, q, "Durability alert", AutoSpearSwapConfig.hudDurability, () -> AutoSpearSwapConfig.hudDurability = !AutoSpearSwapConfig.hudDurability);
                 addSearchEntry(labels, states, actions, q, "FPS counter", AutoSpearSwapConfig.hudFps, () -> AutoSpearSwapConfig.hudFps = !AutoSpearSwapConfig.hudFps);
                 addSearchEntry(labels, states, actions, q, "Clock", AutoSpearSwapConfig.hudClock, () -> AutoSpearSwapConfig.hudClock = !AutoSpearSwapConfig.hudClock);
+                addSearchEntry(labels, states, actions, q, "Spotify now playing", AutoSpearSwapConfig.hudSpotify, () -> AutoSpearSwapConfig.hudSpotify = !AutoSpearSwapConfig.hudSpotify);
                 addSearchEntry(labels, states, actions, q, "Movement speed", AutoSpearSwapConfig.hudSpeed, () -> AutoSpearSwapConfig.hudSpeed = !AutoSpearSwapConfig.hudSpeed);
                 addSearchEntry(labels, states, actions, q, "Direction", AutoSpearSwapConfig.hudDirection, () -> AutoSpearSwapConfig.hudDirection = !AutoSpearSwapConfig.hudDirection);
                 addSearchEntry(labels, states, actions, q, "Biome", AutoSpearSwapConfig.hudBiome, () -> AutoSpearSwapConfig.hudBiome = !AutoSpearSwapConfig.hudBiome);
@@ -260,6 +262,33 @@ public final class AutoSpearSwapScreen extends Screen {
                 add(cx, y1, bw, h, "Previous track", b -> MediaKeyService.previous());
                 add(cx + bw + gap, y1, bw, h, "Next track", b -> MediaKeyService.next());
                 add(cx, y1 + 38, cw, h, "Play / Pause  •  Windows media session", b -> MediaKeyService.togglePlayback());
+            }
+            case 13 -> {
+                int sh = 34;
+                int controlsWidth = Math.min(470, cw);
+                int swb = (controlsWidth - gap) / 2;
+                spotifyClientField = new TextFieldWidget(textRenderer, cx, y1, cw, 42, Text.literal("Spotify Client ID"));
+                spotifyClientField.setMaxLength(96);
+                spotifyClientField.setText(AutoSpearSwapConfig.spotifyClientId == null ? "" : AutoSpearSwapConfig.spotifyClientId);
+                addDrawableChild(spotifyClientField);
+                add(cx, y1 + 50, swb, sh, "Save Client ID", b -> {
+                    AutoSpearSwapConfig.spotifyClientId = spotifyClientField.getText().trim();
+                    AutoSpearSwapConfig.save();
+                    clearAndInit();
+                });
+                add(cx + swb + gap, y1 + 50, swb, sh, "Connect Spotify", b -> SpotifyService.connect());
+                add(cx, y1 + 88, swb, sh, "Refresh playback", b -> SpotifyService.refresh());
+                add(cx + swb + gap, y1 + 88, swb, sh, "Disconnect", b -> SpotifyService.disconnect());
+                add(cx, y1 + 126, swb, sh, "Previous track", b -> SpotifyService.previous());
+                add(cx + swb + gap, y1 + 126, swb, sh, "Next track", b -> SpotifyService.next());
+                add(cx, y1 + 164, swb, sh, "Play / Pause", b -> SpotifyService.togglePlayback());
+                add(cx + swb + gap, y1 + 164, swb, sh, "Play dropout", b -> SpotifyService.playDropout());
+                add(cx, y1 + 202, swb, sh, "Seek -10s", b -> SpotifyService.seekBy(-10000));
+                add(cx + swb + gap, y1 + 202, swb, sh, "Seek +10s", b -> SpotifyService.seekBy(10000));
+                add(cx, y1 + 240, swb, sh, "Volume -10", b -> SpotifyService.changeVolume(-10));
+                add(cx + swb + gap, y1 + 240, swb, sh, "Volume +10", b -> SpotifyService.changeVolume(10));
+                add(cx, y1 + 278, controlsWidth, sh, "Open Spotify Developer Dashboard", b ->
+                    net.minecraft.util.Util.getOperatingSystem().open(java.net.URI.create("https://developer.spotify.com/dashboard")));
             }
             case 11 -> {
                 add(cx, y1, cw, h, "Reset HUD position", b -> { AutoSpearSwapConfig.hudX = 7; AutoSpearSwapConfig.hudY = 7; save(); });
@@ -507,6 +536,28 @@ public final class AutoSpearSwapScreen extends Screen {
             ctx.drawTextWithShadow(textRenderer, Text.literal("Controls the active Windows media session (browser, player, etc.)."), x + 160, y + 338, 0xFFE2D7D9);
             ctx.drawTextWithShadow(textRenderer, Text.literal("No Spotify account, API key, subscription or extra app required."), x + 160, y + 356, 0xFFBBAAB0);
             ctx.drawTextWithShadow(textRenderer, Text.literal("Track metadata is not exposed by this lightweight media-key bridge."), x + 160, y + 374, 0xFFBBAAB0);
+        }
+        if (tab == 13) {
+            SpotifyService.pollIfNeeded();
+            int artX = x + 160 + 492;
+            int artY = y + 150;
+            ctx.fill(artX - 8, artY - 8, x + pw - 18, y + 390, 0xAA160C11);
+            ctx.drawTexture(RenderPipelines.GUI_TEXTURED,
+                Identifier.of("autospearswap", "textures/gui/overtonight-cover.jpg"),
+                artX, artY, 0.0f, 0.0f, 146, 146, 640, 640, 0xFFFFFFFF);
+            String status = SpotifyService.status();
+            if (status.length() > 32) status = status.substring(0, 32) + "…";
+            int textX = artX + 158;
+            ctx.drawTextWithShadow(textRenderer, Text.literal("SPOTIFY CONNECT"), textX, artY + 5, ACCENT[t]);
+            ctx.drawTextWithShadow(textRenderer, Text.literal(textRenderer.trimToWidth(status, 178)), textX, artY + 24, 0xFFE8DADD);
+            ctx.drawTextWithShadow(textRenderer, Text.literal(textRenderer.trimToWidth(SpotifyService.currentTrack(), 178)), textX, artY + 54, 0xFFFFFFFF);
+            ctx.drawTextWithShadow(textRenderer, Text.literal(textRenderer.trimToWidth(SpotifyService.currentArtist(), 178)), textX, artY + 72, 0xFFE8DADD);
+            ctx.drawTextWithShadow(textRenderer, Text.literal(textRenderer.trimToWidth(SpotifyService.currentAlbum(), 178)), textX, artY + 90, 0xFFBBAAB0);
+            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.progressText()), textX, artY + 116, ACCENT[t]);
+            ctx.drawTextWithShadow(textRenderer, Text.literal(SpotifyService.volumeText()), textX, artY + 132, 0xFFBBAAB0);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("SETUP  •  Add this redirect URI to your Spotify Developer app:"), x + 160, y + 432, 0xFFE8DADD);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("http://127.0.0.1:8888/callback"), x + 160, y + 450, ACCENT[t]);
+            ctx.drawTextWithShadow(textRenderer, Text.literal("Paste your Client ID, Save it, then Connect. Playback controls require Premium."), x + 160, y + 468, 0xFFBBAAB0);
         }
         if (tab == 8) {
             String sequence = MacroEngine.STEPS.isEmpty() ? "No steps yet" : "Sequence: " +
