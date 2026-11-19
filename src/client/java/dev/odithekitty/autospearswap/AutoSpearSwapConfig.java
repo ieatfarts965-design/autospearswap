@@ -54,6 +54,7 @@ public final class AutoSpearSwapConfig {
     public static boolean hudFood = false;
     public static boolean hudHeldItem = false;
     public static boolean hudEffects = false;
+    public static boolean hudSpotify = false;
     public static int hudX = 7;
     public static int hudY = 7;
     public static boolean triggerBotHoldMode = false;
@@ -95,7 +96,7 @@ public final class AutoSpearSwapConfig {
         hudFood = false;
         hudHeldItem = false;
         hudEffects = false;
-        uiTheme = 5;
+        uiTheme = 0;
         uiOpacity = 82;
         save();
     }
@@ -172,6 +173,7 @@ public final class AutoSpearSwapConfig {
                     hudFood = data.hudFood;
                     hudHeldItem = data.hudHeldItem;
                     hudEffects = data.hudEffects;
+                    hudSpotify = data.hudSpotify;
                     hudX = Math.max(0, Math.min(10000, data.hudX));
                     hudY = Math.max(0, Math.min(10000, data.hudY));
                     triggerBotHoldMode = data.triggerBotHoldMode;
@@ -231,6 +233,7 @@ public final class AutoSpearSwapConfig {
             d.hudFood = hudFood;
             d.hudHeldItem = hudHeldItem;
             d.hudEffects = hudEffects;
+            d.hudSpotify = hudSpotify;
             d.hudX = hudX;
             d.hudY = hudY;
             d.triggerBotHoldMode = triggerBotHoldMode;
@@ -288,6 +291,7 @@ public final class AutoSpearSwapConfig {
         boolean hudFood = false;
         boolean hudHeldItem = false;
         boolean hudEffects = false;
+        boolean hudSpotify = false;
         int hudX = 7;
         int hudY = 7;
         boolean triggerBotHoldMode = false;
