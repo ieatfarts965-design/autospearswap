@@ -32,6 +32,7 @@ These options automate normal client inputs/inventory interactions. Server rules
 
 - Coordinates, CPS, armor durability, keystrokes, combat timer, low-health warning, target HUD, durability alerts, FPS, clock, speed, direction, biome, ping, health, food, held item, and potion effects.
 - Additional world/player/inventory readouts include time/day, dimension, light level, chunk and block coordinates, velocity, fall distance, air, experience, absorption, armor points, weather, saturation, inventory counts, target details, durability, and cardinal direction.
+- The searchable registry contains **200 selectable readout modules**. The latest expansion adds 120 individual inventory counters for common blocks, tools, armor, crafting items, and resources.
 - Module states are stored independently and can be searched from the Search page.
 
 ## Music controls (free)
