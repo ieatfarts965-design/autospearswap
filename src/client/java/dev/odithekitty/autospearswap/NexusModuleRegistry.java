@@ -30,7 +30,27 @@ public final class NexusModuleRegistry {
         new Module("hotbar_slot", "Selected Slot", "Inventory", "Shows selected hotbar slot"),
         new Module("world_age", "World Age", "World", "Shows total world time in days and ticks"),
         new Module("nether_coords", "Nether Coordinates", "World", "Converts coordinates between Overworld and Nether"),
-        new Module("entity_target_type", "Target Type", "Combat", "Shows the type of entity under your crosshair")
+        new Module("entity_target_type", "Target Type", "Combat", "Shows the type of entity under your crosshair"),
+        new Module("player_name", "Player Name", "Player", "Displays your username"),
+        new Module("attack_charge", "Attack Charge", "Combat", "Shows vanilla attack cooldown"),
+        new Module("sprint_state", "Sprint State", "Movement", "Shows sprint status"),
+        new Module("swim_state", "Swim State", "Movement", "Shows swimming status"),
+        new Module("climb_state", "Climb State", "Movement", "Shows climbing status"),
+        new Module("glide_state", "Glide State", "Movement", "Shows elytra gliding status"),
+        new Module("vehicle_state", "Vehicle State", "Movement", "Shows whether you are riding"),
+        new Module("fire_ticks", "Fire Timer", "Player", "Shows remaining fire ticks"),
+        new Module("wet_state", "Wet Status", "Player", "Shows wet or dry status"),
+        new Module("inventory_empty", "Empty Slots", "Inventory", "Counts empty inventory slots"),
+        new Module("inventory_used", "Used Slots", "Inventory", "Counts occupied inventory slots"),
+        new Module("selected_count", "Held Stack", "Inventory", "Shows selected stack count"),
+        new Module("totem_count", "Totems", "Inventory", "Counts totems in inventory"),
+        new Module("arrow_count", "Arrows", "Inventory", "Counts arrows in inventory"),
+        new Module("golden_apple_count", "Golden Apples", "Inventory", "Counts golden apples in inventory"),
+        new Module("offhand_item", "Offhand Item", "Inventory", "Shows offhand item name"),
+        new Module("target_block", "Target Block", "World", "Shows the block under your crosshair"),
+        new Module("target_block_coords", "Target Block Position", "World", "Shows target block coordinates"),
+        new Module("target_entity_distance", "Target Entity Range", "Combat", "Shows distance to crosshair entity"),
+        new Module("spawn_distance", "Spawn Distance", "World", "Shows distance from world spawn")
     );
 
     private NexusModuleRegistry() {}
@@ -50,6 +70,16 @@ public final class NexusModuleRegistry {
                 y += 11;
             }
         }
+    }
+
+    private static int countItem(PlayerEntity player, net.minecraft.item.Item item) {
+        int total = 0;
+        for (int i = 0; i < 36; i++) {
+            var stack = player.getInventory().getStack(i);
+            if (stack.isOf(item)) total += stack.getCount();
+        }
+        if (player.getOffHandStack().isOf(item)) total += player.getOffHandStack().getCount();
+        return total;
     }
 
     private static String value(String id, MinecraftClient c, PlayerEntity p, BlockPos pos) {
@@ -85,6 +115,40 @@ public final class NexusModuleRegistry {
             }
             case "entity_target_type" -> c.crosshairTarget instanceof net.minecraft.util.hit.EntityHitResult hit
                 ? hit.getEntity().getType().getName().getString() : "None";
+            case "player_name" -> p.getGameProfile().getName();
+            case "attack_charge" -> Math.round(p.getAttackCooldownProgress(0.5f) * 100) + "%";
+            case "sprint_state" -> p.isSprinting() ? "SPRINTING" : "WALKING";
+            case "swim_state" -> p.isSwimming() ? "SWIMMING" : "NOT SWIMMING";
+            case "climb_state" -> p.isClimbing() ? "CLIMBING" : "NOT CLIMBING";
+            case "glide_state" -> p.isGliding() ? "GLIDING" : "NOT GLIDING";
+            case "vehicle_state" -> p.hasVehicle() ? p.getVehicle().getName().getString() : "ON FOOT";
+            case "fire_ticks" -> p.getFireTicks() + " ticks";
+            case "wet_state" -> p.isWet() ? "WET" : "DRY";
+            case "inventory_empty" -> {
+                int empty = 0;
+                for (int i = 0; i < 36; i++) if (p.getInventory().getStack(i).isEmpty()) empty++;
+                yield empty + " slots";
+            }
+            case "inventory_used" -> {
+                int used = 0;
+                for (int i = 0; i < 36; i++) if (!p.getInventory().getStack(i).isEmpty()) used++;
+                yield used + " / 36 slots";
+            }
+            case "selected_count" -> p.getMainHandStack().isEmpty() ? "0" : p.getMainHandStack().getCount() + " items";
+            case "totem_count" -> countItem(p, net.minecraft.item.Items.TOTEM_OF_UNDYING) + "";
+            case "arrow_count" -> (countItem(p, net.minecraft.item.Items.ARROW)
+                + countItem(p, net.minecraft.item.Items.SPECTRAL_ARROW)
+                + countItem(p, net.minecraft.item.Items.TIPPED_ARROW)) + "";
+            case "golden_apple_count" -> (countItem(p, net.minecraft.item.Items.GOLDEN_APPLE)
+                + countItem(p, net.minecraft.item.Items.ENCHANTED_GOLDEN_APPLE)) + "";
+            case "offhand_item" -> p.getOffHandStack().isEmpty() ? "Empty" : p.getOffHandStack().getName().getString();
+            case "target_block" -> c.crosshairTarget instanceof net.minecraft.util.hit.BlockHitResult block
+                ? c.world.getBlockState(block.getBlockPos()).getBlock().getName().getString() : "None";
+            case "target_block_coords" -> c.crosshairTarget instanceof net.minecraft.util.hit.BlockHitResult block
+                ? block.getBlockPos().getX() + ", " + block.getBlockPos().getY() + ", " + block.getBlockPos().getZ() : "None";
+            case "target_entity_distance" -> c.crosshairTarget instanceof net.minecraft.util.hit.EntityHitResult hit
+                ? String.format("%.1f blocks", hit.getEntity().distanceTo(p)) : "None";
+            case "spawn_distance" -> String.format("%.1f blocks", Math.sqrt(pos.getSquaredDistance(c.world.getSpawnPos())));
             default -> null;
         };
     }
