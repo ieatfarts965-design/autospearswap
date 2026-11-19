@@ -3,12 +3,15 @@ package dev.odithekitty.autospearswap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpServer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Util;
 
 import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URLDecoder;
@@ -53,7 +56,7 @@ public final class SpotifyService {
     private static volatile long lastPollAt;
     private static volatile String pendingVerifier = "";
     private static volatile String pendingState = "";
-    private static volatile HttpServer callbackServer;
+    private static volatile ServerSocket callbackServer;
 
     private SpotifyService() {}
 
@@ -92,7 +95,7 @@ public final class SpotifyService {
             return;
         }
         try {
-            if (callbackServer != null) callbackServer.stop(0);
+            stopCallbackServer();
             byte[] verifierBytes = new byte[48];
             RANDOM.nextBytes(verifierBytes);
             pendingVerifier = Base64.getUrlEncoder().withoutPadding().encodeToString(verifierBytes);
@@ -102,10 +105,13 @@ public final class SpotifyService {
             String challenge = Base64.getUrlEncoder().withoutPadding().encodeToString(
                 MessageDigest.getInstance("SHA-256").digest(pendingVerifier.getBytes(StandardCharsets.US_ASCII)));
 
-            HttpServer server = HttpServer.create(new InetSocketAddress("127.0.0.1", 8888), 0);
+            ServerSocket server = new ServerSocket();
+            server.setReuseAddress(true);
+            server.bind(new InetSocketAddress("127.0.0.1", 8888));
             callbackServer = server;
-            server.createContext("/callback", SpotifyService::handleCallback);
-            server.start();
+            Thread listener = new Thread(() -> listenForCallback(server), "Overtonight-Spotify-OAuth");
+            listener.setDaemon(true);
+            listener.start();
 
             String url = "https://accounts.spotify.com/authorize"
                 + "?client_id=" + enc(clientId)
@@ -123,34 +129,56 @@ public final class SpotifyService {
         }
     }
 
-    private static void handleCallback(HttpExchange exchange) throws IOException {
-        Map<String, String> query = parseQuery(exchange.getRequestURI().getRawQuery());
-        String returnedState = query.getOrDefault("state", "");
-        String code = query.getOrDefault("code", "");
-        String error = query.getOrDefault("error", "");
-        boolean valid = !pendingState.isBlank() && pendingState.equals(returnedState);
-        String response;
-        if (!valid) {
-            response = "<html><body><h2>Overtonight Client</h2><p>Spotify login state did not match. You can close this tab.</p></body></html>";
-            state = "Spotify login rejected: state mismatch";
-        } else if (!error.isBlank()) {
-            response = "<html><body><h2>Overtonight Client</h2><p>Spotify access was not granted. You can close this tab.</p></body></html>";
-            state = "Spotify authorization was cancelled";
-        } else if (code.isBlank()) {
-            response = "<html><body><h2>Overtonight Client</h2><p>No authorization code received.</p></body></html>";
-            state = "Spotify returned no authorization code";
-        } else {
-            response = "<html><body style='background:#10090d;color:#eee;font:16px sans-serif'><h2>Overtonight Client</h2><p>Spotify connected. You can close this tab and return to Minecraft.</p></body></html>";
-            state = "Spotify approved · exchanging token…";
-            String verifier = pendingVerifier;
-            CompletableFuture.runAsync(() -> exchangeCode(code, verifier));
+    private static void listenForCallback(ServerSocket server) {
+        try (Socket socket = server.accept()) {
+            socket.setSoTimeout(12000);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.US_ASCII));
+            String requestLine = reader.readLine();
+            String header;
+            while ((header = reader.readLine()) != null && !header.isEmpty()) {
+                // Consume the complete HTTP header before writing the callback response.
+            }
+            String target = "/";
+            if (requestLine != null) {
+                String[] parts = requestLine.split(" ", 3);
+                if (parts.length > 1) target = parts[1];
+            }
+            int question = target.indexOf('?');
+            String rawQuery = question >= 0 ? target.substring(question + 1) : "";
+            Map<String, String> query = parseQuery(rawQuery);
+            String returnedState = query.getOrDefault("state", "");
+            String code = query.getOrDefault("code", "");
+            String error = query.getOrDefault("error", "");
+            boolean valid = !pendingState.isBlank() && pendingState.equals(returnedState);
+            String response;
+            if (!valid) {
+                response = "<html><body style='background:#10090d;color:#eee;font:16px sans-serif'><h2>Overtonight Client</h2><p>Spotify login state did not match. You can close this tab.</p></body></html>";
+                state = "Spotify login rejected: state mismatch";
+            } else if (!error.isBlank()) {
+                response = "<html><body style='background:#10090d;color:#eee;font:16px sans-serif'><h2>Overtonight Client</h2><p>Spotify access was not granted. You can close this tab.</p></body></html>";
+                state = "Spotify authorization was cancelled";
+            } else if (code.isBlank()) {
+                response = "<html><body style='background:#10090d;color:#eee;font:16px sans-serif'><h2>Overtonight Client</h2><p>No authorization code received.</p></body></html>";
+                state = "Spotify returned no authorization code";
+            } else {
+                response = "<html><body style='background:#10090d;color:#eee;font:16px sans-serif'><h2>Overtonight Client</h2><p>Spotify connected. You can close this tab and return to Minecraft.</p></body></html>";
+                state = "Spotify approved · exchanging token…";
+                String verifier = pendingVerifier;
+                CompletableFuture.runAsync(() -> exchangeCode(code, verifier));
+            }
+            byte[] bytes = response.getBytes(StandardCharsets.UTF_8);
+            OutputStream output = socket.getOutputStream();
+            String headers = "HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\nContent-Length: "
+                + bytes.length + "\r\nConnection: close\r\n\r\n";
+            output.write(headers.getBytes(StandardCharsets.US_ASCII));
+            output.write(bytes);
+            output.flush();
+        } catch (Exception e) {
+            if (!server.isClosed()) state = "Spotify callback failed: " + safeMessage(e);
+        } finally {
+            try { server.close(); } catch (IOException ignored) {}
+            if (callbackServer == server) callbackServer = null;
         }
-        byte[] bytes = response.getBytes(StandardCharsets.UTF_8);
-        exchange.getResponseHeaders().set("Content-Type", "text/html; charset=utf-8");
-        exchange.sendResponseHeaders(200, bytes.length);
-        exchange.getResponseBody().write(bytes);
-        exchange.close();
-        stopCallbackServer();
     }
 
     private static synchronized void exchangeCode(String code, String verifier) {
@@ -361,10 +389,10 @@ public final class SpotifyService {
     }
 
     private static void stopCallbackServer() {
-        HttpServer server = callbackServer;
+        ServerSocket server = callbackServer;
         callbackServer = null;
         if (server != null) {
-            try { server.stop(0); } catch (Exception ignored) {}
+            try { server.close(); } catch (Exception ignored) {}
         }
     }
 
