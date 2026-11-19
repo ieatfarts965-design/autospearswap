@@ -59,6 +59,8 @@ public final class AutoSpearSwapScreen extends Screen {
                     () -> AutoSpearSwapConfig.autoTotem = !AutoSpearSwapConfig.autoTotem);
                 toggle(cx + bw + gap, y1 + 117, bw, h, "Auto refill", AutoSpearSwapConfig.autoRefill,
                     () -> AutoSpearSwapConfig.autoRefill = !AutoSpearSwapConfig.autoRefill);
+                toggle(cx, y1 + 156, cw, h, "Auto armor (empty slots)", AutoSpearSwapConfig.autoArmor,
+                    () -> AutoSpearSwapConfig.autoArmor = !AutoSpearSwapConfig.autoArmor);
             }
             case 1 -> {
                 toggle(cx, y1, bw, h, "Auto sprint", AutoSpearSwapConfig.autoSprint,
@@ -196,6 +198,7 @@ public final class AutoSpearSwapScreen extends Screen {
                 addSearchEntry(labels, states, actions, q, "Jump reset", AutoSpearSwapConfig.jumpResetEnabled, () -> AutoSpearSwapConfig.jumpResetEnabled = !AutoSpearSwapConfig.jumpResetEnabled);
                 addSearchEntry(labels, states, actions, q, "Auto totem", AutoSpearSwapConfig.autoTotem, () -> AutoSpearSwapConfig.autoTotem = !AutoSpearSwapConfig.autoTotem);
                 addSearchEntry(labels, states, actions, q, "Auto refill", AutoSpearSwapConfig.autoRefill, () -> AutoSpearSwapConfig.autoRefill = !AutoSpearSwapConfig.autoRefill);
+                addSearchEntry(labels, states, actions, q, "Auto armor", AutoSpearSwapConfig.autoArmor, () -> AutoSpearSwapConfig.autoArmor = !AutoSpearSwapConfig.autoArmor);
                 addSearchEntry(labels, states, actions, q, "Coordinates", AutoSpearSwapConfig.hudCoordinates, () -> AutoSpearSwapConfig.hudCoordinates = !AutoSpearSwapConfig.hudCoordinates);
                 addSearchEntry(labels, states, actions, q, "CPS counter", AutoSpearSwapConfig.hudCps, () -> AutoSpearSwapConfig.hudCps = !AutoSpearSwapConfig.hudCps);
                 addSearchEntry(labels, states, actions, q, "Armor status", AutoSpearSwapConfig.hudArmor, () -> AutoSpearSwapConfig.hudArmor = !AutoSpearSwapConfig.hudArmor);
