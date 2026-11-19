@@ -48,7 +48,6 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         AutoSpearSwapConfig.load();
-        SpotifyService.load();
         autoWalkLatched = AutoSpearSwapConfig.autoWalk;
         MacroEngine.load();
         KeyBinding.Category category = KeyBinding.Category.create(Identifier.of("autospearswap", "main"));
@@ -71,7 +70,6 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             PvpHud.tick(client);
-            SpotifyService.pollIfNeeded();
             while (autoWalkKey.wasPressed()) {
                 autoWalkLatched = !autoWalkLatched;
                 AutoSpearSwapConfig.autoWalk = autoWalkLatched;
