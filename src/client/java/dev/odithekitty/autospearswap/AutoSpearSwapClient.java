@@ -14,6 +14,8 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.util.Hand;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.component.type.EquippableComponent;
 import net.minecraft.screen.slot.SlotActionType;
 import dev.odithekitty.autospearswap.mixin.MinecraftClientAccessor;
 import net.minecraft.util.Identifier;
@@ -100,6 +102,47 @@ public final class AutoSpearSwapClient implements ClientModInitializer {
                 sneakLatched = false;
             } else {
                 if (client.currentScreen == null && client.interactionManager != null) {
+                    if (AutoSpearSwapConfig.autoArmor
+                        && client.player.currentScreenHandler.getCursorStack().isEmpty()) {
+                        EquipmentSlot[] armorSlots = {
+                            EquipmentSlot.HEAD, EquipmentSlot.CHEST,
+                            EquipmentSlot.LEGS, EquipmentSlot.FEET
+                        };
+                        int[] handlerSlots = {5, 6, 7, 8};
+                        for (int gearIndex = 0; gearIndex < armorSlots.length; gearIndex++) {
+                            EquipmentSlot equipmentSlot = armorSlots[gearIndex];
+                            if (!client.player.getEquippedStack(equipmentSlot).isEmpty()) continue;
+                            boolean equipped = false;
+                            for (int inventory = 9; inventory < 36; inventory++) {
+                                var candidate = client.player.getInventory().getStack(inventory);
+                                EquippableComponent equippable = candidate.get(DataComponentTypes.EQUIPPABLE);
+                                if (equippable != null && equippable.slot() == equipmentSlot) {
+                                    client.interactionManager.clickSlot(
+                                        client.player.currentScreenHandler.syncId,
+                                        inventory, 0, SlotActionType.PICKUP, client.player);
+                                    client.interactionManager.clickSlot(
+                                        client.player.currentScreenHandler.syncId,
+                                        handlerSlots[gearIndex], 0, SlotActionType.PICKUP, client.player);
+                                    equipped = true;
+                                    break;
+                                }
+                            }
+                            if (!equipped) {
+                                for (int hotbar = 0; hotbar < 9; hotbar++) {
+                                    var candidate = client.player.getInventory().getStack(hotbar);
+                                    EquippableComponent equippable = candidate.get(DataComponentTypes.EQUIPPABLE);
+                                    if (equippable != null && equippable.slot() == equipmentSlot) {
+                                        client.interactionManager.clickSlot(
+                                            client.player.currentScreenHandler.syncId,
+                                            handlerSlots[gearIndex], hotbar, SlotActionType.SWAP, client.player);
+                                        equipped = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (equipped) break;
+                        }
+                    }
                     if (AutoSpearSwapConfig.autoTotem
                         && !client.player.getOffHandStack().isOf(Items.TOTEM_OF_UNDYING)) {
                         int totemSlot = -1;
