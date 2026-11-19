@@ -54,7 +54,8 @@ public final class AutoSpearSwapConfig {
     public static int hudX = 7;
     public static int hudY = 7;
     public static boolean triggerBotHoldMode = false;
-    public static Map<String, Boolean> extraModules = new LinkedHashMap<>();\n    public static String spotifyClientId = "";
+    public static Map<String, Boolean> extraModules = new LinkedHashMap<>();
+    public static String spotifyClientId = "";
 
     private AutoSpearSwapConfig() {}
 
@@ -166,6 +167,7 @@ public final class AutoSpearSwapConfig {
                     hudY = Math.max(0, Math.min(10000, data.hudY));
                     triggerBotHoldMode = data.triggerBotHoldMode;
                     extraModules = data.extraModules == null ? new LinkedHashMap<>() : new LinkedHashMap<>(data.extraModules);
+                    spotifyClientId = data.spotifyClientId == null ? "" : data.spotifyClientId;
                 }
             } else {
                 save();
@@ -220,7 +222,8 @@ public final class AutoSpearSwapConfig {
             d.hudX = hudX;
             d.hudY = hudY;
             d.triggerBotHoldMode = triggerBotHoldMode;
-            d.extraModules = new LinkedHashMap<>(extraModules);\n            d.spotifyClientId = spotifyClientId;
+            d.extraModules = new LinkedHashMap<>(extraModules);
+            d.spotifyClientId = spotifyClientId;
             Files.writeString(FILE, GSON.toJson(d));
         } catch (Exception e) {
             System.err.println("[AutoSpearSwap] Could not save config: " + e.getMessage());
@@ -274,5 +277,6 @@ public final class AutoSpearSwapConfig {
         int hudY = 7;
         boolean triggerBotHoldMode = false;
         Map<String, Boolean> extraModules = new LinkedHashMap<>();
+        String spotifyClientId = "";
     }
 }
