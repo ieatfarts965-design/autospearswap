@@ -84,6 +84,10 @@ public final class SpotifyService {
         return formatTime(progressMs) + " / " + formatTime(durationMs);
     }
 
+    public static String volumeText() {
+        return "Volume " + volumePercent + "%";
+    }
+
     private static String formatTime(long millis) {
         long seconds = Math.max(0, millis / 1000);
         return String.format("%d:%02d", seconds / 60, seconds % 60);
