@@ -244,7 +244,7 @@ public final class AutoSpearSwapScreen extends Screen {
                 add(cx + bw + gap, y1 + 76, bw, h, "Disconnect", b -> SpotifyService.disconnect());
                 add(cx, y1 + 114, bw, h, "Previous track", b -> SpotifyService.previous());
                 add(cx + bw + gap, y1 + 114, bw, h, "Next track", b -> SpotifyService.next());
-                add(cx, y1 + 152, bw, h, SpotifyService.isPlaying() ? "Pause playback" : "Resume playback", b -> SpotifyService.togglePlayback());
+                add(cx, y1 + 152, bw, h, "Play / Pause", b -> SpotifyService.togglePlayback());
                 add(cx + bw + gap, y1 + 152, bw, h, "Play dropout", b -> SpotifyService.playDropout());
             }
             case 11 -> {
