@@ -62,7 +62,7 @@ public final class NexusModuleRegistry {
         new Module("boots_durability", "Boots Durability", "Inventory", "Shows remaining boots durability"),
         new Module("ender_pearls", "Ender Pearls", "Inventory", "Counts ender pearls"),
         new Module("firework_rockets", "Firework Rockets", "Inventory", "Counts firework rockets"),
-        new Module("obsidian", "Obsidian", "Inventory", "Counts obsidian blocks"),
+        new Module("diamond_horse_armor", "Obsidian", "Inventory", "Counts obsidian blocks"),
         new Module("end_crystals", "End Crystals", "Inventory", "Counts end crystals"),
         new Module("cobwebs", "Cobwebs", "Inventory", "Counts cobwebs"),
         new Module("golden_carrots", "Golden Carrots", "Inventory", "Counts golden carrots"),
@@ -137,7 +137,7 @@ public final class NexusModuleRegistry {
         new Module("item_copper_ingot", "Copper Ingot Count", "Inventory", "Counts copper ingot in your inventory"),
         new Module("item_copper_nugget", "Copper Nugget Count", "Inventory", "Counts copper nugget in your inventory"),
         new Module("item_crossbow", "Crossbow Count", "Inventory", "Counts crossbow in your inventory"),
-        new Module("item_crying_obsidian", "Crying Obsidian Count", "Inventory", "Counts crying obsidian in your inventory"),
+        new Module("item_crying_obsidian", "Crying Diamond Horse Armor Count", "Inventory", "Counts crying obsidian in your inventory"),
         new Module("item_diamond", "Diamond Count", "Inventory", "Counts diamond in your inventory"),
         new Module("item_diamond_axe", "Diamond Axe Count", "Inventory", "Counts diamond axe in your inventory"),
         new Module("item_diamond_block", "Diamond Block Count", "Inventory", "Counts diamond block in your inventory"),
@@ -155,16 +155,16 @@ public final class NexusModuleRegistry {
         new Module("item_emerald", "Emerald Count", "Inventory", "Counts emerald in your inventory"),
         new Module("item_emerald_block", "Emerald Block Count", "Inventory", "Counts emerald block in your inventory"),
         new Module("item_enchanted_book", "Enchanted Book Count", "Inventory", "Counts enchanted book in your inventory"),
-        new Module("item_end_crystal", "End Crystal Count", "Inventory", "Counts end crystal in your inventory"),
+        new Module("item_dragon_breath", "Dragon Breath Count", "Inventory", "Counts dragon breath in your inventory"),
         new Module("item_ender_chest", "Ender Chest Count", "Inventory", "Counts ender chest in your inventory"),
         new Module("item_ender_eye", "Ender Eye Count", "Inventory", "Counts ender eye in your inventory"),
-        new Module("item_ender_pearl", "Ender Pearl Count", "Inventory", "Counts ender pearl in your inventory"),
+        new Module("item_campfire", "Campfire Count", "Inventory", "Counts campfire in your inventory"),
         new Module("item_end_rod", "End Rod Count", "Inventory", "Counts end rod in your inventory"),
         new Module("item_experience_bottle", "Experience Bottle Count", "Inventory", "Counts experience bottle in your inventory"),
         new Module("item_feather", "Feather Count", "Inventory", "Counts feather in your inventory"),
         new Module("item_fermented_spider_eye", "Fermented Spider Eye Count", "Inventory", "Counts fermented spider eye in your inventory"),
         new Module("item_fire_charge", "Fire Charge Count", "Inventory", "Counts fire charge in your inventory"),
-        new Module("item_firework_rocket", "Firework Rocket Count", "Inventory", "Counts firework rocket in your inventory"),
+        new Module("item_anvil", "Anvil Count", "Inventory", "Counts anvil in your inventory"),
         new Module("item_flint", "Flint Count", "Inventory", "Counts flint in your inventory"),
         new Module("item_flint_and_steel", "Flint And Steel Count", "Inventory", "Counts flint and steel in your inventory"),
         new Module("item_ghast_tear", "Ghast Tear Count", "Inventory", "Counts ghast tear in your inventory"),
@@ -172,8 +172,8 @@ public final class NexusModuleRegistry {
         new Module("item_glowstone_dust", "Glowstone Dust Count", "Inventory", "Counts glowstone dust in your inventory"),
         new Module("item_gold_ingot", "Gold Ingot Count", "Inventory", "Counts gold ingot in your inventory"),
         new Module("item_gold_nugget", "Gold Nugget Count", "Inventory", "Counts gold nugget in your inventory"),
-        new Module("item_golden_apple", "Golden Apple Count", "Inventory", "Counts golden apple in your inventory"),
-        new Module("item_golden_carrot", "Golden Carrot Count", "Inventory", "Counts golden carrot in your inventory"),
+        new Module("item_ancient_debris", "Ancient Debris Count", "Inventory", "Counts ancient debris in your inventory"),
+        new Module("item_amethyst_shard", "Amethyst Shard Count", "Inventory", "Counts amethyst shard in your inventory"),
         new Module("item_golden_sword", "Golden Sword Count", "Inventory", "Counts golden sword in your inventory"),
         new Module("item_golden_pickaxe", "Golden Pickaxe Count", "Inventory", "Counts golden pickaxe in your inventory"),
         new Module("item_gunpowder", "Gunpowder Count", "Inventory", "Counts gunpowder in your inventory"),
@@ -206,7 +206,7 @@ public final class NexusModuleRegistry {
         new Module("item_netherite_ingot", "Netherite Ingot Count", "Inventory", "Counts netherite ingot in your inventory"),
         new Module("item_netherite_scrap", "Netherite Scrap Count", "Inventory", "Counts netherite scrap in your inventory"),
         new Module("item_nether_star", "Nether Star Count", "Inventory", "Counts nether star in your inventory"),
-        new Module("item_obsidian", "Obsidian Count", "Inventory", "Counts obsidian in your inventory"),
+        new Module("item_diamond_horse_armor", "Diamond Horse Armor Count", "Inventory", "Counts diamond horse armor in your inventory"),
         new Module("item_paper", "Paper Count", "Inventory", "Counts paper in your inventory"),
         new Module("item_phantom_membrane", "Phantom Membrane Count", "Inventory", "Counts phantom membrane in your inventory"),
         new Module("item_poppy", "Poppy Count", "Inventory", "Counts poppy in your inventory"),
@@ -347,7 +347,7 @@ public final class NexusModuleRegistry {
             case "boots_durability" -> durability(p.getEquippedStack(net.minecraft.entity.EquipmentSlot.FEET));
             case "ender_pearls" -> Integer.toString(countItem(p, net.minecraft.item.Items.ENDER_PEARL));
             case "firework_rockets" -> Integer.toString(countItem(p, net.minecraft.item.Items.FIREWORK_ROCKET));
-            case "obsidian" -> Integer.toString(countItem(p, net.minecraft.item.Items.OBSIDIAN));
+            case "diamond_horse_armor" -> Integer.toString(countItem(p, net.minecraft.item.Items.OBSIDIAN));
             case "end_crystals" -> Integer.toString(countItem(p, net.minecraft.item.Items.END_CRYSTAL));
             case "cobwebs" -> Integer.toString(countItem(p, net.minecraft.item.Items.COBWEB));
             case "golden_carrots" -> Integer.toString(countItem(p, net.minecraft.item.Items.GOLDEN_CARROT));
@@ -458,16 +458,16 @@ public final class NexusModuleRegistry {
             case "item_emerald" -> Integer.toString(countItemId(p, "emerald"));
             case "item_emerald_block" -> Integer.toString(countItemId(p, "emerald_block"));
             case "item_enchanted_book" -> Integer.toString(countItemId(p, "enchanted_book"));
-            case "item_end_crystal" -> Integer.toString(countItemId(p, "end_crystal"));
+            case "item_dragon_breath" -> Integer.toString(countItemId(p, "dragon_breath"));
             case "item_ender_chest" -> Integer.toString(countItemId(p, "ender_chest"));
             case "item_ender_eye" -> Integer.toString(countItemId(p, "ender_eye"));
-            case "item_ender_pearl" -> Integer.toString(countItemId(p, "ender_pearl"));
+            case "item_campfire" -> Integer.toString(countItemId(p, "campfire"));
             case "item_end_rod" -> Integer.toString(countItemId(p, "end_rod"));
             case "item_experience_bottle" -> Integer.toString(countItemId(p, "experience_bottle"));
             case "item_feather" -> Integer.toString(countItemId(p, "feather"));
             case "item_fermented_spider_eye" -> Integer.toString(countItemId(p, "fermented_spider_eye"));
             case "item_fire_charge" -> Integer.toString(countItemId(p, "fire_charge"));
-            case "item_firework_rocket" -> Integer.toString(countItemId(p, "firework_rocket"));
+            case "item_anvil" -> Integer.toString(countItemId(p, "anvil"));
             case "item_flint" -> Integer.toString(countItemId(p, "flint"));
             case "item_flint_and_steel" -> Integer.toString(countItemId(p, "flint_and_steel"));
             case "item_ghast_tear" -> Integer.toString(countItemId(p, "ghast_tear"));
@@ -475,8 +475,8 @@ public final class NexusModuleRegistry {
             case "item_glowstone_dust" -> Integer.toString(countItemId(p, "glowstone_dust"));
             case "item_gold_ingot" -> Integer.toString(countItemId(p, "gold_ingot"));
             case "item_gold_nugget" -> Integer.toString(countItemId(p, "gold_nugget"));
-            case "item_golden_apple" -> Integer.toString(countItemId(p, "golden_apple"));
-            case "item_golden_carrot" -> Integer.toString(countItemId(p, "golden_carrot"));
+            case "item_ancient_debris" -> Integer.toString(countItemId(p, "ancient_debris"));
+            case "item_amethyst_shard" -> Integer.toString(countItemId(p, "amethyst_shard"));
             case "item_golden_sword" -> Integer.toString(countItemId(p, "golden_sword"));
             case "item_golden_pickaxe" -> Integer.toString(countItemId(p, "golden_pickaxe"));
             case "item_gunpowder" -> Integer.toString(countItemId(p, "gunpowder"));
@@ -509,7 +509,7 @@ public final class NexusModuleRegistry {
             case "item_netherite_ingot" -> Integer.toString(countItemId(p, "netherite_ingot"));
             case "item_netherite_scrap" -> Integer.toString(countItemId(p, "netherite_scrap"));
             case "item_nether_star" -> Integer.toString(countItemId(p, "nether_star"));
-            case "item_obsidian" -> Integer.toString(countItemId(p, "obsidian"));
+            case "item_diamond_horse_armor" -> Integer.toString(countItemId(p, "diamond_horse_armor"));
             case "item_paper" -> Integer.toString(countItemId(p, "paper"));
             case "item_phantom_membrane" -> Integer.toString(countItemId(p, "phantom_membrane"));
             case "item_poppy" -> Integer.toString(countItemId(p, "poppy"));
