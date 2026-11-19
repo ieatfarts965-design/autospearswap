@@ -27,6 +27,7 @@ public final class AutoSpearSwapScreen extends Screen {
     private boolean openingPacks;
     private String moduleQuery = "";
     private TextFieldWidget searchField;
+    private TextFieldWidget spotifyClientField;
     private int modulePage;
     private boolean addingNavigation;
     private int gridIndex;
