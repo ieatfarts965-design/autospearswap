@@ -3,7 +3,7 @@
   "id": "autospearswap",
   "version": "${version}",
   "name": "Overtonight Client",
-  "description": "Overtonight-themed Fabric client with Spotify Connect, combat utilities, expanded modules, HUD and visual presets.",
+  "description": "Overtonight-themed Fabric client with free desktop media controls, combat utilities, expanded HUD modules and visual presets.",
   "environment": "client",
   "icon": "assets/icon.png",
   "entrypoints": {
