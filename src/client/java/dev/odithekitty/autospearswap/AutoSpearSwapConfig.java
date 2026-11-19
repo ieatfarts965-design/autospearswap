@@ -11,7 +11,7 @@ import java.util.Map;
 public final class AutoSpearSwapConfig {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Path FILE = FabricLoader.getInstance().getConfigDir().resolve("autospearswap.json");
-    private static final Path PROFILES = FabricLoader.getInstance().getConfigDir().resolve("nexus-profiles");
+    private static final Path PROFILES = FabricLoader.getInstance().getConfigDir().resolve("overtonight-profiles");
 
     public static boolean attributeSwapEnabled = false;
     public static boolean lungeSwapEnabled = false;
@@ -54,7 +54,7 @@ public final class AutoSpearSwapConfig {
     public static int hudX = 7;
     public static int hudY = 7;
     public static boolean triggerBotHoldMode = false;
-    public static Map<String, Boolean> extraModules = new LinkedHashMap<>();
+    public static Map<String, Boolean> extraModules = new LinkedHashMap<>();\n    public static String spotifyClientId = "";
 
     private AutoSpearSwapConfig() {}
 
@@ -220,7 +220,7 @@ public final class AutoSpearSwapConfig {
             d.hudX = hudX;
             d.hudY = hudY;
             d.triggerBotHoldMode = triggerBotHoldMode;
-            d.extraModules = new LinkedHashMap<>(extraModules);
+            d.extraModules = new LinkedHashMap<>(extraModules);\n            d.spotifyClientId = spotifyClientId;
             Files.writeString(FILE, GSON.toJson(d));
         } catch (Exception e) {
             System.err.println("[AutoSpearSwap] Could not save config: " + e.getMessage());
