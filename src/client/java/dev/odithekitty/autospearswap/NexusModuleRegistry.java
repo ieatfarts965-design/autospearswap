@@ -70,7 +70,27 @@ public final class NexusModuleRegistry {
         new Module("player_z", "Z Position", "World", "Shows precise Z position"),
         new Module("chunk_section", "Chunk Section", "World", "Shows the vertical chunk section"),
         new Module("target_entity_name", "Target Name", "Combat", "Shows the crosshair entity name"),
-        new Module("target_entity_health", "Target Health", "Combat", "Shows crosshair entity health")
+        new Module("target_entity_health", "Target Health", "Combat", "Shows crosshair entity health"),
+        new Module("hunger_level", "Hunger Level", "Player", "Shows food points out of 20"),
+        new Module("hunger_percent", "Hunger Percent", "Player", "Shows hunger as a percentage"),
+        new Module("mainhand_count", "Main Hand Count", "Inventory", "Shows held stack count"),
+        new Module("offhand_count", "Offhand Count", "Inventory", "Shows offhand stack count"),
+        new Module("experience_progress", "XP Progress", "Player", "Shows progress to next level"),
+        new Module("yaw_cardinal", "Cardinal Direction", "Player", "Shows north south east or west"),
+        new Module("chunk_x", "Chunk X", "World", "Shows current chunk X coordinate"),
+        new Module("chunk_z", "Chunk Z", "World", "Shows current chunk Z coordinate"),
+        new Module("chunk_local_x", "Local Chunk X", "World", "Shows X position within current chunk"),
+        new Module("chunk_local_z", "Local Chunk Z", "World", "Shows Z position within current chunk"),
+        new Module("velocity_x", "Velocity X", "Movement", "Shows horizontal X velocity"),
+        new Module("velocity_y", "Velocity Y", "Movement", "Shows vertical velocity"),
+        new Module("velocity_z", "Velocity Z", "Movement", "Shows horizontal Z velocity"),
+        new Module("target_block_distance", "Block Target Range", "World", "Shows distance to targeted block"),
+        new Module("target_block_face", "Target Block Face", "World", "Shows targeted block face"),
+        new Module("target_entity_is_player", "Target Is Player", "Combat", "Shows whether the target is a player"),
+        new Module("target_entity_alive", "Target Alive", "Combat", "Shows whether target entity is alive"),
+        new Module("target_entity_absorption", "Target Absorption", "Combat", "Shows target absorption hearts"),
+        new Module("day_phase", "Day Phase", "World", "Shows sunrise daytime sunset or night"),
+        new Module("air_percent", "Air Percent", "Player", "Shows remaining air as percentage")
     );
 
     private NexusModuleRegistry() {}
@@ -198,6 +218,38 @@ public final class NexusModuleRegistry {
             case "target_entity_health" -> c.crosshairTarget instanceof net.minecraft.util.hit.EntityHitResult hit
                 && hit.getEntity() instanceof net.minecraft.entity.LivingEntity living
                 ? String.format("%.1f / %.1f HP", living.getHealth(), living.getMaxHealth()) : "None";
+            case "hunger_level" -> p.getHungerManager().getFoodLevel() + " / 20";
+            case "hunger_percent" -> Math.round(p.getHungerManager().getFoodLevel() * 5.0f) + "%";
+            case "mainhand_count" -> p.getMainHandStack().getCount() + " items";
+            case "offhand_count" -> p.getOffHandStack().getCount() + " items";
+            case "experience_progress" -> Math.round(p.experienceProgress * 100) + "%";
+            case "yaw_cardinal" -> {
+                int direction = Math.floorMod((int)Math.floor(p.getYaw() / 90.0f + 0.5f), 4);
+                yield switch (direction) { case 0 -> "SOUTH"; case 1 -> "WEST"; case 2 -> "NORTH"; default -> "EAST"; };
+            }
+            case "chunk_x" -> Integer.toString(pos.getX() >> 4);
+            case "chunk_z" -> Integer.toString(pos.getZ() >> 4);
+            case "chunk_local_x" -> Integer.toString(Math.floorMod(pos.getX(), 16));
+            case "chunk_local_z" -> Integer.toString(Math.floorMod(pos.getZ(), 16));
+            case "velocity_x" -> String.format("%.3f", p.getVelocity().x);
+            case "velocity_y" -> String.format("%.3f", p.getVelocity().y);
+            case "velocity_z" -> String.format("%.3f", p.getVelocity().z);
+            case "target_block_distance" -> c.crosshairTarget instanceof net.minecraft.util.hit.BlockHitResult block
+                ? String.format("%.1f blocks", p.getPos().distanceTo(block.getBlockPos().toCenterPos())) : "None";
+            case "target_block_face" -> c.crosshairTarget instanceof net.minecraft.util.hit.BlockHitResult block
+                ? block.getSide().getName() : "None";
+            case "target_entity_is_player" -> c.crosshairTarget instanceof net.minecraft.util.hit.EntityHitResult hit
+                ? (hit.getEntity() instanceof PlayerEntity ? "YES" : "NO") : "None";
+            case "target_entity_alive" -> c.crosshairTarget instanceof net.minecraft.util.hit.EntityHitResult hit
+                ? (hit.getEntity().isAlive() ? "ALIVE" : "DEAD") : "None";
+            case "target_entity_absorption" -> c.crosshairTarget instanceof net.minecraft.util.hit.EntityHitResult hit
+                && hit.getEntity() instanceof net.minecraft.entity.LivingEntity living
+                ? String.format("%.1f hearts", living.getAbsorptionAmount() / 2.0f) : "None";
+            case "day_phase" -> {
+                int hour = (int)((Math.floorMod(c.world.getTimeOfDay(), 24000L) / 1000 + 6) % 24);
+                yield hour < 6 ? "NIGHT" : hour < 8 ? "SUNRISE" : hour < 17 ? "DAY" : hour < 19 ? "SUNSET" : "NIGHT";
+            }
+            case "air_percent" -> Math.round(Math.max(0, p.getAir()) * 100.0f / Math.max(1, p.getMaxAir())) + "%";
             default -> null;
         };
     }
