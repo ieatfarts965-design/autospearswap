@@ -6,6 +6,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.registry.Registries;
+import net.minecraft.util.Identifier;
 
 /** Real, data-backed world and player readouts exposed as independent client modules. */
 public final class NexusModuleRegistry {
@@ -90,7 +92,127 @@ public final class NexusModuleRegistry {
         new Module("target_entity_alive", "Target Alive", "Combat", "Shows whether target entity is alive"),
         new Module("target_entity_absorption", "Target Absorption", "Combat", "Shows target absorption hearts"),
         new Module("day_phase", "Day Phase", "World", "Shows sunrise daytime sunset or night"),
-        new Module("air_percent", "Air Percent", "Player", "Shows remaining air as percentage")
+        new Module("air_percent", "Air Percent", "Player", "Shows remaining air as percentage"),
+        new Module("item_acacia_boat", "Acacia Boat Count", "Inventory", "Counts acacia boat in your inventory"),
+        new Module("item_acacia_chest_boat", "Acacia Chest Boat Count", "Inventory", "Counts acacia chest boat in your inventory"),
+        new Module("item_apple", "Apple Count", "Inventory", "Counts apple in your inventory"),
+        new Module("item_armor_stand", "Armor Stand Count", "Inventory", "Counts armor stand in your inventory"),
+        new Module("item_baked_potato", "Baked Potato Count", "Inventory", "Counts baked potato in your inventory"),
+        new Module("item_bamboo", "Bamboo Count", "Inventory", "Counts bamboo in your inventory"),
+        new Module("item_barrel", "Barrel Count", "Inventory", "Counts barrel in your inventory"),
+        new Module("item_beacon", "Beacon Count", "Inventory", "Counts beacon in your inventory"),
+        new Module("item_beef", "Beef Count", "Inventory", "Counts beef in your inventory"),
+        new Module("item_beetroot", "Beetroot Count", "Inventory", "Counts beetroot in your inventory"),
+        new Module("item_beetroot_seeds", "Beetroot Seeds Count", "Inventory", "Counts beetroot seeds in your inventory"),
+        new Module("item_beetroot_soup", "Beetroot Soup Count", "Inventory", "Counts beetroot soup in your inventory"),
+        new Module("item_birch_boat", "Birch Boat Count", "Inventory", "Counts birch boat in your inventory"),
+        new Module("item_blaze_powder", "Blaze Powder Count", "Inventory", "Counts blaze powder in your inventory"),
+        new Module("item_blaze_rod", "Blaze Rod Count", "Inventory", "Counts blaze rod in your inventory"),
+        new Module("item_blue_ice", "Blue Ice Count", "Inventory", "Counts blue ice in your inventory"),
+        new Module("item_bone", "Bone Count", "Inventory", "Counts bone in your inventory"),
+        new Module("item_bone_meal", "Bone Meal Count", "Inventory", "Counts bone meal in your inventory"),
+        new Module("item_book", "Book Count", "Inventory", "Counts book in your inventory"),
+        new Module("item_bookshelf", "Bookshelf Count", "Inventory", "Counts bookshelf in your inventory"),
+        new Module("item_bow", "Bow Count", "Inventory", "Counts bow in your inventory"),
+        new Module("item_bread", "Bread Count", "Inventory", "Counts bread in your inventory"),
+        new Module("item_breeze_rod", "Breeze Rod Count", "Inventory", "Counts breeze rod in your inventory"),
+        new Module("item_brick", "Brick Count", "Inventory", "Counts brick in your inventory"),
+        new Module("item_bucket", "Bucket Count", "Inventory", "Counts bucket in your inventory"),
+        new Module("item_bundle", "Bundle Count", "Inventory", "Counts bundle in your inventory"),
+        new Module("item_cake", "Cake Count", "Inventory", "Counts cake in your inventory"),
+        new Module("item_carrot", "Carrot Count", "Inventory", "Counts carrot in your inventory"),
+        new Module("item_carrot_on_a_stick", "Carrot On A Stick Count", "Inventory", "Counts carrot on a stick in your inventory"),
+        new Module("item_chain", "Chain Count", "Inventory", "Counts chain in your inventory"),
+        new Module("item_charcoal", "Charcoal Count", "Inventory", "Counts charcoal in your inventory"),
+        new Module("item_cherry_boat", "Cherry Boat Count", "Inventory", "Counts cherry boat in your inventory"),
+        new Module("item_chest_minecart", "Chest Minecart Count", "Inventory", "Counts chest minecart in your inventory"),
+        new Module("item_chicken", "Chicken Count", "Inventory", "Counts chicken in your inventory"),
+        new Module("item_chorus_fruit", "Chorus Fruit Count", "Inventory", "Counts chorus fruit in your inventory"),
+        new Module("item_clay_ball", "Clay Ball Count", "Inventory", "Counts clay ball in your inventory"),
+        new Module("item_clock", "Clock Count", "Inventory", "Counts clock in your inventory"),
+        new Module("item_coal", "Coal Count", "Inventory", "Counts coal in your inventory"),
+        new Module("item_cobbled_deepslate", "Cobbled Deepslate Count", "Inventory", "Counts cobbled deepslate in your inventory"),
+        new Module("item_cobblestone", "Cobblestone Count", "Inventory", "Counts cobblestone in your inventory"),
+        new Module("item_cocoa_beans", "Cocoa Beans Count", "Inventory", "Counts cocoa beans in your inventory"),
+        new Module("item_copper_ingot", "Copper Ingot Count", "Inventory", "Counts copper ingot in your inventory"),
+        new Module("item_copper_nugget", "Copper Nugget Count", "Inventory", "Counts copper nugget in your inventory"),
+        new Module("item_crossbow", "Crossbow Count", "Inventory", "Counts crossbow in your inventory"),
+        new Module("item_crying_obsidian", "Crying Obsidian Count", "Inventory", "Counts crying obsidian in your inventory"),
+        new Module("item_diamond", "Diamond Count", "Inventory", "Counts diamond in your inventory"),
+        new Module("item_diamond_axe", "Diamond Axe Count", "Inventory", "Counts diamond axe in your inventory"),
+        new Module("item_diamond_block", "Diamond Block Count", "Inventory", "Counts diamond block in your inventory"),
+        new Module("item_diamond_boots", "Diamond Boots Count", "Inventory", "Counts diamond boots in your inventory"),
+        new Module("item_diamond_chestplate", "Diamond Chestplate Count", "Inventory", "Counts diamond chestplate in your inventory"),
+        new Module("item_diamond_helmet", "Diamond Helmet Count", "Inventory", "Counts diamond helmet in your inventory"),
+        new Module("item_diamond_hoe", "Diamond Hoe Count", "Inventory", "Counts diamond hoe in your inventory"),
+        new Module("item_diamond_leggings", "Diamond Leggings Count", "Inventory", "Counts diamond leggings in your inventory"),
+        new Module("item_diamond_pickaxe", "Diamond Pickaxe Count", "Inventory", "Counts diamond pickaxe in your inventory"),
+        new Module("item_diamond_shovel", "Diamond Shovel Count", "Inventory", "Counts diamond shovel in your inventory"),
+        new Module("item_diamond_sword", "Diamond Sword Count", "Inventory", "Counts diamond sword in your inventory"),
+        new Module("item_dried_kelp", "Dried Kelp Count", "Inventory", "Counts dried kelp in your inventory"),
+        new Module("item_egg", "Egg Count", "Inventory", "Counts egg in your inventory"),
+        new Module("item_elytra", "Elytra Count", "Inventory", "Counts elytra in your inventory"),
+        new Module("item_emerald", "Emerald Count", "Inventory", "Counts emerald in your inventory"),
+        new Module("item_emerald_block", "Emerald Block Count", "Inventory", "Counts emerald block in your inventory"),
+        new Module("item_enchanted_book", "Enchanted Book Count", "Inventory", "Counts enchanted book in your inventory"),
+        new Module("item_end_crystal", "End Crystal Count", "Inventory", "Counts end crystal in your inventory"),
+        new Module("item_ender_chest", "Ender Chest Count", "Inventory", "Counts ender chest in your inventory"),
+        new Module("item_ender_eye", "Ender Eye Count", "Inventory", "Counts ender eye in your inventory"),
+        new Module("item_ender_pearl", "Ender Pearl Count", "Inventory", "Counts ender pearl in your inventory"),
+        new Module("item_end_rod", "End Rod Count", "Inventory", "Counts end rod in your inventory"),
+        new Module("item_experience_bottle", "Experience Bottle Count", "Inventory", "Counts experience bottle in your inventory"),
+        new Module("item_feather", "Feather Count", "Inventory", "Counts feather in your inventory"),
+        new Module("item_fermented_spider_eye", "Fermented Spider Eye Count", "Inventory", "Counts fermented spider eye in your inventory"),
+        new Module("item_fire_charge", "Fire Charge Count", "Inventory", "Counts fire charge in your inventory"),
+        new Module("item_firework_rocket", "Firework Rocket Count", "Inventory", "Counts firework rocket in your inventory"),
+        new Module("item_flint", "Flint Count", "Inventory", "Counts flint in your inventory"),
+        new Module("item_flint_and_steel", "Flint And Steel Count", "Inventory", "Counts flint and steel in your inventory"),
+        new Module("item_ghast_tear", "Ghast Tear Count", "Inventory", "Counts ghast tear in your inventory"),
+        new Module("item_glass_bottle", "Glass Bottle Count", "Inventory", "Counts glass bottle in your inventory"),
+        new Module("item_glowstone_dust", "Glowstone Dust Count", "Inventory", "Counts glowstone dust in your inventory"),
+        new Module("item_gold_ingot", "Gold Ingot Count", "Inventory", "Counts gold ingot in your inventory"),
+        new Module("item_gold_nugget", "Gold Nugget Count", "Inventory", "Counts gold nugget in your inventory"),
+        new Module("item_golden_apple", "Golden Apple Count", "Inventory", "Counts golden apple in your inventory"),
+        new Module("item_golden_carrot", "Golden Carrot Count", "Inventory", "Counts golden carrot in your inventory"),
+        new Module("item_golden_sword", "Golden Sword Count", "Inventory", "Counts golden sword in your inventory"),
+        new Module("item_golden_pickaxe", "Golden Pickaxe Count", "Inventory", "Counts golden pickaxe in your inventory"),
+        new Module("item_gunpowder", "Gunpowder Count", "Inventory", "Counts gunpowder in your inventory"),
+        new Module("item_honey_bottle", "Honey Bottle Count", "Inventory", "Counts honey bottle in your inventory"),
+        new Module("item_honeycomb", "Honeycomb Count", "Inventory", "Counts honeycomb in your inventory"),
+        new Module("item_hopper", "Hopper Count", "Inventory", "Counts hopper in your inventory"),
+        new Module("item_iron_ingot", "Iron Ingot Count", "Inventory", "Counts iron ingot in your inventory"),
+        new Module("item_iron_nugget", "Iron Nugget Count", "Inventory", "Counts iron nugget in your inventory"),
+        new Module("item_iron_block", "Iron Block Count", "Inventory", "Counts iron block in your inventory"),
+        new Module("item_iron_axe", "Iron Axe Count", "Inventory", "Counts iron axe in your inventory"),
+        new Module("item_iron_pickaxe", "Iron Pickaxe Count", "Inventory", "Counts iron pickaxe in your inventory"),
+        new Module("item_iron_sword", "Iron Sword Count", "Inventory", "Counts iron sword in your inventory"),
+        new Module("item_iron_helmet", "Iron Helmet Count", "Inventory", "Counts iron helmet in your inventory"),
+        new Module("item_iron_chestplate", "Iron Chestplate Count", "Inventory", "Counts iron chestplate in your inventory"),
+        new Module("item_iron_leggings", "Iron Leggings Count", "Inventory", "Counts iron leggings in your inventory"),
+        new Module("item_iron_boots", "Iron Boots Count", "Inventory", "Counts iron boots in your inventory"),
+        new Module("item_lapis_lazuli", "Lapis Lazuli Count", "Inventory", "Counts lapis lazuli in your inventory"),
+        new Module("item_lead", "Lead Count", "Inventory", "Counts lead in your inventory"),
+        new Module("item_leather", "Leather Count", "Inventory", "Counts leather in your inventory"),
+        new Module("item_leather_boots", "Leather Boots Count", "Inventory", "Counts leather boots in your inventory"),
+        new Module("item_leather_chestplate", "Leather Chestplate Count", "Inventory", "Counts leather chestplate in your inventory"),
+        new Module("item_leather_helmet", "Leather Helmet Count", "Inventory", "Counts leather helmet in your inventory"),
+        new Module("item_leather_leggings", "Leather Leggings Count", "Inventory", "Counts leather leggings in your inventory"),
+        new Module("item_magma_cream", "Magma Cream Count", "Inventory", "Counts magma cream in your inventory"),
+        new Module("item_map", "Map Count", "Inventory", "Counts map in your inventory"),
+        new Module("item_melon_slice", "Melon Slice Count", "Inventory", "Counts melon slice in your inventory"),
+        new Module("item_milk_bucket", "Milk Bucket Count", "Inventory", "Counts milk bucket in your inventory"),
+        new Module("item_minecart", "Minecart Count", "Inventory", "Counts minecart in your inventory"),
+        new Module("item_nautilus_shell", "Nautilus Shell Count", "Inventory", "Counts nautilus shell in your inventory"),
+        new Module("item_netherite_ingot", "Netherite Ingot Count", "Inventory", "Counts netherite ingot in your inventory"),
+        new Module("item_netherite_scrap", "Netherite Scrap Count", "Inventory", "Counts netherite scrap in your inventory"),
+        new Module("item_nether_star", "Nether Star Count", "Inventory", "Counts nether star in your inventory"),
+        new Module("item_obsidian", "Obsidian Count", "Inventory", "Counts obsidian in your inventory"),
+        new Module("item_paper", "Paper Count", "Inventory", "Counts paper in your inventory"),
+        new Module("item_phantom_membrane", "Phantom Membrane Count", "Inventory", "Counts phantom membrane in your inventory"),
+        new Module("item_poppy", "Poppy Count", "Inventory", "Counts poppy in your inventory"),
+        new Module("item_prismarine_crystals", "Prismarine Crystals Count", "Inventory", "Counts prismarine crystals in your inventory"),
+        new Module("item_prismarine_shard", "Prismarine Shard Count", "Inventory", "Counts prismarine shard in your inventory"),
+        new Module("item_quartz", "Quartz Count", "Inventory", "Counts quartz in your inventory")
     );
 
     private NexusModuleRegistry() {}
@@ -142,6 +264,10 @@ public final class NexusModuleRegistry {
         }
         if (player.getOffHandStack().isOf(item)) total += player.getOffHandStack().getCount();
         return total;
+    }
+
+    private static int countItemId(PlayerEntity player, String path) {
+        return countItem(player, Registries.ITEM.get(Identifier.of("minecraft", path)));
     }
 
     private static String value(String id, MinecraftClient c, PlayerEntity p, BlockPos pos) {
@@ -269,6 +395,126 @@ public final class NexusModuleRegistry {
                 yield hour < 6 ? "NIGHT" : hour < 8 ? "SUNRISE" : hour < 17 ? "DAY" : hour < 19 ? "SUNSET" : "NIGHT";
             }
             case "air_percent" -> Math.round(Math.max(0, p.getAir()) * 100.0f / Math.max(1, p.getMaxAir())) + "%";
+            case "item_acacia_boat" -> Integer.toString(countItemId(p, "acacia_boat"));
+            case "item_acacia_chest_boat" -> Integer.toString(countItemId(p, "acacia_chest_boat"));
+            case "item_apple" -> Integer.toString(countItemId(p, "apple"));
+            case "item_armor_stand" -> Integer.toString(countItemId(p, "armor_stand"));
+            case "item_baked_potato" -> Integer.toString(countItemId(p, "baked_potato"));
+            case "item_bamboo" -> Integer.toString(countItemId(p, "bamboo"));
+            case "item_barrel" -> Integer.toString(countItemId(p, "barrel"));
+            case "item_beacon" -> Integer.toString(countItemId(p, "beacon"));
+            case "item_beef" -> Integer.toString(countItemId(p, "beef"));
+            case "item_beetroot" -> Integer.toString(countItemId(p, "beetroot"));
+            case "item_beetroot_seeds" -> Integer.toString(countItemId(p, "beetroot_seeds"));
+            case "item_beetroot_soup" -> Integer.toString(countItemId(p, "beetroot_soup"));
+            case "item_birch_boat" -> Integer.toString(countItemId(p, "birch_boat"));
+            case "item_blaze_powder" -> Integer.toString(countItemId(p, "blaze_powder"));
+            case "item_blaze_rod" -> Integer.toString(countItemId(p, "blaze_rod"));
+            case "item_blue_ice" -> Integer.toString(countItemId(p, "blue_ice"));
+            case "item_bone" -> Integer.toString(countItemId(p, "bone"));
+            case "item_bone_meal" -> Integer.toString(countItemId(p, "bone_meal"));
+            case "item_book" -> Integer.toString(countItemId(p, "book"));
+            case "item_bookshelf" -> Integer.toString(countItemId(p, "bookshelf"));
+            case "item_bow" -> Integer.toString(countItemId(p, "bow"));
+            case "item_bread" -> Integer.toString(countItemId(p, "bread"));
+            case "item_breeze_rod" -> Integer.toString(countItemId(p, "breeze_rod"));
+            case "item_brick" -> Integer.toString(countItemId(p, "brick"));
+            case "item_bucket" -> Integer.toString(countItemId(p, "bucket"));
+            case "item_bundle" -> Integer.toString(countItemId(p, "bundle"));
+            case "item_cake" -> Integer.toString(countItemId(p, "cake"));
+            case "item_carrot" -> Integer.toString(countItemId(p, "carrot"));
+            case "item_carrot_on_a_stick" -> Integer.toString(countItemId(p, "carrot_on_a_stick"));
+            case "item_chain" -> Integer.toString(countItemId(p, "chain"));
+            case "item_charcoal" -> Integer.toString(countItemId(p, "charcoal"));
+            case "item_cherry_boat" -> Integer.toString(countItemId(p, "cherry_boat"));
+            case "item_chest_minecart" -> Integer.toString(countItemId(p, "chest_minecart"));
+            case "item_chicken" -> Integer.toString(countItemId(p, "chicken"));
+            case "item_chorus_fruit" -> Integer.toString(countItemId(p, "chorus_fruit"));
+            case "item_clay_ball" -> Integer.toString(countItemId(p, "clay_ball"));
+            case "item_clock" -> Integer.toString(countItemId(p, "clock"));
+            case "item_coal" -> Integer.toString(countItemId(p, "coal"));
+            case "item_cobbled_deepslate" -> Integer.toString(countItemId(p, "cobbled_deepslate"));
+            case "item_cobblestone" -> Integer.toString(countItemId(p, "cobblestone"));
+            case "item_cocoa_beans" -> Integer.toString(countItemId(p, "cocoa_beans"));
+            case "item_copper_ingot" -> Integer.toString(countItemId(p, "copper_ingot"));
+            case "item_copper_nugget" -> Integer.toString(countItemId(p, "copper_nugget"));
+            case "item_crossbow" -> Integer.toString(countItemId(p, "crossbow"));
+            case "item_crying_obsidian" -> Integer.toString(countItemId(p, "crying_obsidian"));
+            case "item_diamond" -> Integer.toString(countItemId(p, "diamond"));
+            case "item_diamond_axe" -> Integer.toString(countItemId(p, "diamond_axe"));
+            case "item_diamond_block" -> Integer.toString(countItemId(p, "diamond_block"));
+            case "item_diamond_boots" -> Integer.toString(countItemId(p, "diamond_boots"));
+            case "item_diamond_chestplate" -> Integer.toString(countItemId(p, "diamond_chestplate"));
+            case "item_diamond_helmet" -> Integer.toString(countItemId(p, "diamond_helmet"));
+            case "item_diamond_hoe" -> Integer.toString(countItemId(p, "diamond_hoe"));
+            case "item_diamond_leggings" -> Integer.toString(countItemId(p, "diamond_leggings"));
+            case "item_diamond_pickaxe" -> Integer.toString(countItemId(p, "diamond_pickaxe"));
+            case "item_diamond_shovel" -> Integer.toString(countItemId(p, "diamond_shovel"));
+            case "item_diamond_sword" -> Integer.toString(countItemId(p, "diamond_sword"));
+            case "item_dried_kelp" -> Integer.toString(countItemId(p, "dried_kelp"));
+            case "item_egg" -> Integer.toString(countItemId(p, "egg"));
+            case "item_elytra" -> Integer.toString(countItemId(p, "elytra"));
+            case "item_emerald" -> Integer.toString(countItemId(p, "emerald"));
+            case "item_emerald_block" -> Integer.toString(countItemId(p, "emerald_block"));
+            case "item_enchanted_book" -> Integer.toString(countItemId(p, "enchanted_book"));
+            case "item_end_crystal" -> Integer.toString(countItemId(p, "end_crystal"));
+            case "item_ender_chest" -> Integer.toString(countItemId(p, "ender_chest"));
+            case "item_ender_eye" -> Integer.toString(countItemId(p, "ender_eye"));
+            case "item_ender_pearl" -> Integer.toString(countItemId(p, "ender_pearl"));
+            case "item_end_rod" -> Integer.toString(countItemId(p, "end_rod"));
+            case "item_experience_bottle" -> Integer.toString(countItemId(p, "experience_bottle"));
+            case "item_feather" -> Integer.toString(countItemId(p, "feather"));
+            case "item_fermented_spider_eye" -> Integer.toString(countItemId(p, "fermented_spider_eye"));
+            case "item_fire_charge" -> Integer.toString(countItemId(p, "fire_charge"));
+            case "item_firework_rocket" -> Integer.toString(countItemId(p, "firework_rocket"));
+            case "item_flint" -> Integer.toString(countItemId(p, "flint"));
+            case "item_flint_and_steel" -> Integer.toString(countItemId(p, "flint_and_steel"));
+            case "item_ghast_tear" -> Integer.toString(countItemId(p, "ghast_tear"));
+            case "item_glass_bottle" -> Integer.toString(countItemId(p, "glass_bottle"));
+            case "item_glowstone_dust" -> Integer.toString(countItemId(p, "glowstone_dust"));
+            case "item_gold_ingot" -> Integer.toString(countItemId(p, "gold_ingot"));
+            case "item_gold_nugget" -> Integer.toString(countItemId(p, "gold_nugget"));
+            case "item_golden_apple" -> Integer.toString(countItemId(p, "golden_apple"));
+            case "item_golden_carrot" -> Integer.toString(countItemId(p, "golden_carrot"));
+            case "item_golden_sword" -> Integer.toString(countItemId(p, "golden_sword"));
+            case "item_golden_pickaxe" -> Integer.toString(countItemId(p, "golden_pickaxe"));
+            case "item_gunpowder" -> Integer.toString(countItemId(p, "gunpowder"));
+            case "item_honey_bottle" -> Integer.toString(countItemId(p, "honey_bottle"));
+            case "item_honeycomb" -> Integer.toString(countItemId(p, "honeycomb"));
+            case "item_hopper" -> Integer.toString(countItemId(p, "hopper"));
+            case "item_iron_ingot" -> Integer.toString(countItemId(p, "iron_ingot"));
+            case "item_iron_nugget" -> Integer.toString(countItemId(p, "iron_nugget"));
+            case "item_iron_block" -> Integer.toString(countItemId(p, "iron_block"));
+            case "item_iron_axe" -> Integer.toString(countItemId(p, "iron_axe"));
+            case "item_iron_pickaxe" -> Integer.toString(countItemId(p, "iron_pickaxe"));
+            case "item_iron_sword" -> Integer.toString(countItemId(p, "iron_sword"));
+            case "item_iron_helmet" -> Integer.toString(countItemId(p, "iron_helmet"));
+            case "item_iron_chestplate" -> Integer.toString(countItemId(p, "iron_chestplate"));
+            case "item_iron_leggings" -> Integer.toString(countItemId(p, "iron_leggings"));
+            case "item_iron_boots" -> Integer.toString(countItemId(p, "iron_boots"));
+            case "item_lapis_lazuli" -> Integer.toString(countItemId(p, "lapis_lazuli"));
+            case "item_lead" -> Integer.toString(countItemId(p, "lead"));
+            case "item_leather" -> Integer.toString(countItemId(p, "leather"));
+            case "item_leather_boots" -> Integer.toString(countItemId(p, "leather_boots"));
+            case "item_leather_chestplate" -> Integer.toString(countItemId(p, "leather_chestplate"));
+            case "item_leather_helmet" -> Integer.toString(countItemId(p, "leather_helmet"));
+            case "item_leather_leggings" -> Integer.toString(countItemId(p, "leather_leggings"));
+            case "item_magma_cream" -> Integer.toString(countItemId(p, "magma_cream"));
+            case "item_map" -> Integer.toString(countItemId(p, "map"));
+            case "item_melon_slice" -> Integer.toString(countItemId(p, "melon_slice"));
+            case "item_milk_bucket" -> Integer.toString(countItemId(p, "milk_bucket"));
+            case "item_minecart" -> Integer.toString(countItemId(p, "minecart"));
+            case "item_nautilus_shell" -> Integer.toString(countItemId(p, "nautilus_shell"));
+            case "item_netherite_ingot" -> Integer.toString(countItemId(p, "netherite_ingot"));
+            case "item_netherite_scrap" -> Integer.toString(countItemId(p, "netherite_scrap"));
+            case "item_nether_star" -> Integer.toString(countItemId(p, "nether_star"));
+            case "item_obsidian" -> Integer.toString(countItemId(p, "obsidian"));
+            case "item_paper" -> Integer.toString(countItemId(p, "paper"));
+            case "item_phantom_membrane" -> Integer.toString(countItemId(p, "phantom_membrane"));
+            case "item_poppy" -> Integer.toString(countItemId(p, "poppy"));
+            case "item_prismarine_crystals" -> Integer.toString(countItemId(p, "prismarine_crystals"));
+            case "item_prismarine_shard" -> Integer.toString(countItemId(p, "prismarine_shard"));
+            case "item_quartz" -> Integer.toString(countItemId(p, "quartz"));
             default -> null;
         };
     }
