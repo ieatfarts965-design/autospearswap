@@ -15,8 +15,38 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: 9.4.0
-      - name: Install Nexus icon
-        run: base64 -d src/main/resources/assets/icon.png.b64 > src/main/resources/assets/icon.png && rm src/main/resources/assets/icon.png.b64
+      - name: Install Overtonight album artwork and icon
+        shell: bash
+        run: |
+          mkdir -p src/main/resources/assets/autospearswap/textures/gui
+          python3 - <<'PY'
+          import json
+          import urllib.request
+          album = "2wVlRXuhfGaHp4vBskI9MG"
+          oembed = "https://open.spotify.com/oembed?url=https%3A%2F%2Fopen.spotify.com%2Falbum%2F" + album
+          target = "src/main/resources/assets/autospearswap/textures/gui/overtonight-cover.jpg"
+          try:
+              request = urllib.request.Request(oembed, headers={"User-Agent": "OvertonightClient/2.0"})
+              with urllib.request.urlopen(request, timeout=20) as response:
+                  metadata = json.loads(response.read().decode("utf-8"))
+              artwork_url = metadata["thumbnail_url"]
+              request = urllib.request.Request(artwork_url, headers={"User-Agent": "OvertonightClient/2.0"})
+              with urllib.request.urlopen(request, timeout=20) as response:
+                  artwork = response.read()
+              if not artwork:
+                  raise RuntimeError("Spotify returned an empty album cover")
+              with open(target, "wb") as output:
+                  output.write(artwork)
+              print("Downloaded it's over tonight. cover art from Spotify.")
+          except Exception as error:
+              print("Spotify cover download unavailable; using a local Overtonight-style fallback:", error)
+          PY
+          if [ -s src/main/resources/assets/autospearswap/textures/gui/overtonight-cover.jpg ]; then
+            convert src/main/resources/assets/autospearswap/textures/gui/overtonight-cover.jpg -resize 128x128^ -gravity center -extent 128x128 src/main/resources/assets/icon.png
+          else
+            convert -size 640x640 gradient:'#250d16-#050406' -gravity center -fill '#f0e8e8' -font DejaVu-Sans-Bold -pointsize 58 -annotate +0-24 'OVERTONIGHT' -fill '#bd263a' -pointsize 24 -annotate +0+42 'DROP OUT / AFTER HOURS' src/main/resources/assets/autospearswap/textures/gui/overtonight-cover.jpg
+            convert src/main/resources/assets/autospearswap/textures/gui/overtonight-cover.jpg -resize 128x128^ -gravity center -extent 128x128 src/main/resources/assets/icon.png
+          fi
       - name: Build
         run: gradle build
       - uses: actions/upload-artifact@v4
