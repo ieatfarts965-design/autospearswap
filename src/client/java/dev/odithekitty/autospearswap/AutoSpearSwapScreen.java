@@ -265,6 +265,157 @@ public final class AutoSpearSwapScreen extends Screen {
         c.options.write();
     }
 
+    private void addSearchEntry(java.util.List<String> labels, java.util.List<Boolean> states,
+                                java.util.List<Runnable> actions, String query, String name,
+                                boolean enabled, Runnable action) {
+        if (query.isEmpty() || name.toLowerCase(java.util.Locale.ROOT).contains(query)) {
+            labels.add(name);
+            states.add(enabled);
+            actions.add(action);
+        }
+    }
+
+    private int searchModule(int x, int y, int w, int h, int gap, String query, String name,
+                             BooleanSupplier enabled, Runnable action, int index) {
+        if (!query.isEmpty() && !name.toLowerCase(java.util.Locale.ROOT).contains(query)) return index;
+        int bx = x + (index % 2) * (w + gap);
+        int by = y + (index / 2) * 35;
+        add(bx, by, w, h, (enabled.getAsBoolean() ? "● " : "○ ") + name, b -> {
+            action.run();
+            AutoSpearSwapConfig.save();
+            clearAndInit();
+        });
+        return index + 1;
+    }
+
+    private void add(int x, int y, int w, int h, String label, ButtonWidget.PressAction action) {
+        if (addingNavigation) {
+            addDrawableChild(ButtonWidget.builder(Text.literal(label), action)
+                .dimensions(x, y, w, h).build());
+            return;
+        }
+        if ("Close".equals(label)) {
+            addDrawableChild(ButtonWidget.builder(Text.literal(label), action)
+                .dimensions(panelX + panelWidth - 84, panelY + panelHeight - 34, 70, 24).build());
+            return;
+        }
+        int columns = cwColumns();
+        int gap = 9;
+        int cardWidth = (panelWidth - 176 - gap * (columns - 1)) / columns;
+        int cardHeight = 52;
+        int contentLeft = panelX + 160;
+        int contentTop = panelY + (tab == 12 ? 144 : 92);
+        int column = gridIndex % columns;
+        int row = gridIndex / columns;
+        int px = contentLeft + column * (cardWidth + gap);
+        int py = contentTop + row * 61;
+        boolean active = label.startsWith("●") || label.endsWith("ON");
+        cards.add(new CardRect(px, py, cardWidth, cardHeight, active));
+        gridIndex++;
+        addDrawableChild(ButtonWidget.builder(Text.literal(label), action)
+            .dimensions(px, py, cardWidth, cardHeight).build());
+    }
+
+    private int cwColumns() {
+        int contentWidth = panelWidth - 176;
+        return contentWidth >= 700 ? 4 : contentWidth >= 510 ? 3 : 2;
+    }
+
+    private void toggle(int x, int y, int w, int h, String label, boolean value, Runnable action) {
+        add(x, y, w, h, (value ? "●  " : "○  ") + label + (value ? "   ON" : "   OFF"), b -> { action.run(); save(); });
+    }
+
+    private void save() { AutoSpearSwapConfig.save(); clearAndInit(); }
+    private void capture(KeyBinding key) { capturing = key; clearAndInit(); }
+    private String keyText(String name, KeyBinding key) {
+        return (capturing == key ? "PRESS A KEY  •  " : name + "  •  ") + key.getBoundKeyLocalizedText().getString();
+    }
+
+    private void openPackFolder() {
+        if (client == null) return;
+        try {
+            java.nio.file.Files.createDirectories(client.getResourcePackDir());
+            net.minecraft.util.Util.getOperatingSystem().open(client.getResourcePackDir().toFile());
+        } catch (Exception e) {
+            System.err.println("[Nexus] Could not open resource pack folder: " + e.getMessage());
+        }
+    }
+
+    private void packs() {
+        if (openingPacks || client == null) return;
+        openingPacks = true;
+        MinecraftClient mc = client;
+        Screen parent = this;
+        mc.getResourcePackManager().scanPacks();
+        mc.setScreen(new PackScreen(mc.getResourcePackManager(), manager -> mc.reloadResources(),
+            mc.getResourcePackDir(), Text.literal("Resource Packs")) {
+            @Override public void close() { openingPacks = false; mc.setScreen(parent); }
+        });
+    }
+
+    private static void performance() {
+        MinecraftClient c = MinecraftClient.getInstance();
+        c.options.getParticles().setValue(ParticlesMode.MINIMAL);
+        c.options.getCloudRenderMode().setValue(CloudRenderMode.OFF);
+        c.options.getEntityDistanceScaling().setValue(0.25);
+        c.options.getBiomeBlendRadius().setValue(0);
+        c.options.getEntityShadows().setValue(false);
+        c.options.write();
+    }
+
+    private static void balancedPerformance() {
+        MinecraftClient c = MinecraftClient.getInstance();
+        c.options.getParticles().setValue(ParticlesMode.DECREASED);
+        c.options.getCloudRenderMode().setValue(CloudRenderMode.FAST);
+        c.options.getEntityDistanceScaling().setValue(0.75);
+        c.options.getBiomeBlendRadius().setValue(1);
+        c.options.getEntityShadows().setValue(false);
+        c.options.write();
+    }
+
+    private static void visualQuality() {
+        MinecraftClient c = MinecraftClient.getInstance();
+        c.options.getParticles().setValue(ParticlesMode.ALL);
+        c.options.getCloudRenderMode().setValue(CloudRenderMode.FANCY);
+        c.options.getEntityDistanceScaling().setValue(1.0);
+        c.options.getBiomeBlendRadius().setValue(5);
+        c.options.getEntityShadows().setValue(true);
+        c.options.write();
+    }
+
+    private static int visualPresetIndex = 0;
+    private static final String[] VISUAL_PRESETS = {"Clean", "Competitive", "Vibrant", "Classic", "Low Effects"};
+
+    private static void visualPreset() {
+        MinecraftClient c = MinecraftClient.getInstance();
+        visualPresetIndex = (visualPresetIndex + 1) % VISUAL_PRESETS.length;
+        switch (visualPresetIndex) {
+            case 1 -> {
+                c.options.getParticles().setValue(ParticlesMode.MINIMAL);
+                c.options.getCloudRenderMode().setValue(CloudRenderMode.OFF);
+                c.options.getEntityDistanceScaling().setValue(0.5);
+                c.options.getEntityShadows().setValue(false);
+            }
+            case 2 -> {
+                c.options.getParticles().setValue(ParticlesMode.ALL);
+                c.options.getCloudRenderMode().setValue(CloudRenderMode.FANCY);
+                c.options.getEntityDistanceScaling().setValue(1.0);
+                c.options.getEntityShadows().setValue(true);
+            }
+            case 3 -> {
+                c.options.getParticles().setValue(ParticlesMode.DECREASED);
+            }
+            case 4 -> {
+                c.options.getParticles().setValue(ParticlesMode.MINIMAL);
+                c.options.getCloudRenderMode().setValue(CloudRenderMode.OFF);
+                c.options.getEntityDistanceScaling().setValue(0.75);
+                c.options.getEntityShadows().setValue(false);
+            }
+            default -> defaults();
+        }
+        c.options.write();
+    }
+
     private static void defaults() {
         MinecraftClient c = MinecraftClient.getInstance();
         c.options.getParticles().setValue(ParticlesMode.ALL);
