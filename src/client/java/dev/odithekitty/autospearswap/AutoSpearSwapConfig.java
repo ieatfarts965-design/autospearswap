@@ -18,7 +18,7 @@ public final class AutoSpearSwapConfig {
     public static int spearSlot = 8;
     public static int maceSlot = 1;
     public static int lungeReturnDelayTicks = 1;
-    public static int uiTheme = 5;
+    public static int uiTheme = 0;
     public static int uiOpacity = 65;
     public static boolean hudCoordinates = true;
     public static boolean hudCps = true;
@@ -252,7 +252,7 @@ public final class AutoSpearSwapConfig {
         int spearSlot = 8;
         int maceSlot = 1;
         int lungeReturnDelayTicks = 1;
-        int uiTheme = 5;
+        int uiTheme = 0;
         int uiOpacity = 65;
         boolean hudCoordinates = true;
         boolean hudCps = true;
