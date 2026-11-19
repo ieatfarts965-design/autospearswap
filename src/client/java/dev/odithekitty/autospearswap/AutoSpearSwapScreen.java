@@ -108,7 +108,6 @@ public final class AutoSpearSwapScreen extends Screen {
                 toggle(cx + bw + gap, y1 + 114, bw, h, "Durability alert", AutoSpearSwapConfig.hudDurability, () -> AutoSpearSwapConfig.hudDurability = !AutoSpearSwapConfig.hudDurability);
                 toggle(cx, y1 + 152, bw, h, "FPS counter", AutoSpearSwapConfig.hudFps, () -> AutoSpearSwapConfig.hudFps = !AutoSpearSwapConfig.hudFps);
                 toggle(cx + bw + gap, y1 + 152, bw, h, "Clock", AutoSpearSwapConfig.hudClock, () -> AutoSpearSwapConfig.hudClock = !AutoSpearSwapConfig.hudClock);
-                toggle(cx, y1 + 190, bw, h, "Spotify now playing", AutoSpearSwapConfig.hudSpotify, () -> AutoSpearSwapConfig.hudSpotify = !AutoSpearSwapConfig.hudSpotify);
             }
             case 3 -> {
                 add(cx, y1, bw, h, "Theme  •  " + THEMES[AutoSpearSwapConfig.uiTheme], b -> {
@@ -227,7 +226,6 @@ public final class AutoSpearSwapScreen extends Screen {
                 addSearchEntry(labels, states, actions, q, "Durability alert", AutoSpearSwapConfig.hudDurability, () -> AutoSpearSwapConfig.hudDurability = !AutoSpearSwapConfig.hudDurability);
                 addSearchEntry(labels, states, actions, q, "FPS counter", AutoSpearSwapConfig.hudFps, () -> AutoSpearSwapConfig.hudFps = !AutoSpearSwapConfig.hudFps);
                 addSearchEntry(labels, states, actions, q, "Clock", AutoSpearSwapConfig.hudClock, () -> AutoSpearSwapConfig.hudClock = !AutoSpearSwapConfig.hudClock);
-                addSearchEntry(labels, states, actions, q, "Spotify now playing", AutoSpearSwapConfig.hudSpotify, () -> AutoSpearSwapConfig.hudSpotify = !AutoSpearSwapConfig.hudSpotify);
                 addSearchEntry(labels, states, actions, q, "Movement speed", AutoSpearSwapConfig.hudSpeed, () -> AutoSpearSwapConfig.hudSpeed = !AutoSpearSwapConfig.hudSpeed);
                 addSearchEntry(labels, states, actions, q, "Direction", AutoSpearSwapConfig.hudDirection, () -> AutoSpearSwapConfig.hudDirection = !AutoSpearSwapConfig.hudDirection);
                 addSearchEntry(labels, states, actions, q, "Biome", AutoSpearSwapConfig.hudBiome, () -> AutoSpearSwapConfig.hudBiome = !AutoSpearSwapConfig.hudBiome);
