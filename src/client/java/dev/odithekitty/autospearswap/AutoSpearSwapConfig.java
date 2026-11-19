@@ -78,6 +78,9 @@ public final class AutoSpearSwapConfig {
         autoEat = false;
         autoWalk = false;
         autoSwim = false;
+        autoTotem = false;
+        autoRefill = false;
+        autoArmor = false;
         hudCoordinates = true;
         hudCps = true;
         hudArmor = true;
@@ -103,7 +106,7 @@ public final class AutoSpearSwapConfig {
             Files.createDirectories(PROFILES);
             Files.copy(FILE, PROFILES.resolve(safeProfile(name) + ".json"), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
         } catch (Exception e) {
-            System.err.println("[Nexus] Could not save profile: " + e.getMessage());
+            System.err.println("[Overtonight] Could not save profile: " + e.getMessage());
         }
     }
 
@@ -179,7 +182,7 @@ public final class AutoSpearSwapConfig {
                 save();
             }
         } catch (Exception e) {
-            System.err.println("[AutoSpearSwap] Could not load config: " + e.getMessage());
+            System.err.println("[Overtonight] Could not load config: " + e.getMessage());
         }
     }
 
